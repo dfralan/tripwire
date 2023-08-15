@@ -65,7 +65,7 @@
     }
 
     // Relay connection
-    const relay = "wss://relay.damus.io";
+    const relay = "wss://relayable.org";
     var socket = new WebSocket(relay);
     const privKey = localStorage.getItem("privKey")
     const pubKey = generatePublicKey(privKey);
