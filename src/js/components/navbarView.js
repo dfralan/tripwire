@@ -6,10 +6,10 @@ var navbar =`
     
         <!-- Brand -->
         
-        <div class="display-flex flex-row">
+        <div class="display-flex flex-wrap">
             ${clipIcon}
             <div>
-                <p class="font-500 color-primary on-mobile-pass">Tripwire</p>
+                <p class="font-500 color-primary">Tripwire</p>
                 <p class="color-rock no-wrap font-s on-mobile-pass">Sales Approach</p>
             </div>
         </div>
