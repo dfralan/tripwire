@@ -5,7 +5,7 @@
     --black-color: #000;
     --red-color: #ff4444;
     --blue-color: #446dff;
-    --violet-color: #7B43F2;
+    --violet-color: #570DF2;
 
     --tint-color: #FF622C;
     --bg-body-color: #FCFEFB;
@@ -25,6 +25,7 @@ html[data-theme='light'] {
     --primary-color: #181A22;
     --secondary-color: #898D9A;
     --tertiary-color: #F6F7F8;
+    --violet-color: #601CF2;
 }
 
 html[data-theme='dark'] {
