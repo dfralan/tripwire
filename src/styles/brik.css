@@ -33,6 +33,7 @@ html[data-theme='dark'] {
     --primary-color: #EAEDF2;
     --secondary-color: #898D9A;
     --tertiary-color: #2A2C33;
+    --tint-color: #FF7742;
 }
 
 [data-theme='light'] .d-block-light,
