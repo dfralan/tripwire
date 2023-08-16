@@ -4,7 +4,7 @@ function createLi(id, title, description, tags, zoneId, at) {
     const newLi = document.createElement('li');
     newLi.id = id;
     newLi.draggable = true;
-    newLi.className = 'taskBoard cursor-pointer bg-body shadow-one color-primary s-padded display-flex flex-col rounded-s s-gap';
+    newLi.className = 'taskBoard cursor-pointer bg-body shadow-dynamic color-primary s-padded display-flex flex-col rounded-s s-gap';
 
     // Create the first div within the li
     const div1 = document.createElement('div');
