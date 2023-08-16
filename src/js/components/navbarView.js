@@ -53,7 +53,9 @@ var navbar =`
 
             <!-- Logout button -->
             <button id="logoutButton" class="cursor-pointer full-center btn bg-none color-secondary fill-secondary hover-color-tint hover-fill-tint">
-                Logout
+            <span class='on-mobile-pass'>
+            Logout
+            </span>
                 ${doorIcon}
             </button>
 
