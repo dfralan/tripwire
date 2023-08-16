@@ -5,7 +5,6 @@ window.addEventListener("tripChange", function() {
     var taskBoards = document.querySelectorAll('.taskBoard');
     var taskBoardDropZones = document.getElementsByClassName('taskBoardDropZone')
     var dragItem = null
-    const deletionZone = document.getElementById('deletionZone')
 
     for(var i of taskBoards){
         i.addEventListener('dragstart', dragStart)
@@ -13,12 +12,10 @@ window.addEventListener("tripChange", function() {
     }
     function dragStart(){
         dragItem = this
-        setTimeout(()=>deletionZone.style.display = 'flex', 0)
         setTimeout(()=>this.style.display = 'none', 0)
     }
 
     function dragEnd(){
-        setTimeout(()=>deletionZone.style.display = 'none', 0)
         setTimeout(()=>this.style.display = 'flex', 0)
         dragItem = null
     }
@@ -39,19 +36,13 @@ window.addEventListener("tripChange", function() {
             this.querySelector("ul").append(dragItem)
         }
         Array.from(taskBoardDropZones).forEach(function(x) {
-            if (x.id === "deletionZone") {
-                return;
-            }
-            x.style.border = 'none';
+            x.classList.remove("border-cyan");
         });
     }
 
     function dragOver(e) {
         e.preventDefault()
-        if (this.id === "deletionZone") {
-            return;
-        }
-        this.style.border = 'dashed cyan'
+        this.classList.add("border-cyan");
     }
 
     function dragEnter(e) {
@@ -60,10 +51,7 @@ window.addEventListener("tripChange", function() {
 
     function dragLeave(e) {
         Array.from(taskBoardDropZones).forEach(function(x) {
-            if (x.id === "deletionZone") {
-                return;
-            }
-            x.style.border = 'none';
+            x.classList.remove("border-cyan");
         });
     }
 
@@ -174,10 +162,48 @@ window.addEventListener("tripChange", function() {
             
             observer.observe(ulElement, { childList: true });
         }
-        countAndLogListItems('1', 'attractionBoardsBadge');
-        countAndLogListItems('2', 'considerationBoardsBadge');
-        countAndLogListItems('3', 'decisionBoardsBadge');
-        countAndLogListItems('4', 'actionBoardsBadge');
+        countAndLogListItems('3', 'attractionBoardsBadge');
+        countAndLogListItems('4', 'considerationBoardsBadge');
+        countAndLogListItems('5', 'decisionBoardsBadge');
+        countAndLogListItems('6', 'actionBoardsBadge');
+
+
+        // Show or hide Contacts Zone 
+        const clientsBoardShowToggle = document.getElementById('clientsBoardShowToggle')
+        const clientsBoard = document.getElementById('clientsBoard')
+
+        clientsBoardShowToggle.addEventListener("click", function () {
+            if (clientsBoard.classList.contains("display-none")){
+                clientsBoard.classList.remove("display-none");
+            } else {
+                clientsBoard.classList.add("display-none");
+            }
+        });
+
+        // Show or hide Draft Zone 
+        const draftBoardShowToggle = document.getElementById('draftBoardShowToggle')
+        const draftBoard = document.getElementById('draftBoard')
+
+        draftBoardShowToggle.addEventListener("click", function () {
+            if (draftBoard.classList.contains("display-none")){
+                draftBoard.classList.remove("display-none");
+            } else {
+                draftBoard.classList.add("display-none");
+            }
+        });
+
+        // Show or hide Trash Zone 
+        const trashBoard = document.getElementById('trashBoard')
+
+        deletionZone.addEventListener("click", function () {
+            if (trashBoard.classList.contains("display-none")){
+                trashBoard.classList.remove("display-none");
+            } else {
+                trashBoard.classList.add("display-none");
+            }
+        });
+
+
 
     }
     

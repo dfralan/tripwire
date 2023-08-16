@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="gradient-mello-yellow">
 
 <head>
 
@@ -7,11 +7,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Tripwire Sales Approach</title>
-    <meta name="description" content="Enhance your sales approach with Tripwire's expert insights. Discover effective strategies, tools, and techniques to boost sales performance. Stay ahead in the competitive market with our proven sales solutions.">
-    <link rel="stylesheet" href="src/styles/brik.css"/>
+    <meta name="description"
+        content="Enhance your sales approach with Tripwire's expert insights. Discover effective strategies, tools, and techniques to boost sales performance. Stay ahead in the competitive market with our proven sales solutions.">
+    <link rel="stylesheet" href="src/styles/brik.css" />
     <link rel="icon" type="image/x-icon" href="src/img/logo.svg">
     <script src="src/js/encryption/bitcoinjs-lib.js"></script>
-	<script src="src/js/encryption/secp256k1-1.2.14.js"></script>
+    <script src="src/js/encryption/secp256k1-1.2.14.js"></script>
     <script src="src/js/encryption/browserify-cipher-1.0.1.js"></script>
     <script src="src/js/core/validators.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/elliptic/6.5.4/elliptic.min.js"></script>
@@ -20,101 +21,118 @@
 
 </head>
 
-<body class="board bg-tertiary">
+<body class="board">
 
     <!-- Navbar -->
     <brik navbar></brik>
     <script src="src/js/components/navbarView.js"></script>
 
+    <div class="padded bg-tertiary display-flex flex-wrap s-gap spaced">
 
-    <div class="padded overflow-scroll">
-
-        <div class="padded display-flex flex-row s-gap">
-            <!-- Deletion Board Zone -->
-            <div id="deletionZone" class="no-wrap taskBoardDropZone btn s-padded rounded-s border-dashed border-red color-alert fill-alert display-none float-left">
-                <svg xmlns="http://www.w3.org/2000/svg" height="16" viewBox="0 -960 960 960" width="16"><path d="M261-120q-24.75 0-42.375-17.625T201-180v-570h-11q-12.75 0-21.375-8.675-8.625-8.676-8.625-21.5 0-12.825 8.625-21.325T190-810h158q0-13 8.625-21.5T378-840h204q12.75 0 21.375 8.625T612-810h158q12.75 0 21.375 8.675 8.625 8.676 8.625 21.5 0 12.825-8.625 21.325T770-750h-11v570q0 24.75-17.625 42.375T699-120H261Zm438-630H261v570h438v-570Zm-438 0v570-570Zm219 330 96 97q10 10 24 10.5t24-10q10-10.5 10-24T624-370l-96-98 96-98q10-10 10-23.5T624-613q-10-10-24-10t-24 10l-96 97-95-97q-10-10-24-10t-24 10q-10 10-10 24t10 24l96 97-96 97q-10 10-10 24t10 24q10 10 24 10t24-10l95-97Z"/></svg>
-                <span>Delete board</span>
-            </div>
-
-            <!-- Show drafts Button -->
+        <div class="display-flex flex-wrap s-gap">
+            <!-- Show Sales Aprroach Button -->
             <button id="salesStagesShow" class="btn btn-rock no-wrap">
-                <span>Sales Approach</span>
-                <svg class="fill-white" xmlns="http://www.w3.org/2000/svg" height="18" viewBox="0 -960 960 960" width="18"><path d="M796-121 533-384q-30 26-70 40.5T378-329q-108 0-183-75t-75-181q0-106 75-181t182-75q106 0 180.5 75T632-585q0 43-14 83t-42 75l264 262-44 44ZM377-389q81 0 138-57.5T572-585q0-81-57-138.5T377-781q-82 0-139.5 57.5T180-585q0 81 57.5 138.5T377-389Zm-74-89 29-87-73-56h87l30-87 30 87h86l-73 56 29 87-72-55-73 55Z"/></svg>
+                <span>Approachs</span>
+            </button>
+
+            <!-- Show Clients Board Button -->
+            <button id="clientsBoardShowToggle" class="btn btn-secondary no-wrap">
+                <span>Clients</span>
             </button>
 
             <!-- Show drafts Button -->
-            <button id="clientsBoardShow" class="btn btn-secondary no-wrap">
-                <span>Clients </span>
-                <svg class="fill-body" xmlns="http://www.w3.org/2000/svg" height="18" viewBox="0 -960 960 960" width="18"><path d="M222-255q63-44 125-67.5T480-346q71 0 133.5 23.5T739-255q44-54 62.5-109T820-480q0-145-97.5-242.5T480-820q-145 0-242.5 97.5T140-480q0 61 19 116t63 109Zm257.814-195Q422-450 382.5-489.686q-39.5-39.686-39.5-97.5t39.686-97.314q39.686-39.5 97.5-39.5t97.314 39.686q39.5 39.686 39.5 97.5T577.314-489.5q-39.686 39.5-97.5 39.5Zm.654 370Q398-80 325-111.5q-73-31.5-127.5-86t-86-127.266Q80-397.532 80-480.266T111.5-635.5q31.5-72.5 86-127t127.266-86q72.766-31.5 155.5-31.5T635.5-848.5q72.5 31.5 127 86t86 127.032q31.5 72.532 31.5 155T848.5-325q-31.5 73-86 127.5t-127.032 86q-72.532 31.5-155 31.5ZM480-140q55 0 107.5-16T691-212q-51-36-104-55t-107-19q-54 0-107 19t-104 55q51 40 103.5 56T480-140Zm0-370q34 0 55.5-21.5T557-587q0-34-21.5-55.5T480-664q-34 0-55.5 21.5T403-587q0 34 21.5 55.5T480-510Zm0-77Zm0 374Z"/></svg>
-            </button>
-    
-            <!-- Show drafts Button -->
-            <button id="draftBoardShow" class="btn btn-primary no-wrap">
+            <button id="draftBoardShowToggle" class="btn btn-primary no-wrap">
                 <span>Draft </span>
-                <svg class="fill-body" xmlns="http://www.w3.org/2000/svg" height="18" viewBox="0 -960 960 960" width="18"><path d="M280-140v-480q0-25.063 17.5-42.532Q315-680 340-680h480q24.75 0 42.375 17.625T880-620v340L680-80H340q-24.75 0-42.375-17.625T280-140ZM81-725q-5-25 9.5-44.5T130-794l473-84q25-5 44.5 9t24.5 39l16 90h-60l-14-79-473 83 79 450v83q-20-2-35-15t-19-34L81-725Zm259 105v480h308v-142q0-12.75 8.625-21.375T678-312h142v-308H340Zm240 240Z"/></svg>
+                
             </button>
-
-            <!-- Create Board Button -->
-            <button id="addNewBoardButton" class="btn btn-tint no-wrap">
-                <span>Add board</span>
-                <svg class="fill-white" xmlns="http://www.w3.org/2000/svg" height="18" viewBox="0 -960 960 960" width="18"><path d="M450-450v140q0 12.75 8.675 21.375 8.676 8.625 21.5 8.625 12.825 0 21.325-8.625T510-310v-140h140q12.75 0 21.375-8.675 8.625-8.676 8.625-21.5 0-12.825-8.625-21.325T650-510H510v-140q0-12.75-8.675-21.375-8.676-8.625-21.5-8.625-12.825 0-21.325 8.625T450-650v140H310q-12.75 0-21.375 8.675-8.625 8.676-8.625 21.5 0 12.825 8.625 21.325T310-450h140ZM180-120q-24 0-42-18t-18-42v-600q0-24 18-42t42-18h600q24 0 42 18t18 42v600q0 24-18 42t-42 18H180Zm0-60h600v-600H180v600Zm0-600v600-600Z"/></svg>
-            </button>
-            
         </div>
-    </div>
+
+    </div>  
 
     <!-- Ephemeral Notifications -->
-    <div id="ephemeralNotificationsModal" class="padded notification-modal display-flex flex-col-reverse s-gap z-i full-center smooth-300">
+    <div id="ephemeralNotificationsModal"
+        class="padded notification-modal display-flex flex-col-reverse s-gap z-i full-center smooth-300">
     </div>
 
     <!-- Boards Sections -->
-    <section class="padded overflow-scroll">
+    <section class="overflow-scroll hide-scrollbar">
 
-        <div class="padded display-flex flex-row s-gap">
+        <div class="display-flex flex-row s-gap ">
 
-        <div style="min-width: 350px;" class="padded responsive-4 padded">
-            <div class="padded taskBoardDropZone overflow-scroll rounded bg-tertiary display-flex flex-col s-gap shadow-one">
-                <h3 class="color-primary font-300 font-l">
-                    <span loom="Attraction Zone"></span>
-                    <span class="badge pastel1 font-s font-400 rounded" id='attractionBoardsBadge'>20</span>
-                </h3>
-                <ul class="display-flex flex-col s-gap accordion" id="1">
-                </ul>
+            <div id="trashBoard" style="min-width: 350px;" class="padded responsive-4 padded display-none">
+                <div class="padded border-dashed taskBoardDropZone rounded bg-tertiary display-flex flex-col s-gap shadow-one">
+                    <h3 class="color-primary font-300 font-l">
+                        <span loom="Trash 🗑️"></span>
+                    </h3>
+                    <ul style="max-height:300px;" class="display-flex flex-col s-gap overflow-scroll" id="0">
+                    </ul>
+                </div>
             </div>
-        </div>
 
-        <div style="min-width: 350px;" class="padded responsive-4 padded">
-            <div class="padded taskBoardDropZone overflow-scroll rounded bg-tertiary display-flex flex-col s-gap shadow-one">
-                <h3 class="color-primary font-300 font-l">
-                    <span loom="Consideration Zone"></span>
-                    <span class="badge pastel2 font-s font-400 rounded" id='considerationBoardsBadge'>20</span>
-                </h3>
-                <ul class="display-flex flex-col s-gap" id="2">
-                </ul>
+            <div id="draftBoard" style="min-width: 350px;" class="padded responsive-4 padded display-none">
+                <div class="padded border-dashed taskBoardDropZone rounded border-dashed border-secondary display-flex flex-col s-gap shadow-one">
+                    <h3 class="color-primary font-300 font-l">
+                        <span loom="Draft"></span>
+                    </h3>
+                    <ul style="max-height:300px;" class="display-flex flex-col s-gap overflow-scroll" id="1">
+                    </ul>
+                </div>
             </div>
-        </div>
 
-        <div style="min-width: 350px;" class="padded responsive-4 padded">
-            <div class="padded taskBoardDropZone overflow-scroll rounded bg-tertiary display-flex flex-col s-gap shadow-one">
-                <h3 class="color-primary font-300 font-l">
-                    <span loom="Decision Zone"></span>
-                    <span class="badge pastel3 font-s font-400 rounded" id='decisionBoardsBadge'>20</span>
-                </h3>
-                <ul class="display-flex flex-col s-gap" id="3">
-                </ul>
+            <div id="clientsBoard" style="min-width: 350px;" class="padded responsive-4 padded display-none">
+                <div class="padded border-dashed taskBoardDropZone rounded bg-primary display-flex flex-col s-gap shadow-one">
+                    <h3 class="color-body font-300 font-l">
+                        <span loom="Contacts"></span>
+                    </h3>
+                    <ul style="max-height:300px;" class="display-flex flex-col s-gap overflow-scroll" id="2">
+                    </ul>
+                </div>
             </div>
-        </div>
 
-        <div style="min-width: 350px;" class="padded responsive-4 padded">
-            <div class="padded taskBoardDropZone overflow-scroll rounded bg-tertiary display-flex flex-col s-gap shadow-one">
-                <h3 class="color-primary font-300 font-l">
-                    <span loom="Action Zone"></span>
-                    <span class="badge pastel4 font-s font-400 rounded" id='actionBoardsBadge'>20</span>
-                </h3>
-                <ul class="display-flex flex-col s-gap" id="4">
-                </ul>
+            <div style="min-width: 350px;" class="padded responsive-4 padded">
+                <div class="padded border-dashed taskBoardDropZone rounded bg-body display-flex flex-col s-gap shadow-one">
+                    <h3 class="color-primary font-300 font-l">
+                        <span loom="Attraction Zone"></span>
+                        <span class="badge pastel1 font-s font-400 rounded" id='attractionBoardsBadge'>20</span>
+                    </h3>
+                    <ul style="max-height:300px;" class="display-flex flex-col s-gap overflow-scroll" id="3">
+                    </ul>
+                </div>
             </div>
-        </div>
+
+            <div style="min-width: 350px;" class="padded responsive-4 padded">
+                <div class="padded border-dashed taskBoardDropZone rounded bg-body display-flex flex-col s-gap shadow-one">
+                    <h3 class="color-primary font-300 font-l">
+                        <span loom="Consideration Zone"></span>
+                        <span class="badge pastel2 font-s font-400 rounded" id='considerationBoardsBadge'>20</span>
+                    </h3>
+                    <ul style="max-height:300px;" class="display-flex flex-col s-gap overflow-scroll" id="4">
+                    </ul>
+                </div>
+            </div>
+
+            <div style="min-width: 350px;" class="padded responsive-4 padded">
+                <div class="padded border-dashed taskBoardDropZone rounded bg-body display-flex flex-col s-gap shadow-one">
+                    <h3 class="color-primary font-300 font-l">
+                        <span loom="Decision Zone"></span>
+                        <span class="badge pastel3 font-s font-400 rounded" id='decisionBoardsBadge'>20</span>
+                    </h3>
+                    <ul style="max-height:300px;" class="display-flex flex-col s-gap overflow-scroll" id="5">
+                    </ul>
+                </div>
+            </div>
+
+            <div style="min-width: 350px;" class="padded responsive-4 padded">
+                <div class="padded border-dashed taskBoardDropZone rounded bg-body display-flex flex-col s-gap shadow-one">
+                    <h3 class="color-primary font-300 font-l">
+                        <span loom="Action Zone"></span>
+                        <span class="badge pastel4 font-s font-400 rounded" id='actionBoardsBadge'>20</span>
+                    </h3>
+                    <ul style="max-height:300px;" class="display-flex flex-col s-gap overflow-scroll" id="6">
+                    </ul>
+                </div>
+            </div>
+
         </div>
 
     </section>
@@ -126,42 +144,66 @@
             <div class="display-flex flex-row spaced">
                 <h4 class="color-primary">Create new board</h4>
                 <div class="dropdown float-right">
-                    <p class="cursor-pointer full-center btn bg-none color-secondary fill-secondary hover-color-tint hover-fill-tint">
+                    <p
+                        class="cursor-pointer full-center btn bg-none color-secondary fill-secondary hover-color-tint hover-fill-tint">
                         <span id="zoneSelection">
                             Attraction
                         </span>
-                        <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M480-360 280-559h400L480-360Z"/></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20">
+                            <path d="M480-360 280-559h400L480-360Z" />
+                        </svg>
                     </p>
                     <ul id="salesApproachZonesList" class="dropdown-right text-right rounded m-font font-200 shadow-two bg-body xs-padded border-solid-xs border-tertiary">
-                        <li class="selected dropdown-element ultra-over-mark block-mode color-secondary rounded-xs cursor-pointer">
+                        
+                        <li
+                            class="dropdown-element ultra-over-mark block-mode color-secondary rounded-xs cursor-pointer display-none">
+                            Trash
+                        </li>
+                        <li
+                            class="dropdown-element ultra-over-mark block-mode color-secondary rounded-xs cursor-pointer">
+                            Draft
+                        </li>
+                        <li
+                            class="dropdown-element ultra-over-mark block-mode color-secondary rounded-xs cursor-pointer">
+                            Contact
+                        </li>
+                        <li
+                            class="selected dropdown-element ultra-over-mark block-mode color-secondary rounded-xs cursor-pointer">
                             Attraction
                         </li>
-                        <li class="dropdown-element ultra-over-mark block-mode color-secondary rounded-xs cursor-pointer">
+                        <li
+                            class="dropdown-element ultra-over-mark block-mode color-secondary rounded-xs cursor-pointer">
                             Consideration
                         </li>
-                        <li class="dropdown-element ultra-over-mark block-mode color-secondary rounded-xs cursor-pointer">
+                        <li
+                            class="dropdown-element ultra-over-mark block-mode color-secondary rounded-xs cursor-pointer">
                             Decision
                         </li>
-                        <li class="dropdown-element ultra-over-mark block-mode color-secondary rounded-xs cursor-pointer">
+                        <li
+                            class="dropdown-element ultra-over-mark block-mode color-secondary rounded-xs cursor-pointer">
                             Action
-                        </li>
-                        <li class="dropdown-element ultra-over-mark block-mode color-secondary rounded-xs cursor-pointer">
-                            Clients
                         </li>
                     </ul>
                 </div>
             </div>
-            <input id="newBoardInputName" class="s-padded bg-body border-secondary border-solid rounded-s placeholder-secondary font-m color-primary" type="text" placeholder="Board name">
+            <input id="newBoardInputName"
+                class="s-padded bg-body border-secondary border-solid rounded-s placeholder-secondary font-m color-primary"
+                type="text" placeholder="Board name">
             <p class="color-alert" id="newBoardFormInfo" loom></p>
-            <textarea id="newBoardInputDescription" name="" cols="30" rows="5" class="s-padded bg-body border-secondary border-solid rounded-s placeholder-secondary font-m color-primary" placeholder="Description here..."></textarea>
+            <textarea id="newBoardInputDescription" name="" cols="30" rows="5"
+                class="s-padded bg-body border-secondary border-solid rounded-s placeholder-secondary font-m color-primary"
+                placeholder="Description here..."></textarea>
             <div id="tagsContainer" class="display-flex flex-wrap s-gap">
                 <p class="xs-padded pastel1 font-xs rounded-s">+5493412293515</p>
                 <p class="xs-padded pastel2 font-xs rounded-s">john@lotus.com</p>
                 <p class="xs-padded pastel3 font-xs rounded-s">lotusmotors.com</p>
             </div>
             <div class="display-flex flex-col">
-                <input id="newBoardInputTags" class="s-padded bg-body border-secondary border-solid rounded-s placeholder-secondary font-m color-primary" type="text" placeholder="Add some tags">
-                <p class="font-xs color-secondary">Add tags separated by "," like: +54911234565, john@lotus.com, lotusmotors.com</p>
+                <input id="newBoardInputTags"
+                    class="s-padded bg-body border-secondary border-solid rounded-s placeholder-secondary font-m color-primary"
+                    type="text" placeholder="Add some tags">
+                <p class="font-xs color-secondary">Add tags separated by "," like: +54911234565, john@lotus.com,
+                    lotusmotors.com</p>
             </div>
             <div class="brick flex-row flex-end s-gap">
                 <button id="cancelAddNewBoard" class="btn btn-primary" type="button">Cancel</button>
@@ -180,6 +222,27 @@
                 <button class="btn btn-danger" type="submit">Delete</button>
             </div>
         </div>
+    </div>
+
+    <!-- Confirmation online user -->
+    <div id="boardConfirmationOnlineUser" class="modal z-i full-center blur-behind smooth-300 display-none">
+        <div class="modal-bg o-8 bg-primary"></div>
+        <div class="bg-body z-2 padded rounded brick flex-col m-gap">
+            <h4 class="color-primary">Are you still online?</h4>
+            <div class="brick flex-row flex-end s-gap">
+                <button id="userIsOnline" class="btn btn-tertiary color-body" type="submit">Yes I am</button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Deletion Board Zone -->
+    <div id="deletionZone" class="fill-white padded border-dashed rounded-s taskBoardDropZone display-flex position-fixed to-bottom to-right">
+        <button class="btn display-flex flex-col">
+            
+            <h1 class="font-xxxl">🗑️</h1><span class="color-primary">Trash</span>
+        </button>
+
     </div>
 
     <!-- 
@@ -209,7 +272,7 @@
     <script src="src/js/link/connectionStatus.js"></script>
     <script src="src/js/core/newBoard.js"></script>
     <script src="src/js/core/timestampFormatter.js"></script>
-    </body>
+</body>
 
 </body>
 

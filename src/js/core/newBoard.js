@@ -80,7 +80,7 @@ function createLi(id, title, description, tags, zoneId, at) {
     const newBoardFormInfo = document.getElementById('newBoardFormInfo');
     const zoneSelection = document.getElementById('zoneSelection')
 
-    var selectedZone = 1
+    var selectedZone = 3
     var salesApproachZonesList = document.getElementById('salesApproachZonesList');
     var liElements = salesApproachZonesList.getElementsByTagName('li');
     for (var i = 0; i < liElements.length; i++) {
@@ -91,7 +91,7 @@ function createLi(id, title, description, tags, zoneId, at) {
             zoneSelection.textContent = this.textContent
             this.classList.add('selected')
             var clickedIndex = Array.from(liElements).indexOf(this)
-            selectedZone = clickedIndex + 1
+            selectedZone = clickedIndex
         });
     }
 
@@ -102,8 +102,9 @@ function createLi(id, title, description, tags, zoneId, at) {
         const newBoardInputName = document.getElementById('newBoardInputName').value
         const newBoardInputDescription = document.getElementById('newBoardInputDescription').value
         const newBoardInputTags = document.getElementById('newBoardInputTags').value
-        var newBoardState = selectedZone //0 deleted, 1 attraction, 2 consideration, 3 decision, 4 action, 5 client.
+        var newBoardState = selectedZone //0 deleted, 1 draft, 2 contacts, 3 attraction, 4 consideration, 5 decision, 6 action
 
+        console.log(`selected state ${newBoardState}`)
         // Split the input string into an array using the comma as the delimiter
         const values = newBoardInputTags.split(', ');
 

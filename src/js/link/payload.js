@@ -96,17 +96,32 @@
     var subscription = ["REQ", subId, filter]
 
     socket.addEventListener('open', async function (e) {
-        ephemeralNotification(`Connection succesfully.`)
         socket.send(JSON.stringify(subscription));
+        ephemeralNotification(`Connection succesfully.`)
     })
+
+    // Show user is online confirmation modal and handle reconnection to websocket
+    function isUserOnline(){
+        const boardConfirmationOnlineUseruserIsOnline = document.getElementById('boardConfirmationOnlineUser')
+        const userIsOnline = document.getElementById('userIsOnline')
+        boardConfirmationOnlineUseruserIsOnline.classList.remove("display-none");
+        userIsOnline.addEventListener("click", function() {
+            var socket = new WebSocket(relay);
+            socket.send(JSON.stringify(subscription));
+            boardConfirmationOnlineUseruserIsOnline.classList.add("display-none");
+        })
+    }
 
     // Listen on websocket close
     socket.addEventListener('close', function (event) {
+
+        
         if (event.wasClean) {
             console.log(`WebSocket connection closed cleanly, code: ${event.code}, reason: ${event.reason}`);
-            socket.send(JSON.stringify(subscription));
+            isUserOnline()
+
         } else {
-            socket.send(JSON.stringify(subscription));
+            isUserOnline()
             console.error(`WebSocket connection was abruptly closed, code: ${event.code}, reason: ${event.reason}`);
         }
 
