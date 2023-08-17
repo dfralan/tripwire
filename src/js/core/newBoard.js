@@ -12,11 +12,9 @@ function createLi(id, title, description, tags, zoneId, at) {
     
     // Create the span for the title
     const spanTitle = document.createElement('h4');
-    spanTitle.className = 'hide-scrollbar overflow-scroll no-wrap font-m font-500';
+    spanTitle.className = 'hide-scrollbar overflow-scroll no-wrap font-s font-500';
     spanTitle.textContent = title;
     div1.appendChild(spanTitle);
-
-    console.log(`title here ${title}`)
 
     // Create the span for buttons
     const spanButtons = document.createElement('div');
