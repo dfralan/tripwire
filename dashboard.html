@@ -59,12 +59,22 @@
 
         <div class="display-flex flex-row m-gap ">
 
-            <div id="trashBoard" style="min-width: 350px;" class="responsive-4">
+            <div id="trashBoard" style="min-width: 350px; min-height: 300px;" class="responsive-4">
                 <div class="border-dashed taskBoardDropZone rounded bg-body display-flex flex-col s-gap shadow-one">
                     <div class="xs-padded no-padded-right no-padded-top">
                         <h4 class="display-flex spaced color-primary font-500 font-m s-padded no-padded-bottom">
                             <span loom="Trash 🗑️"></span>
-                            <svg class="fill-primary" width="22" height="22" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12.3929 26.4001C11.731 26.4001 11.1667 26.1644 10.7 25.693C10.2333 25.2216 10 24.655 10 23.993C10 23.3311 10.2357 22.7668 10.7071 22.3001C11.1785 21.8334 11.7451 21.6001 12.4071 21.6001C13.069 21.6001 13.6333 21.8358 14.1 22.3072C14.5667 22.7786 14.8 23.3452 14.8 24.0072C14.8 24.6691 14.5643 25.2334 14.0929 25.7001C13.6215 26.1668 13.0549 26.4001 12.3929 26.4001ZM23.9929 26.4001C23.331 26.4001 22.7667 26.1644 22.3 25.693C21.8333 25.2216 21.6 24.655 21.6 23.993C21.6 23.3311 21.8357 22.7668 22.3071 22.3001C22.7785 21.8334 23.3451 21.6001 24.0071 21.6001C24.669 21.6001 25.2333 21.8358 25.7 22.3072C26.1667 22.7786 26.4 23.3452 26.4 24.0072C26.4 24.6691 26.1643 25.2334 25.6929 25.7001C25.2215 26.1668 24.6549 26.4001 23.9929 26.4001ZM35.5929 26.4001C34.931 26.4001 34.3667 26.1644 33.9 25.693C33.4333 25.2216 33.2 24.655 33.2 23.993C33.2 23.3311 33.4357 22.7668 33.9071 22.3001C34.3785 21.8334 34.9451 21.6001 35.6071 21.6001C36.269 21.6001 36.8333 21.8358 37.3 22.3072C37.7667 22.7786 38 23.3452 38 24.0072C38 24.6691 37.7643 25.2334 37.2929 25.7001C36.8215 26.1668 36.2549 26.4001 35.5929 26.4001Z" /></svg>
+
+                            <!-- Trash options dropdown -->
+                            <div class="dropdown">
+                                <p class="dropbtn cursor-pointer bg-none hover-color-tint hover-fill-tint focus-fill-tint focus-color-tint">
+                                    <svg class="fill-primary" width="22" height="22" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12.3929 26.4001C11.731 26.4001 11.1667 26.1644 10.7 25.693C10.2333 25.2216 10 24.655 10 23.993C10 23.3311 10.2357 22.7668 10.7071 22.3001C11.1785 21.8334 11.7451 21.6001 12.4071 21.6001C13.069 21.6001 13.6333 21.8358 14.1 22.3072C14.5667 22.7786 14.8 23.3452 14.8 24.0072C14.8 24.6691 14.5643 25.2334 14.0929 25.7001C13.6215 26.1668 13.0549 26.4001 12.3929 26.4001ZM23.9929 26.4001C23.331 26.4001 22.7667 26.1644 22.3 25.693C21.8333 25.2216 21.6 24.655 21.6 23.993C21.6 23.3311 21.8357 22.7668 22.3071 22.3001C22.7785 21.8334 23.3451 21.6001 24.0071 21.6001C24.669 21.6001 25.2333 21.8358 25.7 22.3072C26.1667 22.7786 26.4 23.3452 26.4 24.0072C26.4 24.6691 26.1643 25.2334 25.6929 25.7001C25.2215 26.1668 24.6549 26.4001 23.9929 26.4001ZM35.5929 26.4001C34.931 26.4001 34.3667 26.1644 33.9 25.693C33.4333 25.2216 33.2 24.655 33.2 23.993C33.2 23.3311 33.4357 22.7668 33.9071 22.3001C34.3785 21.8334 34.9451 21.6001 35.6071 21.6001C36.269 21.6001 36.8333 21.8358 37.3 22.3072C37.7667 22.7786 38 23.3452 38 24.0072C38 24.6691 37.7643 25.2334 37.2929 25.7001C36.8215 26.1668 36.2549 26.4001 35.5929 26.4001Z" /></svg>
+                                </p>
+                                <ul class="dropdown-content to-right z-1 absolute text-right rounded shadow-two bg-body xs-padded border-solid-s border-primary">
+                                    <li class="dropdown-element block-mode color-secondary rounded-xs cursor-pointer">Hide Board</li>
+                                </ul>
+                            </div>
+
                         </h4>
                     </div>
                     <ul style="max-height:300px;" class="display-flex flex-col s-gap overflow-scroll s-padded" id="0">
@@ -77,7 +87,17 @@
                     <div class="xs-padded no-padded-right no-padded-top">
                         <h4 class="display-flex spaced color-primary font-500 font-m s-padded no-padded-bottom">
                             <span loom="Draft"></span>
-                            <svg class="fill-primary" width="22" height="22" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12.3929 26.4001C11.731 26.4001 11.1667 26.1644 10.7 25.693C10.2333 25.2216 10 24.655 10 23.993C10 23.3311 10.2357 22.7668 10.7071 22.3001C11.1785 21.8334 11.7451 21.6001 12.4071 21.6001C13.069 21.6001 13.6333 21.8358 14.1 22.3072C14.5667 22.7786 14.8 23.3452 14.8 24.0072C14.8 24.6691 14.5643 25.2334 14.0929 25.7001C13.6215 26.1668 13.0549 26.4001 12.3929 26.4001ZM23.9929 26.4001C23.331 26.4001 22.7667 26.1644 22.3 25.693C21.8333 25.2216 21.6 24.655 21.6 23.993C21.6 23.3311 21.8357 22.7668 22.3071 22.3001C22.7785 21.8334 23.3451 21.6001 24.0071 21.6001C24.669 21.6001 25.2333 21.8358 25.7 22.3072C26.1667 22.7786 26.4 23.3452 26.4 24.0072C26.4 24.6691 26.1643 25.2334 25.6929 25.7001C25.2215 26.1668 24.6549 26.4001 23.9929 26.4001ZM35.5929 26.4001C34.931 26.4001 34.3667 26.1644 33.9 25.693C33.4333 25.2216 33.2 24.655 33.2 23.993C33.2 23.3311 33.4357 22.7668 33.9071 22.3001C34.3785 21.8334 34.9451 21.6001 35.6071 21.6001C36.269 21.6001 36.8333 21.8358 37.3 22.3072C37.7667 22.7786 38 23.3452 38 24.0072C38 24.6691 37.7643 25.2334 37.2929 25.7001C36.8215 26.1668 36.2549 26.4001 35.5929 26.4001Z" /></svg>
+
+                            <!-- Draft options dropdown -->
+                            <div class="dropdown">
+                                <p class="dropbtn cursor-pointer bg-none hover-color-tint hover-fill-tint focus-fill-tint focus-color-tint">
+                                    <svg class="fill-primary" width="22" height="22" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12.3929 26.4001C11.731 26.4001 11.1667 26.1644 10.7 25.693C10.2333 25.2216 10 24.655 10 23.993C10 23.3311 10.2357 22.7668 10.7071 22.3001C11.1785 21.8334 11.7451 21.6001 12.4071 21.6001C13.069 21.6001 13.6333 21.8358 14.1 22.3072C14.5667 22.7786 14.8 23.3452 14.8 24.0072C14.8 24.6691 14.5643 25.2334 14.0929 25.7001C13.6215 26.1668 13.0549 26.4001 12.3929 26.4001ZM23.9929 26.4001C23.331 26.4001 22.7667 26.1644 22.3 25.693C21.8333 25.2216 21.6 24.655 21.6 23.993C21.6 23.3311 21.8357 22.7668 22.3071 22.3001C22.7785 21.8334 23.3451 21.6001 24.0071 21.6001C24.669 21.6001 25.2333 21.8358 25.7 22.3072C26.1667 22.7786 26.4 23.3452 26.4 24.0072C26.4 24.6691 26.1643 25.2334 25.6929 25.7001C25.2215 26.1668 24.6549 26.4001 23.9929 26.4001ZM35.5929 26.4001C34.931 26.4001 34.3667 26.1644 33.9 25.693C33.4333 25.2216 33.2 24.655 33.2 23.993C33.2 23.3311 33.4357 22.7668 33.9071 22.3001C34.3785 21.8334 34.9451 21.6001 35.6071 21.6001C36.269 21.6001 36.8333 21.8358 37.3 22.3072C37.7667 22.7786 38 23.3452 38 24.0072C38 24.6691 37.7643 25.2334 37.2929 25.7001C36.8215 26.1668 36.2549 26.4001 35.5929 26.4001Z" /></svg>
+                                </p>
+                                <ul class="dropdown-content to-right z-1 absolute text-right rounded shadow-two bg-body xs-padded border-solid-s border-primary">
+                                    <li class="dropdown-element block-mode color-secondary rounded-xs cursor-pointer">Hide Board</li>
+                                    <li class="dropdown-element block-mode color-secondary rounded-xs cursor-pointer">Delete All Cards</li>
+                                </ul>
+                            </div>                        
                         </h4>
                     </div>
                     <ul style="max-height:300px;" class="display-flex flex-col s-gap overflow-scroll s-padded" id="1">
@@ -90,7 +110,17 @@
                     <div class="xs-padded no-padded-right no-padded-top">
                         <h4 class="display-flex spaced color-body font-500 font-m s-padded no-padded-bottom">
                             <span loom="Contacts"></span>
-                            <svg class="fill-body" width="22" height="22" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12.3929 26.4001C11.731 26.4001 11.1667 26.1644 10.7 25.693C10.2333 25.2216 10 24.655 10 23.993C10 23.3311 10.2357 22.7668 10.7071 22.3001C11.1785 21.8334 11.7451 21.6001 12.4071 21.6001C13.069 21.6001 13.6333 21.8358 14.1 22.3072C14.5667 22.7786 14.8 23.3452 14.8 24.0072C14.8 24.6691 14.5643 25.2334 14.0929 25.7001C13.6215 26.1668 13.0549 26.4001 12.3929 26.4001ZM23.9929 26.4001C23.331 26.4001 22.7667 26.1644 22.3 25.693C21.8333 25.2216 21.6 24.655 21.6 23.993C21.6 23.3311 21.8357 22.7668 22.3071 22.3001C22.7785 21.8334 23.3451 21.6001 24.0071 21.6001C24.669 21.6001 25.2333 21.8358 25.7 22.3072C26.1667 22.7786 26.4 23.3452 26.4 24.0072C26.4 24.6691 26.1643 25.2334 25.6929 25.7001C25.2215 26.1668 24.6549 26.4001 23.9929 26.4001ZM35.5929 26.4001C34.931 26.4001 34.3667 26.1644 33.9 25.693C33.4333 25.2216 33.2 24.655 33.2 23.993C33.2 23.3311 33.4357 22.7668 33.9071 22.3001C34.3785 21.8334 34.9451 21.6001 35.6071 21.6001C36.269 21.6001 36.8333 21.8358 37.3 22.3072C37.7667 22.7786 38 23.3452 38 24.0072C38 24.6691 37.7643 25.2334 37.2929 25.7001C36.8215 26.1668 36.2549 26.4001 35.5929 26.4001Z" /></svg>
+
+                            <!-- Draft options dropdown -->
+                            <div class="dropdown">
+                                <p class="dropbtn cursor-pointer bg-none hover-color-tint hover-fill-tint focus-fill-tint focus-color-tint">
+                                    <svg class="fill-body" width="22" height="22" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12.3929 26.4001C11.731 26.4001 11.1667 26.1644 10.7 25.693C10.2333 25.2216 10 24.655 10 23.993C10 23.3311 10.2357 22.7668 10.7071 22.3001C11.1785 21.8334 11.7451 21.6001 12.4071 21.6001C13.069 21.6001 13.6333 21.8358 14.1 22.3072C14.5667 22.7786 14.8 23.3452 14.8 24.0072C14.8 24.6691 14.5643 25.2334 14.0929 25.7001C13.6215 26.1668 13.0549 26.4001 12.3929 26.4001ZM23.9929 26.4001C23.331 26.4001 22.7667 26.1644 22.3 25.693C21.8333 25.2216 21.6 24.655 21.6 23.993C21.6 23.3311 21.8357 22.7668 22.3071 22.3001C22.7785 21.8334 23.3451 21.6001 24.0071 21.6001C24.669 21.6001 25.2333 21.8358 25.7 22.3072C26.1667 22.7786 26.4 23.3452 26.4 24.0072C26.4 24.6691 26.1643 25.2334 25.6929 25.7001C25.2215 26.1668 24.6549 26.4001 23.9929 26.4001ZM35.5929 26.4001C34.931 26.4001 34.3667 26.1644 33.9 25.693C33.4333 25.2216 33.2 24.655 33.2 23.993C33.2 23.3311 33.4357 22.7668 33.9071 22.3001C34.3785 21.8334 34.9451 21.6001 35.6071 21.6001C36.269 21.6001 36.8333 21.8358 37.3 22.3072C37.7667 22.7786 38 23.3452 38 24.0072C38 24.6691 37.7643 25.2334 37.2929 25.7001C36.8215 26.1668 36.2549 26.4001 35.5929 26.4001Z" /></svg>
+                                </p>
+                                <ul class="dropdown-content to-right z-1 absolute text-right rounded shadow-two bg-body xs-padded border-solid-s border-primary">
+                                    <li class="dropdown-element block-mode color-secondary rounded-xs cursor-pointer">Hide Board</li>
+                                    <li class="dropdown-element block-mode color-secondary rounded-xs cursor-pointer">Delete All Cards</li>
+                                </ul>
+                            </div>  
                         </h4>
                     </div>
                     <ul style="max-height:300px;" class="display-flex flex-col s-gap overflow-scroll s-padded" id="2">
@@ -106,7 +136,18 @@
                                 <span loom="Attraction Zone"></span>
                                 <span class="badge pastel1 font-s font-400 rounded" id='attractionBoardsBadge'>20</span>
                             </div>
-                            <svg class="fill-primary" width="22" height="22" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12.3929 26.4001C11.731 26.4001 11.1667 26.1644 10.7 25.693C10.2333 25.2216 10 24.655 10 23.993C10 23.3311 10.2357 22.7668 10.7071 22.3001C11.1785 21.8334 11.7451 21.6001 12.4071 21.6001C13.069 21.6001 13.6333 21.8358 14.1 22.3072C14.5667 22.7786 14.8 23.3452 14.8 24.0072C14.8 24.6691 14.5643 25.2334 14.0929 25.7001C13.6215 26.1668 13.0549 26.4001 12.3929 26.4001ZM23.9929 26.4001C23.331 26.4001 22.7667 26.1644 22.3 25.693C21.8333 25.2216 21.6 24.655 21.6 23.993C21.6 23.3311 21.8357 22.7668 22.3071 22.3001C22.7785 21.8334 23.3451 21.6001 24.0071 21.6001C24.669 21.6001 25.2333 21.8358 25.7 22.3072C26.1667 22.7786 26.4 23.3452 26.4 24.0072C26.4 24.6691 26.1643 25.2334 25.6929 25.7001C25.2215 26.1668 24.6549 26.4001 23.9929 26.4001ZM35.5929 26.4001C34.931 26.4001 34.3667 26.1644 33.9 25.693C33.4333 25.2216 33.2 24.655 33.2 23.993C33.2 23.3311 33.4357 22.7668 33.9071 22.3001C34.3785 21.8334 34.9451 21.6001 35.6071 21.6001C36.269 21.6001 36.8333 21.8358 37.3 22.3072C37.7667 22.7786 38 23.3452 38 24.0072C38 24.6691 37.7643 25.2334 37.2929 25.7001C36.8215 26.1668 36.2549 26.4001 35.5929 26.4001Z" /></svg>
+
+                            <!-- Draft options dropdown -->
+                            <div class="dropdown">
+                                <p class="dropbtn cursor-pointer bg-none hover-color-tint hover-fill-tint focus-fill-tint focus-color-tint">
+                                    <svg class="fill-primary" width="22" height="22" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12.3929 26.4001C11.731 26.4001 11.1667 26.1644 10.7 25.693C10.2333 25.2216 10 24.655 10 23.993C10 23.3311 10.2357 22.7668 10.7071 22.3001C11.1785 21.8334 11.7451 21.6001 12.4071 21.6001C13.069 21.6001 13.6333 21.8358 14.1 22.3072C14.5667 22.7786 14.8 23.3452 14.8 24.0072C14.8 24.6691 14.5643 25.2334 14.0929 25.7001C13.6215 26.1668 13.0549 26.4001 12.3929 26.4001ZM23.9929 26.4001C23.331 26.4001 22.7667 26.1644 22.3 25.693C21.8333 25.2216 21.6 24.655 21.6 23.993C21.6 23.3311 21.8357 22.7668 22.3071 22.3001C22.7785 21.8334 23.3451 21.6001 24.0071 21.6001C24.669 21.6001 25.2333 21.8358 25.7 22.3072C26.1667 22.7786 26.4 23.3452 26.4 24.0072C26.4 24.6691 26.1643 25.2334 25.6929 25.7001C25.2215 26.1668 24.6549 26.4001 23.9929 26.4001ZM35.5929 26.4001C34.931 26.4001 34.3667 26.1644 33.9 25.693C33.4333 25.2216 33.2 24.655 33.2 23.993C33.2 23.3311 33.4357 22.7668 33.9071 22.3001C34.3785 21.8334 34.9451 21.6001 35.6071 21.6001C36.269 21.6001 36.8333 21.8358 37.3 22.3072C37.7667 22.7786 38 23.3452 38 24.0072C38 24.6691 37.7643 25.2334 37.2929 25.7001C36.8215 26.1668 36.2549 26.4001 35.5929 26.4001Z" /></svg>
+                                </p>
+                                <ul class="dropdown-content to-right z-1 absolute text-right rounded shadow-two bg-body xs-padded border-solid-s border-primary">
+                                    <li class="dropdown-element block-mode color-secondary rounded-xs cursor-pointer">Hide Board</li>
+                                    <li class="dropdown-element block-mode color-secondary rounded-xs cursor-pointer">Delete All Cards</li>
+                                </ul>
+                            </div>
+
                         </h4>
                     </div>
                     <ul style="max-height:300px;" class="display-flex flex-col s-gap overflow-scroll s-padded" id="3">
@@ -122,7 +163,18 @@
                                 <span loom="Consideration Zone"></span>
                                 <span class="badge pastel2 font-s font-400 rounded" id='considerationBoardsBadge'>20</span>
                             </div>
-                            <svg class="fill-primary" width="22" height="22" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12.3929 26.4001C11.731 26.4001 11.1667 26.1644 10.7 25.693C10.2333 25.2216 10 24.655 10 23.993C10 23.3311 10.2357 22.7668 10.7071 22.3001C11.1785 21.8334 11.7451 21.6001 12.4071 21.6001C13.069 21.6001 13.6333 21.8358 14.1 22.3072C14.5667 22.7786 14.8 23.3452 14.8 24.0072C14.8 24.6691 14.5643 25.2334 14.0929 25.7001C13.6215 26.1668 13.0549 26.4001 12.3929 26.4001ZM23.9929 26.4001C23.331 26.4001 22.7667 26.1644 22.3 25.693C21.8333 25.2216 21.6 24.655 21.6 23.993C21.6 23.3311 21.8357 22.7668 22.3071 22.3001C22.7785 21.8334 23.3451 21.6001 24.0071 21.6001C24.669 21.6001 25.2333 21.8358 25.7 22.3072C26.1667 22.7786 26.4 23.3452 26.4 24.0072C26.4 24.6691 26.1643 25.2334 25.6929 25.7001C25.2215 26.1668 24.6549 26.4001 23.9929 26.4001ZM35.5929 26.4001C34.931 26.4001 34.3667 26.1644 33.9 25.693C33.4333 25.2216 33.2 24.655 33.2 23.993C33.2 23.3311 33.4357 22.7668 33.9071 22.3001C34.3785 21.8334 34.9451 21.6001 35.6071 21.6001C36.269 21.6001 36.8333 21.8358 37.3 22.3072C37.7667 22.7786 38 23.3452 38 24.0072C38 24.6691 37.7643 25.2334 37.2929 25.7001C36.8215 26.1668 36.2549 26.4001 35.5929 26.4001Z" /></svg>
+
+                            <!-- Draft options dropdown -->
+                            <div class="dropdown">
+                                <p class="dropbtn cursor-pointer bg-none hover-color-tint hover-fill-tint focus-fill-tint focus-color-tint">
+                                    <svg class="fill-primary" width="22" height="22" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12.3929 26.4001C11.731 26.4001 11.1667 26.1644 10.7 25.693C10.2333 25.2216 10 24.655 10 23.993C10 23.3311 10.2357 22.7668 10.7071 22.3001C11.1785 21.8334 11.7451 21.6001 12.4071 21.6001C13.069 21.6001 13.6333 21.8358 14.1 22.3072C14.5667 22.7786 14.8 23.3452 14.8 24.0072C14.8 24.6691 14.5643 25.2334 14.0929 25.7001C13.6215 26.1668 13.0549 26.4001 12.3929 26.4001ZM23.9929 26.4001C23.331 26.4001 22.7667 26.1644 22.3 25.693C21.8333 25.2216 21.6 24.655 21.6 23.993C21.6 23.3311 21.8357 22.7668 22.3071 22.3001C22.7785 21.8334 23.3451 21.6001 24.0071 21.6001C24.669 21.6001 25.2333 21.8358 25.7 22.3072C26.1667 22.7786 26.4 23.3452 26.4 24.0072C26.4 24.6691 26.1643 25.2334 25.6929 25.7001C25.2215 26.1668 24.6549 26.4001 23.9929 26.4001ZM35.5929 26.4001C34.931 26.4001 34.3667 26.1644 33.9 25.693C33.4333 25.2216 33.2 24.655 33.2 23.993C33.2 23.3311 33.4357 22.7668 33.9071 22.3001C34.3785 21.8334 34.9451 21.6001 35.6071 21.6001C36.269 21.6001 36.8333 21.8358 37.3 22.3072C37.7667 22.7786 38 23.3452 38 24.0072C38 24.6691 37.7643 25.2334 37.2929 25.7001C36.8215 26.1668 36.2549 26.4001 35.5929 26.4001Z" /></svg>
+                                </p>
+                                <ul class="dropdown-content to-right z-1 absolute text-right rounded shadow-two bg-body xs-padded border-solid-s border-primary">
+                                    <li class="dropdown-element block-mode color-secondary rounded-xs cursor-pointer">Hide Board</li>
+                                    <li class="dropdown-element block-mode color-secondary rounded-xs cursor-pointer">Delete All Cards</li>
+                                </ul>
+                            </div>  
+
                         </h4>
                     </div>
                     <ul style="max-height:300px;" class="display-flex flex-col s-gap overflow-scroll s-padded" id="4">
@@ -138,7 +190,18 @@
                                 <span loom="Decision Zone"></span>
                                 <span class="badge pastel3 font-s font-400 rounded" id='decisionBoardsBadge'>20</span>
                             </div>
-                            <svg class="fill-primary" width="22" height="22" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12.3929 26.4001C11.731 26.4001 11.1667 26.1644 10.7 25.693C10.2333 25.2216 10 24.655 10 23.993C10 23.3311 10.2357 22.7668 10.7071 22.3001C11.1785 21.8334 11.7451 21.6001 12.4071 21.6001C13.069 21.6001 13.6333 21.8358 14.1 22.3072C14.5667 22.7786 14.8 23.3452 14.8 24.0072C14.8 24.6691 14.5643 25.2334 14.0929 25.7001C13.6215 26.1668 13.0549 26.4001 12.3929 26.4001ZM23.9929 26.4001C23.331 26.4001 22.7667 26.1644 22.3 25.693C21.8333 25.2216 21.6 24.655 21.6 23.993C21.6 23.3311 21.8357 22.7668 22.3071 22.3001C22.7785 21.8334 23.3451 21.6001 24.0071 21.6001C24.669 21.6001 25.2333 21.8358 25.7 22.3072C26.1667 22.7786 26.4 23.3452 26.4 24.0072C26.4 24.6691 26.1643 25.2334 25.6929 25.7001C25.2215 26.1668 24.6549 26.4001 23.9929 26.4001ZM35.5929 26.4001C34.931 26.4001 34.3667 26.1644 33.9 25.693C33.4333 25.2216 33.2 24.655 33.2 23.993C33.2 23.3311 33.4357 22.7668 33.9071 22.3001C34.3785 21.8334 34.9451 21.6001 35.6071 21.6001C36.269 21.6001 36.8333 21.8358 37.3 22.3072C37.7667 22.7786 38 23.3452 38 24.0072C38 24.6691 37.7643 25.2334 37.2929 25.7001C36.8215 26.1668 36.2549 26.4001 35.5929 26.4001Z" /></svg>
+
+                            <!-- Draft options dropdown -->
+                            <div class="dropdown">
+                                <p class="dropbtn cursor-pointer bg-none hover-color-tint hover-fill-tint focus-fill-tint focus-color-tint">
+                                    <svg class="fill-primary" width="22" height="22" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12.3929 26.4001C11.731 26.4001 11.1667 26.1644 10.7 25.693C10.2333 25.2216 10 24.655 10 23.993C10 23.3311 10.2357 22.7668 10.7071 22.3001C11.1785 21.8334 11.7451 21.6001 12.4071 21.6001C13.069 21.6001 13.6333 21.8358 14.1 22.3072C14.5667 22.7786 14.8 23.3452 14.8 24.0072C14.8 24.6691 14.5643 25.2334 14.0929 25.7001C13.6215 26.1668 13.0549 26.4001 12.3929 26.4001ZM23.9929 26.4001C23.331 26.4001 22.7667 26.1644 22.3 25.693C21.8333 25.2216 21.6 24.655 21.6 23.993C21.6 23.3311 21.8357 22.7668 22.3071 22.3001C22.7785 21.8334 23.3451 21.6001 24.0071 21.6001C24.669 21.6001 25.2333 21.8358 25.7 22.3072C26.1667 22.7786 26.4 23.3452 26.4 24.0072C26.4 24.6691 26.1643 25.2334 25.6929 25.7001C25.2215 26.1668 24.6549 26.4001 23.9929 26.4001ZM35.5929 26.4001C34.931 26.4001 34.3667 26.1644 33.9 25.693C33.4333 25.2216 33.2 24.655 33.2 23.993C33.2 23.3311 33.4357 22.7668 33.9071 22.3001C34.3785 21.8334 34.9451 21.6001 35.6071 21.6001C36.269 21.6001 36.8333 21.8358 37.3 22.3072C37.7667 22.7786 38 23.3452 38 24.0072C38 24.6691 37.7643 25.2334 37.2929 25.7001C36.8215 26.1668 36.2549 26.4001 35.5929 26.4001Z" /></svg>
+                                </p>
+                                <ul class="dropdown-content to-right z-1 absolute text-right rounded shadow-two bg-body xs-padded border-solid-s border-primary">
+                                    <li class="dropdown-element block-mode color-secondary rounded-xs cursor-pointer">Hide Board</li>
+                                    <li class="dropdown-element block-mode color-secondary rounded-xs cursor-pointer">Delete All Cards</li>
+                                </ul>
+                            </div>  
+
                         </h4>
                     </div>
                     <ul style="max-height:300px;" class="display-flex flex-col s-gap overflow-scroll s-padded" id="5">
@@ -154,7 +217,18 @@
                                 <span loom="Action Zone"></span>
                                 <span class="badge pastel4 font-s font-400 rounded" id='actionBoardsBadge'>20</span>
                             </div>
-                            <svg class="fill-primary" width="22" height="22" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12.3929 26.4001C11.731 26.4001 11.1667 26.1644 10.7 25.693C10.2333 25.2216 10 24.655 10 23.993C10 23.3311 10.2357 22.7668 10.7071 22.3001C11.1785 21.8334 11.7451 21.6001 12.4071 21.6001C13.069 21.6001 13.6333 21.8358 14.1 22.3072C14.5667 22.7786 14.8 23.3452 14.8 24.0072C14.8 24.6691 14.5643 25.2334 14.0929 25.7001C13.6215 26.1668 13.0549 26.4001 12.3929 26.4001ZM23.9929 26.4001C23.331 26.4001 22.7667 26.1644 22.3 25.693C21.8333 25.2216 21.6 24.655 21.6 23.993C21.6 23.3311 21.8357 22.7668 22.3071 22.3001C22.7785 21.8334 23.3451 21.6001 24.0071 21.6001C24.669 21.6001 25.2333 21.8358 25.7 22.3072C26.1667 22.7786 26.4 23.3452 26.4 24.0072C26.4 24.6691 26.1643 25.2334 25.6929 25.7001C25.2215 26.1668 24.6549 26.4001 23.9929 26.4001ZM35.5929 26.4001C34.931 26.4001 34.3667 26.1644 33.9 25.693C33.4333 25.2216 33.2 24.655 33.2 23.993C33.2 23.3311 33.4357 22.7668 33.9071 22.3001C34.3785 21.8334 34.9451 21.6001 35.6071 21.6001C36.269 21.6001 36.8333 21.8358 37.3 22.3072C37.7667 22.7786 38 23.3452 38 24.0072C38 24.6691 37.7643 25.2334 37.2929 25.7001C36.8215 26.1668 36.2549 26.4001 35.5929 26.4001Z" /></svg>
+
+                            <!-- Draft options dropdown -->
+                            <div class="dropdown">
+                                <p class="dropbtn cursor-pointer bg-none hover-color-tint hover-fill-tint focus-fill-tint focus-color-tint">
+                                    <svg class="fill-primary" width="22" height="22" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12.3929 26.4001C11.731 26.4001 11.1667 26.1644 10.7 25.693C10.2333 25.2216 10 24.655 10 23.993C10 23.3311 10.2357 22.7668 10.7071 22.3001C11.1785 21.8334 11.7451 21.6001 12.4071 21.6001C13.069 21.6001 13.6333 21.8358 14.1 22.3072C14.5667 22.7786 14.8 23.3452 14.8 24.0072C14.8 24.6691 14.5643 25.2334 14.0929 25.7001C13.6215 26.1668 13.0549 26.4001 12.3929 26.4001ZM23.9929 26.4001C23.331 26.4001 22.7667 26.1644 22.3 25.693C21.8333 25.2216 21.6 24.655 21.6 23.993C21.6 23.3311 21.8357 22.7668 22.3071 22.3001C22.7785 21.8334 23.3451 21.6001 24.0071 21.6001C24.669 21.6001 25.2333 21.8358 25.7 22.3072C26.1667 22.7786 26.4 23.3452 26.4 24.0072C26.4 24.6691 26.1643 25.2334 25.6929 25.7001C25.2215 26.1668 24.6549 26.4001 23.9929 26.4001ZM35.5929 26.4001C34.931 26.4001 34.3667 26.1644 33.9 25.693C33.4333 25.2216 33.2 24.655 33.2 23.993C33.2 23.3311 33.4357 22.7668 33.9071 22.3001C34.3785 21.8334 34.9451 21.6001 35.6071 21.6001C36.269 21.6001 36.8333 21.8358 37.3 22.3072C37.7667 22.7786 38 23.3452 38 24.0072C38 24.6691 37.7643 25.2334 37.2929 25.7001C36.8215 26.1668 36.2549 26.4001 35.5929 26.4001Z" /></svg>
+                                </p>
+                                <ul class="dropdown-content to-right z-1 absolute text-right rounded shadow-two bg-body xs-padded border-solid-s border-primary">
+                                    <li class="dropdown-element block-mode color-secondary rounded-xs cursor-pointer">Hide Board</li>
+                                    <li class="dropdown-element block-mode color-secondary rounded-xs cursor-pointer">Delete All Cards</li>
+                                </ul>
+                            </div>  
+
                         </h4>
                     </div>
                     <ul style="max-height:300px;" class="display-flex flex-col s-gap overflow-scroll s-padded" id="6">
@@ -172,48 +246,28 @@
         <form id="newBoardForm" class="bg-body z-2 padded rounded brick flex-col s-gap">
             <div class="display-flex flex-row spaced">
                 <h4 class="color-primary">Create new board</h4>
-                <div class="dropdown float-right">
-                    <p
-                        class="cursor-pointer full-center btn bg-none color-secondary fill-secondary hover-color-tint hover-fill-tint">
-                        <span id="zoneSelection">
-                            Attraction
-                        </span>
-                        <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20">
-                            <path d="M480-360 280-559h400L480-360Z" />
-                        </svg>
-                    </p>
-                    <ul id="salesApproachZonesList" class="dropdown-right text-right rounded m-font font-200 shadow-two bg-body xs-padded border-solid-xs border-tertiary">
-                        
-                        <li
-                            class="dropdown-element ultra-over-mark block-mode color-secondary rounded-xs cursor-pointer display-none">
-                            Trash
-                        </li>
-                        <li
-                            class="dropdown-element ultra-over-mark block-mode color-secondary rounded-xs cursor-pointer">
-                            Draft
-                        </li>
-                        <li
-                            class="dropdown-element ultra-over-mark block-mode color-secondary rounded-xs cursor-pointer">
-                            Contact
-                        </li>
-                        <li
-                            class="selected dropdown-element ultra-over-mark block-mode color-secondary rounded-xs cursor-pointer">
-                            Attraction
-                        </li>
-                        <li
-                            class="dropdown-element ultra-over-mark block-mode color-secondary rounded-xs cursor-pointer">
-                            Consideration
-                        </li>
-                        <li
-                            class="dropdown-element ultra-over-mark block-mode color-secondary rounded-xs cursor-pointer">
-                            Decision
-                        </li>
-                        <li
-                            class="dropdown-element ultra-over-mark block-mode color-secondary rounded-xs cursor-pointer">
-                            Action
-                        </li>
-                    </ul>
-                </div>
+                
+            <!-- Zone selector -->
+            <div class="dropdown">
+                <p class="display-flex dropbtn cursor-pointer s-padded bg-none color-secondary fill-secondary hover-color-tint hover-fill-tint focus-fill-tint focus-color-tint">
+                    <span id="zoneSelection">
+                        Attraction
+                    </span>
+                    <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20">
+                        <path d="M480-360 280-559h400L480-360Z" />
+                    </svg>
+                </p>
+                <ul id="salesApproachZonesList" class="dropdown-content to-right z-1 absolute text-right rounded shadow-two bg-body xs-padded border-solid-s border-primary">
+                    <li class="dropdown-element block-mode color-secondary rounded-xs cursor-pointer display-none">Trash</li>
+                    <li class="dropdown-element block-mode color-secondary rounded-xs cursor-pointer">Draft</li>
+                    <li class="dropdown-element block-mode color-secondary rounded-xs cursor-pointer">Contact</li>
+                    <li class="dropdown-element block-mode color-secondary rounded-xs cursor-pointer selected">Attracion</li>
+                    <li class="dropdown-element block-mode color-secondary rounded-xs cursor-pointer">Consideration</li>
+                    <li class="dropdown-element block-mode color-secondary rounded-xs cursor-pointer">Decision</li>
+                    <li class="dropdown-element block-mode color-secondary rounded-xs cursor-pointer">Action</li>
+                </ul>
+            </div>
+                
             </div>
             <input id="newBoardInputName"
                 class="s-padded bg-body border-secondary border-solid rounded-s placeholder-secondary font-m color-primary"

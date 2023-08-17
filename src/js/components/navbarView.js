@@ -1,4 +1,4 @@
-let dropwdownElementClass = 'dropdown-element ultra-over-mark block-mode color-secondary rounded-xs cursor-pointer'
+let dropwdownElementClass = 'dropdown-element block-mode color-secondary rounded-xs cursor-pointer'
 
 var navbar =`
 <div class="bg-body stick-top z-3 steady-1 padded spaced display-flex flex-wrap">
@@ -6,36 +6,34 @@ var navbar =`
     
         <!-- Brand -->
         
-        <div class="display-flex flex-wrap">
+        <div class="display-flex flex-row">
             ${clipIcon}
             <div>
-                <p class="font-500 color-primary">Tripwire</p>
-                <p class="color-rock no-wrap font-s on-mobile-pass">Sales Approach</p>
+                <p class="font-500 color-primary on-mobile-pass">Tripwire</p>
+                <p class="color-rock no-wrap font-s">Sales Approach</p>
             </div>
         </div>
 
         <div class="display-flex flex-row s-gap">
 
 
-
-
-        <!-- Create Board Button -->
-        <button id="addNewBoardButton" class="btn btn-tint no-wrap">
-            <span>Create</span>
-            <svg class="fill-white" xmlns="http://www.w3.org/2000/svg" height="18" viewBox="0 -960 960 960"
-                width="18">
-                <path d="M450-450H230q-12.75 0-21.375-8.675-8.625-8.676-8.625-21.5 0-12.825 8.625-21.325T230-510h220v-220q0-12.75 8.675-21.375 8.676-8.625 21.5-8.625 12.825 0 21.325 8.625T510-730v220h220q12.75 0 21.375 8.675 8.625 8.676 8.625 21.5 0 12.825-8.625 21.325T730-450H510v220q0 12.75-8.675 21.375-8.676 8.625-21.5 8.625-12.825 0-21.325-8.625T450-230v-220Z"/></svg>
-        </button>
+            <!-- Create Board Button -->
+            <button id="addNewBoardButton" class="btn btn-tint no-wrap">
+                <span>Create</span>
+                <svg class="fill-white" xmlns="http://www.w3.org/2000/svg" height="18" viewBox="0 -960 960 960"
+                    width="18">
+                    <path d="M450-450H230q-12.75 0-21.375-8.675-8.625-8.676-8.625-21.5 0-12.825 8.625-21.325T230-510h220v-220q0-12.75 8.675-21.375 8.676-8.625 21.5-8.625 12.825 0 21.325 8.625T510-730v220h220q12.75 0 21.375 8.675 8.625 8.676 8.625 21.5 0 12.825-8.625 21.325T730-450H510v220q0 12.75-8.675 21.375-8.676 8.625-21.5 8.625-12.825 0-21.325-8.625T450-230v-220Z"/></svg>
+            </button>
 
             <!-- Language Switcher -->
             <loom class="dropdown">
-                <button class="cursor-pointer full-center btn bg-none color-secondary fill-secondary hover-color-tint hover-fill-tint">
+                <button class="display-flex dropbtn cursor-pointer s-padded bg-none color-secondary fill-secondary hover-color-tint hover-fill-tint focus-fill-tint focus-color-tint">
                     <span loom-indicator>
                     </span>
                     ${globeIcon}
                     ${dropdownIcon}
                 </button>
-                <ul loom-list class="dropdown-right text-right rounded m-font font-200 shadow-two bg-body xs-padded border-solid-xs border-tertiary">
+                <ul loom-list class="dropdown-content to-right z-1 absolute text-right rounded shadow-two bg-body xs-padded border-solid-s border-primary">
                     <li loom-language="ar" class="${dropwdownElementClass}"></li>
                     <li loom-language="us" class="${dropwdownElementClass}"></li>
                     <li loom-language="br" class="${dropwdownElementClass}"></li>
@@ -53,9 +51,7 @@ var navbar =`
 
             <!-- Logout button -->
             <button id="logoutButton" class="cursor-pointer full-center btn bg-none color-secondary fill-secondary hover-color-tint hover-fill-tint">
-            <span class='on-mobile-pass'>
-            Logout
-            </span>
+                Logout
                 ${doorIcon}
             </button>
 

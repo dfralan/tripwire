@@ -400,6 +400,14 @@ html {
     color: var(--tint-color) !important;
 }
 
+.focus-fill-tint:focus {
+    fill: var(--tint-color) !important;
+}
+
+.focus-color-tint:focus {
+    color: var(--tint-color) !important;
+}
+
 .color-black {
     color: var(--black-color);
 }
@@ -551,23 +559,6 @@ html {
     height: auto;
 }
 
-.ultra-over-mark {
-    background-color: rgba(255, 87, 69, 0);
-}
-
-.ultra-over-mark:hover {
-    background-color: var(--tertiary-color);
-}
-
-.ultra-over-mark:focus {
-    background-color: var(--tint-color);
-}
-
-.ultra-over-mark:active {
-    background-color: var(--tint-color) !important;
-    color: var(--white-color) !important;
-}
-
 .flex-wrap {
     flex-wrap: wrap;
 }
@@ -634,53 +625,11 @@ html {
 }
 
 
-.dropdown {
-    text-decoration: none;
-    position: relative;
-    display: inline-block;
-    align-self: center;
-}
-
-.dropdown-left {
-    left: 0;
-    opacity: 0;
-    visibility: hidden;
-    position: absolute;
-    z-index: 1;
-}
-
-.dropdown-right {
-    right: 0;
-    opacity: 0;
-    visibility: hidden;
-    position: absolute;
-    z-index: 1;
-}
-
-.dropdown-element {
-    padding: 5px 10px 5px 10px;
-}
-
 .child {
     opacity: 0;
 }
 
 .show-my-child:hover .child {
-    opacity: 1;
-}
-
-.selected {
-    background-color: var(--tint-color) !important;
-    color: var(--white-color) !important;
-}
-
-.dropdown:hover .dropdown-left {
-    visibility: visible;
-    opacity: 1;
-}
-
-.dropdown:hover .dropdown-right {
-    visibility: visible;
     opacity: 1;
 }
 
@@ -933,6 +882,12 @@ html {
     border-color: transparent;
 }
 
+.border-solid-s {
+    border-width: .5px;
+    border-style: solid;
+    border-color: transparent;
+}
+
 .border-dashed {
     border-style: dashed;
     border-color: transparent;
@@ -1000,6 +955,54 @@ html {
     color: var(--secondary-color);
 }
 
+
+
+
+
+
+
+
+
+
+
+
+.dropdown-element {
+    border-radius: var(--rounded-s);
+    padding: 5px 10px 5px 10px;
+}
+
+.dropdown-element:hover {
+    background-color: var(--tertiary-color);
+}
+
+.dropdown-element:focus {
+    background-color: var(--tint-color);
+}
+
+.dropdown-element:active {
+    background-color: var(--tint-color) !important;
+    color: var(--white-color) !important;
+}
+
+
+.dropbtn {
+  border: none;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  overflow: auto;
+}
+
+.drop-right{
+    right: 0;
+}
+
 .display-block {
     display: block;
 }
@@ -1010,4 +1013,9 @@ html {
 
 .display-none {
     display: none;
+}
+
+.selected {
+    background-color: var(--tint-color) !important;
+    color: var(--white-color) !important;
 }

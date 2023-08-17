@@ -1,3 +1,40 @@
+// dropdown handler
+var dropdowns = document.getElementsByClassName("dropdown");
+var i;
+for (i = 0; i < dropdowns.length; i++) {
+    let actualDropwdown = dropdowns[i]
+    const dropbtn = actualDropwdown.querySelector(".dropbtn");
+    const dropcontent = actualDropwdown.querySelector(".dropdown-content");
+    
+    if (dropbtn) {
+        dropbtn.addEventListener("click", function (event) {
+            event.stopPropagation(); // Stop event propagation
+            if (dropcontent.classList.contains('display-block')) {
+                dropcontent.classList.remove('display-block');
+                console.log("OCULTO")
+            } else {
+                dropcontent.classList.add('display-block');
+                console.log("MUESTRO")
+            }
+        })
+    
+        // Close the dropdown if the user clicks outside of it
+        window.onclick = function(event) {
+            if (!event.target.matches('.dropbtn')) {
+                var dropdowncontainers = document.getElementsByClassName("dropdown-content");
+                var i;
+                for (i = 0; i < dropdowncontainers.length; i++) {
+                    var openDropdown = dropdowncontainers[i];
+                    if (openDropdown.classList.contains('display-block')) {
+                        openDropdown.classList.remove('display-block');
+                        console.log("wep")
+                    }
+                }
+            }
+        }
+    }
+
+}
 
 window.addEventListener("tripChange", function() {
 
@@ -203,7 +240,26 @@ window.addEventListener("tripChange", function() {
             }
         });
 
-        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     }
     
