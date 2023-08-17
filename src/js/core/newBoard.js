@@ -4,7 +4,7 @@ function createLi(id, title, description, tags, zoneId, at) {
     const newLi = document.createElement('li');
     newLi.id = id;
     newLi.draggable = true;
-    newLi.className = 'taskBoard cursor-pointer bg-body shadow-dynamic color-primary s-padded display-flex flex-col rounded-s s-gap';
+    newLi.className = 'show-my-child taskBoard cursor-pointer bg-body shadow-dynamic color-primary s-padded display-flex flex-col rounded-s s-gap';
 
     // Create the first div within the li
     const div1 = document.createElement('div');
@@ -23,7 +23,7 @@ function createLi(id, title, description, tags, zoneId, at) {
     // Create another button
     const otherButton = document.createElement('button');
     otherButton.className = 'btn font-l font-600';
-    otherButton.innerHTML = dragIcon; // Insert SVG content here
+    otherButton.innerHTML = editIcon; // Insert SVG content here
     spanButtons.appendChild(otherButton);
 
     // Create the expand button
@@ -51,7 +51,7 @@ function createLi(id, title, description, tags, zoneId, at) {
     // Create and append tag elements
     parsedTags.forEach(tag => {
         const tagElement = document.createElement('p');
-        tagElement.className = 'xs-padded pastel1 font-xs rounded-s';
+        tagElement.className = 'xs-padded pastel1 font-xs rounded-s decoration-none color-black';
         tagElement.textContent = decodeURIComponent(tag);
         tagsContainer.appendChild(tagElement);
     });

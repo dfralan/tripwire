@@ -203,7 +203,7 @@ window.addEventListener("tripChange", function() {
             }
         });
 
-
+        
 
     }
     

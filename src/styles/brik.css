@@ -593,13 +593,6 @@ html {
     text-decoration: none;
 }
 
-.dropdown {
-    text-decoration: none;
-    position: relative;
-    display: inline-block;
-    align-self: center;
-}
-
 .z-0 {
     z-index: 0;
 }
@@ -640,6 +633,14 @@ html {
     opacity: 0;
 }
 
+
+.dropdown {
+    text-decoration: none;
+    position: relative;
+    display: inline-block;
+    align-self: center;
+}
+
 .dropdown-left {
     left: 0;
     opacity: 0;
@@ -658,6 +659,14 @@ html {
 
 .dropdown-element {
     padding: 5px 10px 5px 10px;
+}
+
+.child {
+    opacity: 0;
+}
+
+.show-my-child:hover .child {
+    opacity: 1;
 }
 
 .selected {
