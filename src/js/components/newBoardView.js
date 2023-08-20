@@ -10,7 +10,7 @@ var boardcreationform =`
                 </div>
                 <div class="full-center flex-col">
                     <h1>📎</h1>
-                    <h4 class="color-primary">New Board</h4>    
+                    <h4 id ='boardModalIndicator'class="color-primary">New Board</h4>    
                 </div>
             </div>
 
@@ -44,7 +44,7 @@ var boardcreationform =`
             </p>
 
             <div class="flex-col display-flex s-gap">
-                <button class="btn btn-tint" type="submit">Create Board</button>
+                <button id='newBoardSubmitButton' class="btn btn-tint" type="submit">Create Board</button>
                 <button id="cancelAddNewBoard" class="btn btn-primary" type="button">Cancel</button>
             </div>
         </form>

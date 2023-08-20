@@ -1,91 +1,86 @@
-(function () {
+// New sheet form variables
+const sheetCreationModal = document.getElementById('sheetCreationModal')
+const newSheetForm = document.getElementById('newSheetForm')
+const cancelAddNewSheet = document.getElementById('cancelAddNewSheet')
+const newSheetSubmitButton = document.getElementById('newSheetSubmitButton')
 
-        // Assuming you have a parent element with class 'workspace'
-        const workspace = document.querySelector('.workspace');
+// show add new sheet modal
+function showNewSheetModal(){
+    sheetCreationModal.classList.add("display-flex");
+    sheetCreationModal.classList.remove("display-none");
+}
 
-        if (workspace) {
+// hide add new sheet modal
+function hideNewSheetModal(){
+    sheetCreationModal.classList.add("display-none");
+    sheetCreationModal.classList.remove("display-flex");
+}
 
-            // Variables to handle sheet creation
-            const newSheetForm = document.getElementById('newSheetForm');
-            var newSheetHash = genHex(8)
-            const cancelAddNewSheet = document.getElementById('cancelAddNewSheet')
-            const closeAddNewSheet = document.getElementById('closeAddNewSheet')
-            const sheetCreationModal = document.getElementById('sheetCreationModal')
+// hide add new sheet modal
+cancelAddNewSheet.addEventListener("click", function () {
+    hideNewSheetModal()
+});
 
+// hide add new sheet modal
+closeAddNewSheet.addEventListener("click", function () {
+    hideNewSheetModal()
+});
 
-            // hide add new sheet modal
-            cancelAddNewSheet.addEventListener("click", function (event) {
-                event.preventDefault(); // Prevent the default behavior of the button
-                sheetCreationModal.classList.add("display-none");
-                sheetCreationModal.classList.remove("display-flex");
-            });
+// listen event that allow close new sheet modal when success on sending the event
+window.addEventListener("closeNewBoardModal", function() {
+    hideNewSheetModal()
+});
 
-            // hide add new sheet modal
-            closeAddNewSheet.addEventListener("click", function (event) {
-                event.preventDefault(); // Prevent the default behavior of the button
-                sheetCreationModal.classList.add("display-none");
-                sheetCreationModal.classList.remove("display-flex");
-            });
+// Launch Modal and fullfill inputs needed
+function launchModalSheet(workspaceId, boardId, boardTitle, sheetHash, sheetTitle, sheetDescription, sheetTags) {
 
-            // listen event that allow close new sheet modal when success on sending the event
-            window.addEventListener("closeNewBoardModal", function() {
-                sheetCreationModal.classList.add("display-none");
-                sheetCreationModal.classList.remove("display-flex");
-            });
+    var newSheetHash = (sheetHash === '') ? genHex(8) : sheetHash
 
+    const newSheetNameInput = document.getElementById('newSheetName')
+    const newSheetInputDescriptionInput = document.getElementById('newSheetInputDescription')
+    const newSheetInputTagsInput = document.getElementById('newSheetInputTags')
+    const boardReference = document.getElementById('boardReference')
+    const sheetModalIndicator = document.getElementById('sheetModalIndicator')
 
-            // Event listener attached to the workspace
-            workspace.addEventListener('click', function(event) {
-                // Check if the clicked element has the class 'newSheetTrigger'
-                if (event.target.classList.contains('newSheetTrigger')) {
-                    // show add new sheet modal
-                    event.stopPropagation(); // Stop event propagation
-                    sheetCreationModal.classList.remove("display-none");
-                    sheetCreationModal.classList.add("display-flex");
-                }
+    sheetModalIndicator.textContent = (sheetHash === '') ? 'New Sheet' : 'Edit Sheet'
+    boardReference.textContent = boardTitle
+    newSheetSubmitButton.textContent = (sheetHash === '') ? 'Add Sheet' : 'Confirm'
+    newSheetNameInput.value = sheetTitle
+    newSheetInputDescriptionInput.value = sheetDescription
+    newSheetInputTagsInput.value = sheetTags
 
+    showNewSheetModal()
 
-                const workspaceId = workspace.id;
-                const boardId = event.target.getAttribute('data-parent-id');
+    // Submit sheet listener
+    newSheetForm.addEventListener('submit', function (event) {
+        event.preventDefault()
+        const newSheetName = newSheetNameInput.value
+        const newSheetInputTags = newSheetInputTagsInput.value
+        const newSheetInputDescription = newSheetInputDescriptionInput.value
 
-                // Submit sheet listener
-                newSheetForm.addEventListener('submit', function (event) {
-                    event.preventDefault() // Prevent the default form submission behavior
-                    const newSheetName = document.getElementById('newSheetName').value
-                    const newSheetInputTags = document.getElementById('newSheetInputTags').value
-                    const newSheetInputDescription = document.getElementById('newSheetInputDescription').value
+        //0 workspaceId, 1 boardId, 2 sheetId, 3 title, 4 description, 5 tags, 6 deadline, 7 at, 8 participants,
+        const newSheetArrayed = [
+            workspaceId,
+            boardId,
+            newSheetHash,
+            encodeURIComponent(newSheetName),
+            encodeURIComponent(newSheetInputDescription),
+            arrayTags(newSheetInputTags),
+            'tomorrow',
+            'now',
+            'onlyme',
+        ];
 
-                    //0 workspaceId, 1 boardId, 2 sheetId, 3 title, 4 description, 5 tags, 6 deadline, 7 at, 8 participants,
-                    const newSheetArrayed = [
-                        workspaceId,
-                        boardId,
-                        newSheetHash,
-                        encodeURIComponent(newSheetName),
-                        encodeURIComponent(newSheetInputDescription),
-                        arrayTags(newSheetInputTags),
-                        'tomorrow',
-                        'now',
-                        'onlyme',
-                    ];
+        if (newSheetName) {
 
-                    if (newSheetName) {
-                        localStorage.setItem("newSheetLS", JSON.stringify(newSheetArrayed));
-
-                        checkOnlineStatusWithRetries(function(isOnline) {
-                            if (isOnline) {
-                                const event = new Event("newSheetEvent");
-                                window.dispatchEvent(event);
-                                console.log(newSheetName);
-                            }
-                        });
-                    } else {
-                        ephemeralNotification("Sheet name cannot be empty")
-                    }
-                });
-                
-            });
-
+            localStorage.setItem("newSheetLS", JSON.stringify(newSheetArrayed));
+            const event = new Event("newSheetEvent");
+            window.dispatchEvent(event);
+            console.log(newSheetName);
+            
+        } else {
+            ephemeralNotification("Sheet name cannot be empty")
         }
-
-
-})();
+    });
+    
+};

@@ -1,24 +1,3 @@
-
-function checkOnlineStatusWithRetries(callback) {
-  let attempts = 0;
-
-  function checkAndRetry() {
-      if (navigator.onLine) {
-          console.log("Estás en línea.")
-          attempts = 0;
-          callback(true);
-      } else if (++attempts >= 5) {
-          console.log("Sigues sin conectarte después de 5 intentos.")
-          callback(false);
-      } else {
-          console.log(`Intentos de conexión: ${attempts}.`);
-          setTimeout(checkAndRetry, 10000);
-      }
-  }
-
-  checkAndRetry();
-}
-
 (function() {
 
     function checkConnectionStatus() {

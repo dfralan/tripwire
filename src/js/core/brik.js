@@ -1,6 +1,4 @@
 
-// Ephemeral Hash
-const genHex = (a) => Math.random().toString(16).slice(2, (a + 2));
 
 let brikStyleSheet = `
 @import url('https://fonts.googleapis.com/css2?family=Edu+SA+Beginner:wght@500&family=IBM+Plex+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap');
@@ -1106,4 +1104,35 @@ html {
     })
 
 })();
+
+// Ephemeral Hash
+const genHex = (a) => Math.random().toString(16).slice(2, (a + 2));
+
+// Hide all dropwdowns
+function hideAllDropdowns(){
+    var dropdowncontainers = document.getElementsByClassName("dropdown-content");
+    var i;
+    for (i = 0; i < dropdowncontainers.length; i++) {
+        var openDropdown = dropdowncontainers[i];
+        if (openDropdown.classList.contains('display-block')) {
+            openDropdown.classList.remove('display-block');
+        }
+    }
+}
+window.onclick = function(event) {
+    if (!event.target.matches('.dropbtn') && !event.target.closest('.dropbtn')) {
+        hideAllDropdowns();
+    }
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+    var dropBtns = document.querySelectorAll(".dropbtn");
+    
+    dropBtns.forEach(function(dropBtn) {
+        dropBtn.addEventListener("click", function() {
+            var dropdownContent = dropBtn.nextElementSibling;
+            dropdownContent.classList.toggle("display-block");
+        });
+    });
+});
 

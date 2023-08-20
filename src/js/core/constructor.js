@@ -25,6 +25,7 @@ function constructBoard(workspaceId, boardId, title, tags, deadline, at, partici
 
     // Create the first span element with attribute "loom"
     const span1 = document.createElement("span");
+    span1.className = "boardTitle";
     span1.textContent = title;
 
     // Append both spans to the first span
@@ -44,18 +45,38 @@ function constructBoard(workspaceId, boardId, title, tags, deadline, at, partici
     dropdownButton.className = "dropbtn cursor-pointer bg-none hover-color-tint hover-fill-tint focus-fill-tint focus-color-tint";
     dropdownButton.innerHTML = dotOptionsIcon;
 
-    // Append the button to the dropdown div
-    dropdownDiv.appendChild(dropdownButton);
+
 
     // Create the ul element for the dropdown content
     const ulElement = document.createElement("ul");
     ulElement.className = "dropdown-content to-right z-1 absolute text-right rounded shadow-two bg-body xs-padded border-solid-s border-primary";
 
+    // Add a click event listener to the dropdown button
+    dropdownButton.addEventListener("click", function() {
+        const dropdownContent = ulElement; // This assumes ulElement is the dropdown content
+
+        // Toggle the "display-block" class on the dropdown content
+        if (dropdownContent.classList.contains("display-block")) {
+            hideAllDropdowns()
+        } else {
+            hideAllDropdowns()
+            dropdownContent.classList.add("display-block");
+        }
+    });
+
+    // Append the button to the dropdown div
+    dropdownDiv.appendChild(dropdownButton);
+
     // Create the li elements for the dropdown options
     const li1 = document.createElement("li");
-    li1.className = "newSheetTrigger dropdown-element block-mode color-secondary rounded-xs cursor-pointer";
+    li1.className = "dropdown-element block-mode color-secondary rounded-xs cursor-pointer";
     li1.setAttribute('data-parent-id', boardId);
     li1.textContent = "Add new sheet +";
+
+    // Add a click event listener to the dropdown button
+    li1.addEventListener("click", function() {
+        launchModalSheet(workspaceId, boardId, title, '', '', '', '')
+    });
 
     // Append the li elements to the ul element
     ulElement.appendChild(li1);
@@ -144,11 +165,22 @@ function constructSheet(workspaceId, boardId, sheetId, title, description, tags,
     const otherButton = document.createElement('button');
     otherButton.className = 'btn font-l font-600';
     otherButton.innerHTML = editIcon; // Insert SVG content here
+
+    // Add a click event ON EDIT button
+    // launchModalSheet(workspaceId, boardId, boardTitle, sheetHash, sheetTitle, sheetDescription, sheetTags)
+    const targetBoard = document.getElementById(boardId)
+    const boardtitle = targetBoard.querySelector(".boardTitle").textContent
+
+    let commaSeparatedTags = parsedTags.join(', ');
+    otherButton.addEventListener("click", function() {
+        launchModalSheet(workspaceId, boardId, boardtitle, sheetId, title, description, commaSeparatedTags)
+    });
+
     spanButtons.appendChild(otherButton);
 
     // Create the expand button
     const expandButton = document.createElement('button');
-    expandButton.className = 'expandBoard btn font-l font-600 fill-secondary';
+    expandButton.className = 'btn font-l font-600 fill-secondary';
     expandButton.innerHTML = chevronDown; // Insert SVG content here
     spanButtons.appendChild(expandButton);
 
@@ -186,6 +218,20 @@ function constructSheet(workspaceId, boardId, sheetId, title, description, tags,
 
     const targetedBoard = document.getElementById(boardId)
     const ulElement = targetedBoard.querySelector(`.sheetContainer`);
+
+
+
+    // Add a click event listener to the dropdown button
+    expandButton.addEventListener("click", function() {
+        const dropdownContent = divMore; // This assumes ulElement is the dropdown content
+
+        // Toggle the "display-block" class on the dropdown content
+        if (dropdownContent.classList.contains("display-none")) {
+            dropdownContent.classList.remove("display-none");
+        } else {
+            dropdownContent.classList.add("display-none");
+        }
+    });
 
     // Append the new li element to the ul
     ulElement.appendChild(newLi);
