@@ -1,49 +1,36 @@
-// dropdown handler
-var dropdowns = document.getElementsByClassName("dropdown");
-var i;
-for (i = 0; i < dropdowns.length; i++) {
-    let actualDropwdown = dropdowns[i]
-    const dropbtn = actualDropwdown.querySelector(".dropbtn");
-    const dropcontent = actualDropwdown.querySelector(".dropdown-content");
+document.addEventListener('DOMContentLoaded', function() {
+    // Get all elements with the class 'backgroundSwitcher'
+    const backgroundSwitchers = document.querySelectorAll('.backgroundSwitcher');
     
-    if (dropbtn) {
-        dropbtn.addEventListener("click", function (event) {
-            event.stopPropagation(); // Stop event propagation
-            if (dropcontent.classList.contains('display-block')) {
-                dropcontent.classList.remove('display-block');
-                console.log("OCULTO")
-            } else {
-                dropcontent.classList.add('display-block');
-                console.log("MUESTRO")
+    // Add click event listener to each backgroundSwitcher element
+    backgroundSwitchers.forEach(function(element) {
+        element.addEventListener('click', function() {
+            // Get the raw attribute value
+            const rawAttributeValue = element.getAttribute('raw');
+            
+            var htmlElement = document.documentElement;
+      
+            // Remove all classes
+            while (htmlElement.classList.length > 0) {
+                htmlElement.classList.remove(htmlElement.classList.item(0));
             }
-        })
-    
-        // Close the dropdown if the user clicks outside of it
-        window.onclick = function(event) {
-            if (!event.target.matches('.dropbtn')) {
-                var dropdowncontainers = document.getElementsByClassName("dropdown-content");
-                var i;
-                for (i = 0; i < dropdowncontainers.length; i++) {
-                    var openDropdown = dropdowncontainers[i];
-                    if (openDropdown.classList.contains('display-block')) {
-                        openDropdown.classList.remove('display-block');
-                        console.log("wep")
-                    }
-                }
-            }
-        }
-    }
+            
+            // Set the new class as the class for the <html> element
+            htmlElement.classList.add(rawAttributeValue);
+        });
+    });
 
-}
+});
 
-window.addEventListener("tripChange", function() {
+
+window.addEventListener("brikChange", function() {
 
     // draggin handler
-    var taskBoards = document.querySelectorAll('.taskBoard');
-    var taskBoardDropZones = document.getElementsByClassName('taskBoardDropZone')
+    var tripSheets = document.querySelectorAll('.tripSheet');
+    var boardDropZones = document.getElementsByClassName('boardDropZone')
     var dragItem = null
 
-    for(var i of taskBoards){
+    for(var i of tripSheets){
         i.addEventListener('dragstart', dragStart)
         i.addEventListener('dragend', dragEnd)
     }
@@ -57,7 +44,7 @@ window.addEventListener("tripChange", function() {
         dragItem = null
     }
 
-    for(j of taskBoardDropZones){
+    for(j of boardDropZones){
         j.addEventListener('dragover', dragOver)
         j.addEventListener('dragenter', dragEnter)
         j.addEventListener('dragleave', dragLeave)
@@ -72,7 +59,7 @@ window.addEventListener("tripChange", function() {
             }
             this.querySelector("ul").append(dragItem)
         }
-        Array.from(taskBoardDropZones).forEach(function(x) {
+        Array.from(boardDropZones).forEach(function(x) {
             x.classList.remove("border-cyan");
         });
     }
@@ -87,23 +74,23 @@ window.addEventListener("tripChange", function() {
     }
 
     function dragLeave(e) {
-        Array.from(taskBoardDropZones).forEach(function(x) {
+        Array.from(boardDropZones).forEach(function(x) {
             x.classList.remove("border-cyan");
         });
     }
 
-
     // Expand board function
-    taskBoards.forEach(function (taskBoard) {
-        focusedTaskBoard = document.getElementById(taskBoard.getAttribute("id"))
-        const expandButton = focusedTaskBoard.querySelector(".expandBoard");
-        const details = focusedTaskBoard.querySelector(".more");
+    tripSheets.forEach(function (tripSheet) {
+        focusedTripSheet = document.getElementById(tripSheet.getAttribute("id"))
+        const expandButton = focusedTripSheet.querySelector(".expandBoard");
+        const details = focusedTripSheet.querySelector(".more");
         
         // Check if the event listener is already attached
         if (!expandButton.dataset.expandListenerAdded) {
             expandButton.dataset.expandListenerAdded = true;
             
             expandButton.addEventListener("click", function () {
+                console.log("clicked expand")
                 if (details.classList.contains("display-none")){
                     details.classList.remove("display-none");
                     details.classList.add("display-flex");
@@ -115,11 +102,51 @@ window.addEventListener("tripChange", function() {
                 }
             });
         }
-    });
-    
+    }); 
 
     // Timestamp formatter initial update
     updateTimestampDisplay();
+
+    // dropdown handler
+    var dropdowns = document.getElementsByClassName("dropdown");
+    var i;
+
+    // Hide all dropwdowns
+    function hideAllDropdowns(){
+        var dropdowncontainers = document.getElementsByClassName("dropdown-content");
+        var i;
+        for (i = 0; i < dropdowncontainers.length; i++) {
+            var openDropdown = dropdowncontainers[i];
+            if (openDropdown.classList.contains('display-block')) {
+                openDropdown.classList.remove('display-block');
+            }
+        }
+    }
+
+    for (i = 0; i < dropdowns.length; i++) {
+        let actualDropwdown = dropdowns[i]
+        const dropbtn = actualDropwdown.querySelector(".dropbtn");
+        const dropcontent = actualDropwdown.querySelector(".dropdown-content");
+        
+        if (dropbtn) {
+            dropbtn.addEventListener("click", function (event) {
+                event.stopPropagation(); // Stop event propagation
+                if (dropcontent.classList.contains('display-block')) {
+                    hideAllDropdowns()
+                } else {
+                    hideAllDropdowns()
+                    dropcontent.classList.add('display-block');
+                }
+            })
+        
+            // Close the dropdown if the user clicks outside of it
+            window.onclick = function(event) {
+                if (!event.target.matches('.dropbtn')) {
+                    hideAllDropdowns()
+                }
+            }
+        }
+    }
 });
 
 
@@ -147,76 +174,6 @@ window.addEventListener("tripChange", function() {
             window.location.href = 'index.html';
         });
 
-        // Variables to handle board creation
-        const addNewBoardButton = document.getElementById('addNewBoardButton')
-        const cancelAddNewBoard = document.getElementById('cancelAddNewBoard')
-        const newBoardCreationModal = document.getElementById('newBoardCreationModal')
-
-        // show add new board modal
-        addNewBoardButton.addEventListener("click", function () {
-            newBoardCreationModal.classList.remove("display-none");
-            newBoardCreationModal.classList.add("display-flex");
-        });
-
-        // hide add new board modal
-        cancelAddNewBoard.addEventListener("click", function (event) {
-            event.preventDefault(); // Prevent the default behavior of the button
-            newBoardCreationModal.classList.add("display-none");
-            newBoardCreationModal.classList.remove("display-flex");
-        });
-
-        // listen event that allow close new board modal when success on sending the event
-        window.addEventListener("closeNewBoardModal", function() {
-            newBoardCreationModal.classList.add("display-none");
-            newBoardCreationModal.classList.remove("display-flex");
-        });
-
-        // count boards inside zones
-        function countAndLogListItems(ulId, badgeId) {
-            const ulElement = document.getElementById(ulId);
-            const badge = document.getElementById(badgeId)
-            
-            if (!ulElement) {
-                return;
-            }
-            
-            let itemCount = ulElement.getElementsByTagName('li').length;
-          
-            badge.innerHTML = itemCount
-            
-            const observer = new MutationObserver((mutations) => {
-              mutations.forEach((mutation) => {
-                if (mutation.type === 'childList') {
-                  const newCount = ulElement.getElementsByTagName('li').length;
-                  if (newCount !== itemCount) {
-                    console.log(`New count: ${newCount}`);
-                    itemCount = newCount;
-                    badge.innerHTML = itemCount
-                  }
-                }
-              });
-            });
-            
-            observer.observe(ulElement, { childList: true });
-        }
-        countAndLogListItems('3', 'attractionBoardsBadge');
-        countAndLogListItems('4', 'considerationBoardsBadge');
-        countAndLogListItems('5', 'decisionBoardsBadge');
-        countAndLogListItems('6', 'actionBoardsBadge');
-
-
-        // Show or hide Contacts Zone 
-        const clientsBoardShowToggle = document.getElementById('clientsBoardShowToggle')
-        const clientsBoard = document.getElementById('clientsBoard')
-
-        clientsBoardShowToggle.addEventListener("click", function () {
-            if (clientsBoard.classList.contains("display-none")){
-                clientsBoard.classList.remove("display-none");
-            } else {
-                clientsBoard.classList.add("display-none");
-            }
-        });
-
         // Show or hide Draft Zone 
         const draftBoardShowToggle = document.getElementById('draftBoardShowToggle')
         const draftBoard = document.getElementById('draftBoard')
@@ -239,27 +196,6 @@ window.addEventListener("tripChange", function() {
                 trashBoard.classList.add("display-none");
             }
         });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     }
     

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="gradient-shady-lane">
+<html lang="en" class="bg-g-melon">
 
 <head>
 
@@ -9,15 +9,16 @@
     <title>Tripwire Sales Approach</title>
     <meta name="description"
         content="Enhance your sales approach with Tripwire's expert insights. Discover effective strategies, tools, and techniques to boost sales performance. Stay ahead in the competitive market with our proven sales solutions.">
-    <link rel="stylesheet" href="src/styles/brik.css?v=12345" />
+    <link rel="stylesheet" href="src/styles/brik.css" />
     <link rel="icon" type="image/x-icon" href="src/img/logo.svg">
     <script src="src/js/encryption/bitcoinjs-lib.js"></script>
     <script src="src/js/encryption/secp256k1-1.2.14.js"></script>
     <script src="src/js/encryption/browserify-cipher-1.0.1.js"></script>
-    <script src="src/js/core/validators.js"></script>
+    <script src="src/js/core/tools.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/elliptic/6.5.4/elliptic.min.js"></script>
     <script src="src/js/components/icons.js"></script>
-
+    <script src="src/js/components/cssShorts.js"></script>
+    <script src="src/js/core/constructor.js"></script>
 
 </head>
 
@@ -27,40 +28,16 @@
     <brik navbar></brik>
     <script src="src/js/components/navbarView.js"></script>
 
-    <div class="padded bg-tertiary display-flex flex-wrap s-gap spaced">
-
-        <div class="display-flex flex-wrap s-gap">
-            <!-- Show Sales Aprroach Button -->
-            <button id="salesStagesShow" class="btn btn-rock no-wrap">
-                <span>Approachs</span>
-            </button>
-
-            <!-- Show Clients Board Button -->
-            <button id="clientsBoardShowToggle" class="btn btn-secondary no-wrap">
-                <span>Clients</span>
-            </button>
-
-            <!-- Show drafts Button -->
-            <button id="draftBoardShowToggle" class="btn btn-primary no-wrap">
-                <span>Draft </span>
-                
-            </button>
-        </div>
-
-    </div>  
-
-    <!-- Ephemeral Notifications -->
-    <div id="ephemeralNotificationsModal"
-        class="padded notification-modal display-flex flex-col-reverse s-gap z-i full-center smooth-300">
-    </div>
+    <brik toolbar></brik>
+    <script src="src/js/components/toolbarView.js"></script>
 
     <!-- Boards Sections -->
-    <section class="overflow-scroll hide-scrollbar padded">
+    <section class="overflow-scroll padded hide-scrollbar display-flex flex-row min-height-50">
 
-        <div class="display-flex flex-row m-gap ">
+        <div id='aWorkspace' class="workspace display-flex flex-row m-gap padded no-padded-bottom no-padded-top no-padded-left">
 
-            <div id="trashBoard" style="min-width: 350px; min-height: 300px;" class="responsive-4">
-                <div class="border-dashed taskBoardDropZone rounded bg-body display-flex flex-col s-gap shadow-one">
+            <div id="trashBoard" style="min-width: 350px; min-height: 300px;" class="responsive-4 display-none">
+                <div class="border-dashed boardDropZone rounded bg-body display-flex flex-col s-gap shadow-one">
                     <div class="xs-padded no-padded-right no-padded-top">
                         <h4 class="display-flex spaced color-primary font-500 font-m s-padded no-padded-bottom">
                             <span loom="Trash 🗑️"></span>
@@ -77,13 +54,13 @@
 
                         </h4>
                     </div>
-                    <ul style="max-height:300px;" class="display-flex flex-col s-gap overflow-scroll s-padded" id="0">
+                    <ul style="max-height:300px;" class="hide-scrollbar display-flex flex-col s-gap overflow-scroll s-padded" id="0">
                     </ul>
                 </div>
             </div>
 
             <div id="draftBoard" style="min-width: 350px;" class="responsive-4">
-                <div class="border-dashed taskBoardDropZone rounded border-secondary display-flex flex-col s-gap shadow-one">
+                <div class="border-dashed boardDropZone rounded border-secondary display-flex flex-col s-gap shadow-one">
                     <div class="xs-padded no-padded-right no-padded-top">
                         <h4 class="display-flex spaced color-primary font-500 font-m s-padded no-padded-bottom">
                             <span loom="Draft"></span>
@@ -100,197 +77,84 @@
                             </div>                        
                         </h4>
                     </div>
-                    <ul style="max-height:300px;" class="display-flex flex-col s-gap overflow-scroll s-padded" id="1">
-                    </ul>
-                </div>
-            </div>
-
-            <div id="clientsBoard" style="min-width: 350px;" class="responsive-4">
-                <div class="border-dashed taskBoardDropZone rounded bg-primary display-flex flex-col s-gap shadow-one">
-                    <div class="xs-padded no-padded-right no-padded-top">
-                        <h4 class="display-flex spaced color-body font-500 font-m s-padded no-padded-bottom">
-                            <span loom="Contacts"></span>
-
-                            <!-- Draft options dropdown -->
-                            <div class="dropdown">
-                                <p class="dropbtn cursor-pointer bg-none hover-color-tint hover-fill-tint focus-fill-tint focus-color-tint">
-                                    <svg class="fill-body" width="22" height="22" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12.3929 26.4001C11.731 26.4001 11.1667 26.1644 10.7 25.693C10.2333 25.2216 10 24.655 10 23.993C10 23.3311 10.2357 22.7668 10.7071 22.3001C11.1785 21.8334 11.7451 21.6001 12.4071 21.6001C13.069 21.6001 13.6333 21.8358 14.1 22.3072C14.5667 22.7786 14.8 23.3452 14.8 24.0072C14.8 24.6691 14.5643 25.2334 14.0929 25.7001C13.6215 26.1668 13.0549 26.4001 12.3929 26.4001ZM23.9929 26.4001C23.331 26.4001 22.7667 26.1644 22.3 25.693C21.8333 25.2216 21.6 24.655 21.6 23.993C21.6 23.3311 21.8357 22.7668 22.3071 22.3001C22.7785 21.8334 23.3451 21.6001 24.0071 21.6001C24.669 21.6001 25.2333 21.8358 25.7 22.3072C26.1667 22.7786 26.4 23.3452 26.4 24.0072C26.4 24.6691 26.1643 25.2334 25.6929 25.7001C25.2215 26.1668 24.6549 26.4001 23.9929 26.4001ZM35.5929 26.4001C34.931 26.4001 34.3667 26.1644 33.9 25.693C33.4333 25.2216 33.2 24.655 33.2 23.993C33.2 23.3311 33.4357 22.7668 33.9071 22.3001C34.3785 21.8334 34.9451 21.6001 35.6071 21.6001C36.269 21.6001 36.8333 21.8358 37.3 22.3072C37.7667 22.7786 38 23.3452 38 24.0072C38 24.6691 37.7643 25.2334 37.2929 25.7001C36.8215 26.1668 36.2549 26.4001 35.5929 26.4001Z" /></svg>
-                                </p>
-                                <ul class="dropdown-content to-right z-1 absolute text-right rounded shadow-two bg-body xs-padded border-solid-s border-primary">
-                                    <li class="dropdown-element block-mode color-secondary rounded-xs cursor-pointer">Hide Board</li>
-                                    <li class="dropdown-element block-mode color-secondary rounded-xs cursor-pointer">Delete All Cards</li>
-                                </ul>
-                            </div>  
-                        </h4>
-                    </div>
-                    <ul style="max-height:300px;" class="display-flex flex-col s-gap overflow-scroll s-padded" id="2">
-                    </ul>
-                </div>
-            </div>
-
-            <div style="min-width: 350px;" class="responsive-4">
-                <div class="border-dashed taskBoardDropZone rounded bg-body display-flex flex-col s-gap shadow-one">
-                    <div class="xs-padded no-padded-right no-padded-top">
-                        <h4 class="display-flex spaced color-primary font-500 font-m s-padded no-padded-bottom">
-                            <div>
-                                <span loom="Attraction Zone"></span>
-                                <span class="badge pastel1 font-s font-400 rounded" id='attractionBoardsBadge'>20</span>
-                            </div>
-
-                            <!-- Draft options dropdown -->
-                            <div class="dropdown">
-                                <p class="dropbtn cursor-pointer bg-none hover-color-tint hover-fill-tint focus-fill-tint focus-color-tint">
-                                    <svg class="fill-primary" width="22" height="22" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12.3929 26.4001C11.731 26.4001 11.1667 26.1644 10.7 25.693C10.2333 25.2216 10 24.655 10 23.993C10 23.3311 10.2357 22.7668 10.7071 22.3001C11.1785 21.8334 11.7451 21.6001 12.4071 21.6001C13.069 21.6001 13.6333 21.8358 14.1 22.3072C14.5667 22.7786 14.8 23.3452 14.8 24.0072C14.8 24.6691 14.5643 25.2334 14.0929 25.7001C13.6215 26.1668 13.0549 26.4001 12.3929 26.4001ZM23.9929 26.4001C23.331 26.4001 22.7667 26.1644 22.3 25.693C21.8333 25.2216 21.6 24.655 21.6 23.993C21.6 23.3311 21.8357 22.7668 22.3071 22.3001C22.7785 21.8334 23.3451 21.6001 24.0071 21.6001C24.669 21.6001 25.2333 21.8358 25.7 22.3072C26.1667 22.7786 26.4 23.3452 26.4 24.0072C26.4 24.6691 26.1643 25.2334 25.6929 25.7001C25.2215 26.1668 24.6549 26.4001 23.9929 26.4001ZM35.5929 26.4001C34.931 26.4001 34.3667 26.1644 33.9 25.693C33.4333 25.2216 33.2 24.655 33.2 23.993C33.2 23.3311 33.4357 22.7668 33.9071 22.3001C34.3785 21.8334 34.9451 21.6001 35.6071 21.6001C36.269 21.6001 36.8333 21.8358 37.3 22.3072C37.7667 22.7786 38 23.3452 38 24.0072C38 24.6691 37.7643 25.2334 37.2929 25.7001C36.8215 26.1668 36.2549 26.4001 35.5929 26.4001Z" /></svg>
-                                </p>
-                                <ul class="dropdown-content to-right z-1 absolute text-right rounded shadow-two bg-body xs-padded border-solid-s border-primary">
-                                    <li class="dropdown-element block-mode color-secondary rounded-xs cursor-pointer">Hide Board</li>
-                                    <li class="dropdown-element block-mode color-secondary rounded-xs cursor-pointer">Delete All Cards</li>
-                                </ul>
-                            </div>
-
-                        </h4>
-                    </div>
-                    <ul style="max-height:300px;" class="display-flex flex-col s-gap overflow-scroll s-padded" id="3">
-                    </ul>
-                </div>
-            </div>
-
-            <div style="min-width: 350px;" class="responsive-4">
-                <div class="border-dashed taskBoardDropZone rounded bg-body display-flex flex-col s-gap shadow-one">
-                    <div class="xs-padded no-padded-right no-padded-top">
-                        <h4 class="display-flex spaced color-primary font-500 font-m s-padded no-padded-bottom">
-                            <div>
-                                <span loom="Consideration Zone"></span>
-                                <span class="badge pastel2 font-s font-400 rounded" id='considerationBoardsBadge'>20</span>
-                            </div>
-
-                            <!-- Draft options dropdown -->
-                            <div class="dropdown">
-                                <p class="dropbtn cursor-pointer bg-none hover-color-tint hover-fill-tint focus-fill-tint focus-color-tint">
-                                    <svg class="fill-primary" width="22" height="22" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12.3929 26.4001C11.731 26.4001 11.1667 26.1644 10.7 25.693C10.2333 25.2216 10 24.655 10 23.993C10 23.3311 10.2357 22.7668 10.7071 22.3001C11.1785 21.8334 11.7451 21.6001 12.4071 21.6001C13.069 21.6001 13.6333 21.8358 14.1 22.3072C14.5667 22.7786 14.8 23.3452 14.8 24.0072C14.8 24.6691 14.5643 25.2334 14.0929 25.7001C13.6215 26.1668 13.0549 26.4001 12.3929 26.4001ZM23.9929 26.4001C23.331 26.4001 22.7667 26.1644 22.3 25.693C21.8333 25.2216 21.6 24.655 21.6 23.993C21.6 23.3311 21.8357 22.7668 22.3071 22.3001C22.7785 21.8334 23.3451 21.6001 24.0071 21.6001C24.669 21.6001 25.2333 21.8358 25.7 22.3072C26.1667 22.7786 26.4 23.3452 26.4 24.0072C26.4 24.6691 26.1643 25.2334 25.6929 25.7001C25.2215 26.1668 24.6549 26.4001 23.9929 26.4001ZM35.5929 26.4001C34.931 26.4001 34.3667 26.1644 33.9 25.693C33.4333 25.2216 33.2 24.655 33.2 23.993C33.2 23.3311 33.4357 22.7668 33.9071 22.3001C34.3785 21.8334 34.9451 21.6001 35.6071 21.6001C36.269 21.6001 36.8333 21.8358 37.3 22.3072C37.7667 22.7786 38 23.3452 38 24.0072C38 24.6691 37.7643 25.2334 37.2929 25.7001C36.8215 26.1668 36.2549 26.4001 35.5929 26.4001Z" /></svg>
-                                </p>
-                                <ul class="dropdown-content to-right z-1 absolute text-right rounded shadow-two bg-body xs-padded border-solid-s border-primary">
-                                    <li class="dropdown-element block-mode color-secondary rounded-xs cursor-pointer">Hide Board</li>
-                                    <li class="dropdown-element block-mode color-secondary rounded-xs cursor-pointer">Delete All Cards</li>
-                                </ul>
-                            </div>  
-
-                        </h4>
-                    </div>
-                    <ul style="max-height:300px;" class="display-flex flex-col s-gap overflow-scroll s-padded" id="4">
-                    </ul>
-                </div>
-            </div>
-
-            <div style="min-width: 350px;" class="responsive-4z">
-                <div class="border-dashed taskBoardDropZone rounded bg-body display-flex flex-col s-gap shadow-one">
-                    <div class="xs-padded no-padded-right no-padded-top">
-                        <h4 class="display-flex spaced color-primary font-500 font-m s-padded no-padded-bottom">
-                            <div>
-                                <span loom="Decision Zone"></span>
-                                <span class="badge pastel3 font-s font-400 rounded" id='decisionBoardsBadge'>20</span>
-                            </div>
-
-                            <!-- Draft options dropdown -->
-                            <div class="dropdown">
-                                <p class="dropbtn cursor-pointer bg-none hover-color-tint hover-fill-tint focus-fill-tint focus-color-tint">
-                                    <svg class="fill-primary" width="22" height="22" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12.3929 26.4001C11.731 26.4001 11.1667 26.1644 10.7 25.693C10.2333 25.2216 10 24.655 10 23.993C10 23.3311 10.2357 22.7668 10.7071 22.3001C11.1785 21.8334 11.7451 21.6001 12.4071 21.6001C13.069 21.6001 13.6333 21.8358 14.1 22.3072C14.5667 22.7786 14.8 23.3452 14.8 24.0072C14.8 24.6691 14.5643 25.2334 14.0929 25.7001C13.6215 26.1668 13.0549 26.4001 12.3929 26.4001ZM23.9929 26.4001C23.331 26.4001 22.7667 26.1644 22.3 25.693C21.8333 25.2216 21.6 24.655 21.6 23.993C21.6 23.3311 21.8357 22.7668 22.3071 22.3001C22.7785 21.8334 23.3451 21.6001 24.0071 21.6001C24.669 21.6001 25.2333 21.8358 25.7 22.3072C26.1667 22.7786 26.4 23.3452 26.4 24.0072C26.4 24.6691 26.1643 25.2334 25.6929 25.7001C25.2215 26.1668 24.6549 26.4001 23.9929 26.4001ZM35.5929 26.4001C34.931 26.4001 34.3667 26.1644 33.9 25.693C33.4333 25.2216 33.2 24.655 33.2 23.993C33.2 23.3311 33.4357 22.7668 33.9071 22.3001C34.3785 21.8334 34.9451 21.6001 35.6071 21.6001C36.269 21.6001 36.8333 21.8358 37.3 22.3072C37.7667 22.7786 38 23.3452 38 24.0072C38 24.6691 37.7643 25.2334 37.2929 25.7001C36.8215 26.1668 36.2549 26.4001 35.5929 26.4001Z" /></svg>
-                                </p>
-                                <ul class="dropdown-content to-right z-1 absolute text-right rounded shadow-two bg-body xs-padded border-solid-s border-primary">
-                                    <li class="dropdown-element block-mode color-secondary rounded-xs cursor-pointer">Hide Board</li>
-                                    <li class="dropdown-element block-mode color-secondary rounded-xs cursor-pointer">Delete All Cards</li>
-                                </ul>
-                            </div>  
-
-                        </h4>
-                    </div>
-                    <ul style="max-height:300px;" class="display-flex flex-col s-gap overflow-scroll s-padded" id="5">
-                    </ul>
-                </div>
-            </div>
-
-            <div style="min-width: 350px;" class="responsive-4">
-                <div class="border-dashed taskBoardDropZone rounded bg-body display-flex flex-col s-gap shadow-one">
-                    <div class="xs-padded no-padded-right no-padded-top">
-                        <h4 class="display-flex spaced color-primary font-500 font-m s-padded no-padded-bottom">
-                            <div>
-                                <span loom="Action Zone"></span>
-                                <span class="badge pastel4 font-s font-400 rounded" id='actionBoardsBadge'>20</span>
-                            </div>
-
-                            <!-- Draft options dropdown -->
-                            <div class="dropdown">
-                                <p class="dropbtn cursor-pointer bg-none hover-color-tint hover-fill-tint focus-fill-tint focus-color-tint">
-                                    <svg class="fill-primary" width="22" height="22" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12.3929 26.4001C11.731 26.4001 11.1667 26.1644 10.7 25.693C10.2333 25.2216 10 24.655 10 23.993C10 23.3311 10.2357 22.7668 10.7071 22.3001C11.1785 21.8334 11.7451 21.6001 12.4071 21.6001C13.069 21.6001 13.6333 21.8358 14.1 22.3072C14.5667 22.7786 14.8 23.3452 14.8 24.0072C14.8 24.6691 14.5643 25.2334 14.0929 25.7001C13.6215 26.1668 13.0549 26.4001 12.3929 26.4001ZM23.9929 26.4001C23.331 26.4001 22.7667 26.1644 22.3 25.693C21.8333 25.2216 21.6 24.655 21.6 23.993C21.6 23.3311 21.8357 22.7668 22.3071 22.3001C22.7785 21.8334 23.3451 21.6001 24.0071 21.6001C24.669 21.6001 25.2333 21.8358 25.7 22.3072C26.1667 22.7786 26.4 23.3452 26.4 24.0072C26.4 24.6691 26.1643 25.2334 25.6929 25.7001C25.2215 26.1668 24.6549 26.4001 23.9929 26.4001ZM35.5929 26.4001C34.931 26.4001 34.3667 26.1644 33.9 25.693C33.4333 25.2216 33.2 24.655 33.2 23.993C33.2 23.3311 33.4357 22.7668 33.9071 22.3001C34.3785 21.8334 34.9451 21.6001 35.6071 21.6001C36.269 21.6001 36.8333 21.8358 37.3 22.3072C37.7667 22.7786 38 23.3452 38 24.0072C38 24.6691 37.7643 25.2334 37.2929 25.7001C36.8215 26.1668 36.2549 26.4001 35.5929 26.4001Z" /></svg>
-                                </p>
-                                <ul class="dropdown-content to-right z-1 absolute text-right rounded shadow-two bg-body xs-padded border-solid-s border-primary">
-                                    <li class="dropdown-element block-mode color-secondary rounded-xs cursor-pointer">Hide Board</li>
-                                    <li class="dropdown-element block-mode color-secondary rounded-xs cursor-pointer">Delete All Cards</li>
-                                </ul>
-                            </div>  
-
-                        </h4>
-                    </div>
-                    <ul style="max-height:300px;" class="display-flex flex-col s-gap overflow-scroll s-padded" id="6">
+                    <ul style="max-height:300px;" class="hide-scrollbar display-flex flex-col s-gap overflow-scroll s-padded" id="1">
                     </ul>
                 </div>
             </div>
 
         </div>
 
+        <div class="">
+
+
+            <p id="addNewBoardButton" class="full-center shadow-one font-xs font-300 bg-body-o s-padded color-primary fill-primary rounded no-wrap cursor-pointer">
+                Create new board
+                <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M450-450H230q-12.75 0-21.375-8.675-8.625-8.676-8.625-21.5 0-12.825 8.625-21.325T230-510h220v-220q0-12.75 8.675-21.375 8.676-8.625 21.5-8.625 12.825 0 21.325 8.625T510-730v220h220q12.75 0 21.375 8.675 8.625 8.676 8.625 21.5 0 12.825-8.625 21.325T730-450H510v220q0 12.75-8.675 21.375-8.676 8.625-21.5 8.625-12.825 0-21.325-8.625T450-230v-220Z"/></svg>
+            </p>
+        </div>
+
+
+
     </section>
 
+
+
     <!-- New board modal -->
-    <div id="newBoardCreationModal" class="modal z-i full-center blur-behind smooth-300 display-none">
+    <brik boardcreationform></brik>
+    <script src="src/js/components/newBoardView.js"></script>
+
+    <!-- New sheet modal -->
+    <div id="sheetCreationModal" class="modal z-i full-center blur-behind smooth-300 display-none">
         <div class="modal-bg o-2 bg-primary"></div>
-        <form id="newBoardForm" class="bg-body z-2 padded rounded brick flex-col s-gap">
-            <div class="display-flex flex-row spaced">
-                <h4 class="color-primary">Create new board</h4>
-                
-            <!-- Zone selector -->
-            <div class="dropdown">
-                <p class="display-flex dropbtn cursor-pointer s-padded bg-none color-secondary fill-secondary hover-color-tint hover-fill-tint focus-fill-tint focus-color-tint">
-                    <span id="zoneSelection">
-                        Attraction
-                    </span>
-                    <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20">
-                        <path d="M480-360 280-559h400L480-360Z" />
-                    </svg>
-                </p>
-                <ul id="salesApproachZonesList" class="dropdown-content to-right z-1 absolute text-right rounded shadow-two bg-body xs-padded border-solid-s border-primary">
-                    <li class="dropdown-element block-mode color-secondary rounded-xs cursor-pointer display-none">Trash</li>
-                    <li class="dropdown-element block-mode color-secondary rounded-xs cursor-pointer">Draft</li>
-                    <li class="dropdown-element block-mode color-secondary rounded-xs cursor-pointer">Contact</li>
-                    <li class="dropdown-element block-mode color-secondary rounded-xs cursor-pointer selected">Attracion</li>
-                    <li class="dropdown-element block-mode color-secondary rounded-xs cursor-pointer">Consideration</li>
-                    <li class="dropdown-element block-mode color-secondary rounded-xs cursor-pointer">Decision</li>
-                    <li class="dropdown-element block-mode color-secondary rounded-xs cursor-pointer">Action</li>
-                </ul>
+        <form id="newSheetForm" class="max-w-350 bg-body z-2 padded rounded brick flex-col s-gap">
+            <div class="display-flex flex-col">
+                <div id="closeAddNewSheet" class="display-flex flex-end fill-primary cursor-pointer">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="35" viewBox="0 -960 960 960" width="35"><path d="M480-438 270-228q-9 9-21 9t-21-9q-9-9-9-21t9-21l210-210-210-210q-9-9-9-21t9-21q9-9 21-9t21 9l210 210 210-210q9-9 21-9t21 9q9 9 9 21t-9 21L522-480l210 210q9 9 9 21t-9 21q-9 9-21 9t-21-9L480-438Z"/></svg>
+                </div>
+                <div class="full-center flex-col">
+                    <h1>✏️</h1>
+                    <h4 class="color-primary">New Sheet</h4>    
+                </div>
             </div>
-                
+
+            <div class="display-flex flex-col xs-gap">
+                <label class="color-primary font-xs" for="newBoardName">
+                    <span>Sheet title</span>
+                    <span class="color-alert">*</span>
+                </label>
+                <input id="newSheetName"
+                    class="s-padded bg-body border-secondary border-solid rounded-s placeholder-secondary font-m color-primary"
+                    type="text" placeholder="" autofocus>
+                <small class="color-primary">👋 It is necessary to indicate the title of the sheet</small>
             </div>
-            <input id="newBoardInputName"
-                class="s-padded bg-body border-secondary border-solid rounded-s placeholder-secondary font-m color-primary"
-                type="text" placeholder="Board name">
-            <p class="color-alert" id="newBoardFormInfo" loom></p>
-            <textarea id="newBoardInputDescription" name="" cols="30" rows="5"
+
+
+            <textarea id="newSheetInputDescription" name="" cols="30" rows="3"
                 class="s-padded bg-body border-secondary border-solid rounded-s placeholder-secondary font-m color-primary"
                 placeholder="Description here..."></textarea>
-            <div id="tagsContainer" class="display-flex flex-wrap s-gap">
-                <p class="xs-padded pastel1 font-xs rounded-s">+5493412293515</p>
-                <p class="xs-padded pastel2 font-xs rounded-s">john@lotus.com</p>
-                <p class="xs-padded pastel3 font-xs rounded-s">lotusmotors.com</p>
+            
+            <div class="display-flex flex-col xs-gap">
+                <label class="color-primary font-xs" >
+                    <span>Tags</span>
+                </label>
+                <input id="newSheetInputTags"
+                        class="s-padded bg-body border-secondary border-solid rounded-s placeholder-secondary font-m color-primary"
+                        type="text" placeholder="">
+                <small class="color-primary">Add some tags splitted by ',' like: Priority high, UX/UI, Keep it simple</small>
             </div>
-            <div class="display-flex flex-col">
-                <input id="newBoardInputTags"
-                    class="s-padded bg-body border-secondary border-solid rounded-s placeholder-secondary font-m color-primary"
-                    type="text" placeholder="Add some tags">
-                <p class="font-xs color-secondary">Add tags separated by "," like: +54911234565, john@lotus.com,
-                    lotusmotors.com</p>
-            </div>
-            <div class="brick flex-row flex-end s-gap">
-                <button id="cancelAddNewBoard" class="btn btn-primary" type="button">Cancel</button>
-                <button class="btn btn-tint" type="submit">Add board +</button>
+
+            <p class="display-flex flex-row flex-start color-secondary fill-secondary font-s">
+                <span>
+                    <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M460-80q-91 0-155.5-62.5T240-296v-430q0-64 45.5-109T395-880q65 0 110 45t45 110v394q0 38-26 64.5T460-240q-38 0-64-28.5T370-336v-372q0-8 6-14t14-6q8 0 14 6t6 14v375q0 22 14.5 37.5T460-280q21 0 35.5-15t14.5-36v-395q0-48-33.5-81T395-840q-48 0-81.5 33T280-726v432q0 73 53 123.5T460-120q75 0 127.5-51T640-296v-412q0-8 6-14t14-6q8 0 14 6t6 14v411q0 91-64.5 154T460-80Z"/></svg>
+                </span>
+                <span>Attached to board</span>
+                <span>&nbsp</span>
+                <span id="board-reference" class="color-primary font-500">Connections 🔗</span>
+            </p>
+
+            <div class="flex-col display-flex s-gap">
+                <button class="btn btn-tint" type="submit">Add Sheet</button>
+                <button id="cancelAddNewSheet" class="btn btn-primary" type="button">Cancel</button>
             </div>
         </form>
     </div>
@@ -308,24 +172,31 @@
     </div>
 
     <!-- Confirmation online user -->
-    <div id="boardConfirmationOnlineUser" class="modal z-i full-center blur-behind smooth-300 display-none">
+    <div id="confirmationOnlineUserModal" class="modal z-i full-center blur-behind smooth-300 display-none">
         <div class="modal-bg o-8 bg-primary"></div>
         <div class="bg-body z-2 padded rounded brick flex-col m-gap">
             <h4 class="color-primary">Are you still online?</h4>
             <div class="brick flex-row flex-end s-gap">
-                <button id="userIsOnline" class="btn btn-tertiary color-body" type="submit">Yes I am</button>
+                <button id="userIsOnline" class="btn btn-tertiary color-body">Yes I am</button>
             </div>
         </div>
     </div>
 
 
     <!-- Deletion Board Zone -->
-    <div id="deletionZone" class="fill-white padded border-dashed rounded-s taskBoardDropZone display-flex fixed to-bottom to-right">
+    <div id="deletionZone" class="fill-white padded border-dashed rounded-s boardDropZone display-flex fixed to-bottom to-right">
         <button class="btn display-flex flex-col">
             
             <h1 class="font-xxxl">🗑️</h1><span class="color-primary">Trash</span>
         </button>
 
+    </div>
+
+
+
+    <!-- Ephemeral Notifications -->
+    <div id="ephemeralNotificationsModal"
+        class="padded notification-modal display-flex flex-col-reverse s-gap z-i full-center smooth-300">
     </div>
 
     <!-- 
@@ -354,6 +225,7 @@
     <script src="src/js/link/payload.js"></script>
     <script src="src/js/link/connectionStatus.js"></script>
     <script src="src/js/core/newBoard.js"></script>
+    <script src="src/js/core/newSheet.js"></script>
     <script src="src/js/core/timestampFormatter.js"></script>
 </body>
 

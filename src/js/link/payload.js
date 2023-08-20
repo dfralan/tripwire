@@ -1,5 +1,10 @@
 (function () {
 
+    const privateDMKindNumber = 4
+    const privateSheetKindNumber = 1003
+    const privateBoardKindNumber = 1002
+    const privateWorkspaceKindNumber = 1001 
+
     // Check if the device is online before proceeding
     if (!navigator.onLine) {
         localStorage.removeItem("privKey");
@@ -70,61 +75,63 @@
     const privKey = localStorage.getItem("privKey")
     const pubKey = generatePublicKey(privKey);
 
-
     // Listen nostr events
     socket.addEventListener('message', async function (message) {
         var [type, subId, event] = JSON.parse(message.data);
         var { kind, content } = event || {}
         if (!event || event === true) return
         console.log('message:', event)
-        if (kind === 4) {
-            content = await decrypt(privKey, event.pubkey, content)
-        }
-        console.log(`created at = ${event.created_at}`)
+        content = await decrypt(privKey, event.pubkey, content)
         const parsedContent = JSON.parse(content);
 
-        // Usage example
-        const tags = ['+5493412293515', 'john@lotus.com', 'lotusmotors.com'];
-        console.log(`tags are ${parsedContent[4]}`)
-        createLi(parsedContent[0], decodeURIComponent(parsedContent[2]), decodeURIComponent(parsedContent[3]), parsedContent[4], parsedContent[1], event.created_at);
-        window.dispatchEvent(new Event("tripChange"));
+        // private board case
+        if (kind === privateBoardKindNumber) {
+            constructBoard(parsedContent[0], parsedContent[1], decodeURIComponent(parsedContent[2]), parsedContent[3], parsedContent[4], event.created_at, event.pubkey);
+        }
+
+        // private sheet case
+        if (kind === privateSheetKindNumber) {
+            if (document.getElementById(parsedContent[1])) {
+                constructSheet(parsedContent[0], parsedContent[1], parsedContent[2], decodeURIComponent(parsedContent[3]), decodeURIComponent(parsedContent[4]), parsedContent[5], parsedContent[6], event.created_at, event.pubkey);
+            } else {
+                window.addEventListener(parsedContent[1], function() {
+                    constructSheet(parsedContent[0], parsedContent[1], parsedContent[2], decodeURIComponent(parsedContent[3]), decodeURIComponent(parsedContent[4]), parsedContent[5], parsedContent[6], event.created_at, event.pubkey);
+                })
+            }
+        }
+
     })
 
     // Subscribe to myself key
     var subId = bitcoinjs.ECPair.makeRandom().privateKey.toString("hex")
     var filter = { "authors": [pubKey] }
     var subscription = ["REQ", subId, filter]
-
     socket.addEventListener('open', async function (e) {
         socket.send(JSON.stringify(subscription));
-        ephemeralNotification(`Connection succesfully.`)
+        ephemeralNotification(`Connected to websocket.`)
     })
 
     // Show user is online confirmation modal and handle reconnection to websocket
     function isUserOnline(){
-        const boardConfirmationOnlineUseruserIsOnline = document.getElementById('boardConfirmationOnlineUser')
+        const confirmationOnlineUserModal = document.getElementById('confirmationOnlineUserModal')
         const userIsOnline = document.getElementById('userIsOnline')
-        boardConfirmationOnlineUseruserIsOnline.classList.remove("display-none");
+        confirmationOnlineUserModal.classList.remove("display-none");
         userIsOnline.addEventListener("click", function() {
             var socket = new WebSocket(relay);
             socket.send(JSON.stringify(subscription));
-            boardConfirmationOnlineUseruserIsOnline.classList.add("display-none");
+            confirmationOnlineUserModal.classList.add("display-none");
         })
     }
 
     // Listen on websocket close
     socket.addEventListener('close', function (event) {
-
-        
         if (event.wasClean) {
             console.log(`WebSocket connection closed cleanly, code: ${event.code}, reason: ${event.reason}`);
             isUserOnline()
-
         } else {
             isUserOnline()
             console.error(`WebSocket connection was abruptly closed, code: ${event.code}, reason: ${event.reason}`);
         }
-
     });
 
     // Signing event
@@ -150,7 +157,7 @@
             socket.send(JSON.stringify(["EVENT", signedEvent]));
             ephemeralNotification("Board created successfully.")
             window.dispatchEvent(new Event("closeNewBoardModal"));
-            localStorage.removeItem("latestNewBoard");
+            localStorage.removeItem("newSheetLS");
         } catch (error) {
             if (currentRetry < 3) {
                 ephemeralNotification(`Unable to send event on try ${currentRetry}. Retrying...`)
@@ -165,20 +172,49 @@
         }
     }
 
-    // Listen application event of created board, and trigger send event with board content
-    window.addEventListener("latestNewBoardCreated", async function (e) {
-        const boardContent = localStorage.getItem("latestNewBoard", newBoardInputName);
-        const message = boardContent;
-        const encrypted = encrypt(privKey, pubKey, message);
-        const event2 = {
-            "content": encrypted,
+    // Listen event of created sheet, and trigger send event
+    window.addEventListener("newSheetEvent", async function (e) {
+        const newSheetContent = localStorage.getItem("newSheetLS");
+        const encryptedSheet = encrypt(privKey, pubKey, newSheetContent);
+        const privateSheet = {
+            "content": encryptedSheet,
             "created_at": Math.floor(Date.now() / 1000),
-            "kind": 4,
-            "tags": [['p', pubKey], ['t', "hexHashBoard"]],
+            "kind": privateSheetKindNumber,
+            "tags": [['p', pubKey]],
             "pubkey": pubKey,
         };
         currentRetry = 0;
-        sendEventWithRetry(event2);
+        sendEventWithRetry(privateSheet);
+    });
+
+    // Listen event of created board, and trigger send event
+    window.addEventListener("newBoardEvent", async function (e) {
+        const newBoardContent = localStorage.getItem("newBoardLS");
+        const encryptedBoard = encrypt(privKey, pubKey, newBoardContent);
+        const privateBoard = {
+            "content": encryptedBoard,
+            "created_at": Math.floor(Date.now() / 1000),
+            "kind": privateBoardKindNumber,
+            "tags": [['p', pubKey]],
+            "pubkey": pubKey,
+        };
+        currentRetry = 0;
+        sendEventWithRetry(privateBoard);
+    });
+
+    // Listen event of created workspace, and trigger send event
+    window.addEventListener("newWorkspaceEvent", async function (e) {
+        const newBoardContent = localStorage.getItem("newWorkspaceLS");
+        const encryptedBoard = encrypt(privKey, pubKey, newBoardContent);
+        const privateBoard = {
+            "content": encryptedBoard,
+            "created_at": Math.floor(Date.now() / 1000),
+            "kind": privateWorkspaceKindNumber,
+            "tags": [['p', pubKey]],
+            "pubkey": pubKey,
+        };
+        currentRetry = 0;
+        sendEventWithRetry(privateBoard);
     });
 
 })();

@@ -19,7 +19,7 @@ function ephemeralNotification(message) {
         // Notification element constructor
         var notification = document.createElement("p");
         notification.id = ephemeralHash;
-        notification.className = "bg-body z-2 s-padded text-center rounded color-primary shadow-dynamic";
+        notification.className = "bg-body z-2 s-padded text-center rounded color-primary shadow-one";
         notification.setAttribute("loom", localStorage.getItem("newEphemeralNotification"));
         ephemeralNotificationsModal.appendChild(notification);
         
