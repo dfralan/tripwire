@@ -1056,6 +1056,36 @@ html {
     background-color: var(--tint-color) !important;
     color: var(--white-color) !important;
 }
+
+.pastel-1 {
+    background-color: #ffd6ff;
+    color: black;
+    fill: black;
+}
+
+.pastel-2 {
+    background-color: #e7c6ff;
+    color: black;
+    fill: black;
+}
+
+.pastel-3 {
+    background-color: #c8b6ff;
+    color: black;
+    fill: black;
+}
+
+.pastel-4 {
+    background-color: #b8c0ff;
+    color: black;
+    fill: black;
+}
+
+.pastel-5 {
+    background-color: #bbd0ff;
+    color: black;
+    fill: black;
+}
 `;
 
 (function () {
