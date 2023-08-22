@@ -14,7 +14,6 @@ function ephemeralNotification(message) {
 
         // Gen hash for notification identification
         let ephemeralHash = genHex(7);
-        console.log(ephemeralHash)
         
         // Notification element constructor
         var notification = document.createElement("p");

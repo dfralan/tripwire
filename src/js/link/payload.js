@@ -1,9 +1,10 @@
 (function () {
 
+    // Define constants for different kinds of private data
     const privateDMKindNumber = 4
     const privateSheetKindNumber = 1003
     const privateBoardKindNumber = 1002
-    const privateWorkspaceKindNumber = 1001 
+    const privateWorkspaceKindNumber = 1001
 
     // Check if the device is online before proceeding
     if (!navigator.onLine) {
@@ -12,18 +13,19 @@
         return;
     }
 
-    // Needed variables
+    // Define elliptic curve and cryptographic functions
     const ec = new elliptic.ec('secp256k1');// Instantiate the secp256k1 elliptic curve (the one used in Bitcoin)
     var { getSharedSecret, schnorr, utils } = nobleSecp256k1
     var crypto = window.crypto
     var getRand = size => crypto.getRandomValues(new Uint8Array(size))
     var sha256 = bitcoinjs.crypto.sha256
 
-    // Hex delaing
+    // Hex dealing functions for data conversion
     function hexToBytes(hex) {
         return Uint8Array.from(hex.match(/.{1,2}/g).map((byte) => parseInt(byte, 16)));
     }
 
+    // Same
     function base64ToHex(str) {
         var raw = atob(str);
         var result = '';
@@ -34,7 +36,7 @@
         return result;
     }
 
-    // Encrypt
+    // Encryption function
     function encrypt(privkey, pubkey, text) {
         var key = nobleSecp256k1.getSharedSecret(privkey, '02' + pubkey, true).substring(2);
         var iv = window.crypto.getRandomValues(new Uint8Array(16));
@@ -46,7 +48,7 @@
         return emsg + "?iv=" + btoa(String.fromCharCode.apply(null, uint8View));
     }
 
-    // Decrypt
+    // Decryption function
     function decrypt(privkey, pubkey, ciphertext) {
         var [emsg, iv] = ciphertext.split("?iv=");
         var key = nobleSecp256k1.getSharedSecret(privkey, '02' + pubkey, true).substring(2);
@@ -60,7 +62,7 @@
         return dmsg;
     }
 
-    // Public key in hexadecimal format from private key
+    // Generate public key from private key
     function generatePublicKey(privateKeyHex) {
         const keyPair = ec.keyFromPrivate(privateKeyHex, 'hex');
         const publicKeyBuffer = keyPair.getPublic();
@@ -69,153 +71,207 @@
         return shortHexKey;
     }
 
-    // Relay connection
-    const relay = "wss://relayable.org";
-    var socket = new WebSocket(relay);
-    const privKey = localStorage.getItem("privKey")
-    const pubKey = generatePublicKey(privKey);
+    // Set up WebSocket connection and handle data communication
+    function setupWebSocketConnection() {
 
-    // Listen nostr events
-    socket.addEventListener('message', async function (message) {
-        var [type, subId, event] = JSON.parse(message.data);
-        var { kind, content } = event || {}
-        if (!event || event === true) return
-        console.log('message:', event)
-        content = await decrypt(privKey, event.pubkey, content)
-        const parsedContent = JSON.parse(content);
+        // Define relay server and fetch private key from local storage
+        const relay = "wss://relayable.org";
+        const privKey = localStorage.getItem("privKey")
+        const pubKey = generatePublicKey(privKey);
 
-        // private board case
-        if (kind === privateBoardKindNumber) {
-            constructBoard(parsedContent[0], parsedContent[1], decodeURIComponent(parsedContent[2]), parsedContent[3], parsedContent[4], event.created_at, event.pubkey);
-        }
+        // Subscribe to own key for data updates
+        var subId = bitcoinjs.ECPair.makeRandom().privateKey.toString("hex")
+        var filter = { "authors": [pubKey] }
+        var subscription = ["REQ", subId, filter]
 
-        // private sheet case
-        if (kind === privateSheetKindNumber) {
-            if (document.getElementById(parsedContent[1])) {
-                constructSheet(parsedContent[0], parsedContent[1], parsedContent[2], decodeURIComponent(parsedContent[3]), decodeURIComponent(parsedContent[4]), parsedContent[5], parsedContent[6], event.created_at, event.pubkey);
-            } else {
-                window.addEventListener(parsedContent[1], function() {
-                    constructSheet(parsedContent[0], parsedContent[1], parsedContent[2], decodeURIComponent(parsedContent[3]), decodeURIComponent(parsedContent[4]), parsedContent[5], parsedContent[6], event.created_at, event.pubkey);
-                })
+        var socket = null; // Initialize socket variable
+
+        function createWebSocket() {
+
+            socket = new WebSocket(relay); // Initialize WebSocket connection
+
+            // Handle incoming messages
+            socket.addEventListener('message', async function (message) {
+                var [type, subId, event] = JSON.parse(message.data);
+                var { kind, content } = event || {}
+                if (!event || event === true) return
+                content = await decrypt(privKey, event.pubkey, content)
+                const parsedDecryptedContent = JSON.parse(content);
+                let workspace = document.getElementById('workspace')
+                let workspaceHash = workspace.getAttribute('data-workspace-hash')
+
+                // Private board event handler
+                if (kind === privateBoardKindNumber) {
+
+                    var workspaceIsReady = true
+                    let eventWorkspaceHash = parsedDecryptedContent[0]
+                    let eventBoardId = parsedDecryptedContent[1]
+                    let eventTitle = decodeURIComponent(parsedDecryptedContent[2])
+                    let eventTagsArray = parsedDecryptedContent[3]
+                    let eventDeadline = parsedDecryptedContent[4]
+                    let eventTimeCreation = event.created_at
+                    let eventParticipants = event.pubkey
+                
+                    function boardCreationHandler() {
+                        constructBoard(eventWorkspaceHash, eventBoardId, eventTitle, eventTagsArray, eventDeadline, eventTimeCreation, eventParticipants);
+                        if (!workspaceIsReady) { c
+                            window.removeEventListener(eventWorkspaceHash, boardCreationHandler);
+                        }
+                        workspaceIsReady = true
+                    }
+                    if (eventWorkspaceHash === workspaceHash) { // Event is from current workspace
+                        workspaceIsReady = true
+                        boardCreationHandler()
+                    } else { // Event is not from current workspace
+                        workspaceIsReady = false
+                        window.addEventListener(eventWorkspaceHash, boardCreationHandler);
+                    }
+                }
+                
+                // Private sheet event handler
+                if (kind === privateSheetKindNumber) {
+
+                    var boardIsReady = true
+                    let eventWorkspaceHash = parsedDecryptedContent[0]
+                    let eventBoardId = parsedDecryptedContent[1]
+                    let eventSheetId = parsedDecryptedContent[2]
+                    let eventTitle = decodeURIComponent(parsedDecryptedContent[3])
+                    let eventDescription = decodeURIComponent(parsedDecryptedContent[4])
+                    let eventTagsArray = parsedDecryptedContent[5]
+                    let eventDeadline = parsedDecryptedContent[6]
+                    let eventTimeCreation = event.created_at
+                    let eventParticipants = event.pubkey
+
+                    function sheetCreationHandler() {
+                        constructSheet(eventWorkspaceHash, eventBoardId, eventSheetId, eventTitle, eventDescription, eventTagsArray, eventDeadline, eventTimeCreation, eventParticipants);
+                        if (!boardIsReady){ // Remove the event listener after it's been executed if applies
+                            window.removeEventListener(eventBoardId, sheetCreationHandler);
+                        }
+                        boardIsReady = true
+                    }
+                    if (eventWorkspaceHash === workspaceHash && document.getElementById(eventBoardId)) {
+                        sheetCreationHandler()
+                    } else {
+                        boardIsReady = false
+                        window.addEventListener(eventBoardId, sheetCreationHandler);
+                    }
+                }
+
+            })
+
+            // Handle WebSocket close events
+            socket.addEventListener('close', function (event) {
+                if (!event.wasClean) {
+                    console.error(`WebSocket connection was abruptly closed, code: ${event.code}, reason: ${event.reason}`);
+                    ephemeralNotification("WebSocket connection was abruptly closed, attempting to reconnect...");
+                    setTimeout(createWebSocket, 2000);
+                }
+            });
+
+            // Sign event data for secure communication
+            async function getSignedEvent(event, privKey) {
+                var eventData = JSON.stringify([
+                    0,
+                    event['pubkey'],
+                    event['created_at'],
+                    event['kind'],
+                    event['tags'],
+                    event['content']
+                ])
+                event.id = sha256(eventData).toString('hex')
+                event.sig = await schnorr.sign(event.id, privKey)
+                return event
             }
-        }
 
-    })
+            // Send event with retry
+            async function sendEventWithRetry(event, maxRetries = 3, retryDelay = 1000) {
+                let retries = 0;
+            
+                while (retries < maxRetries) {
+                    try {
+                        const signedEvent = await getSignedEvent(event, privKey);
+                        socket.send(JSON.stringify(["EVENT", signedEvent]));
+                        ephemeralNotification("Board created successfully.");
+                        localStorage.removeItem("newSheetLS");
+                        localStorage.removeItem("newBoardLS");
+                        window.dispatchEvent(new Event("closeNewBoardModal"));
+                        window.dispatchEvent(new Event("closeNewSheetModal"));
+                        return;
+                    } catch (error) {
+                        retries++;
+                        if (retries < maxRetries) {
+                            ephemeralNotification(`Unable to send event on attempt ${retries}. Retrying...`);
+                            await sleep(retryDelay);
+                        } else {
+                            ephemeralNotification("Max retries reached. Unable to send event. Please try again later.");
+                        }
+                    }
+                }
+            }
+            
+            function sleep(ms) {
+                return new Promise(resolve => setTimeout(resolve, ms));
+            }
+            
 
-    // Subscribe to myself key
-    var subId = bitcoinjs.ECPair.makeRandom().privateKey.toString("hex")
-    var filter = { "authors": [pubKey] }
-    var subscription = ["REQ", subId, filter]
-    socket.addEventListener('open', async function (e) {
-        socket.send(JSON.stringify(subscription));
-        ephemeralNotification(`Connected to websocket.`)
-    })
+            // Listen for the event of creating a new sheet and trigger data sending
+            window.addEventListener("newSheetEvent", async function (e) {
+                const newSheetContent = localStorage.getItem("newSheetLS");
+                const encryptedSheet = encrypt(privKey, pubKey, newSheetContent);
+                const privateSheet = {
+                    "content": encryptedSheet,
+                    "created_at": Math.floor(Date.now() / 1000),
+                    "kind": privateSheetKindNumber,
+                    "tags": [['p', pubKey]],
+                    "pubkey": pubKey,
+                };
+                currentRetry = 0;
+                sendEventWithRetry(privateSheet);
+            });
 
-    // Show user is online confirmation modal and handle reconnection to websocket
-    function isUserOnline(){
-        const confirmationOnlineUserModal = document.getElementById('confirmationOnlineUserModal')
-        const userIsOnline = document.getElementById('userIsOnline')
-        confirmationOnlineUserModal.classList.remove("display-none");
-        userIsOnline.addEventListener("click", function() {
-            var socket = new WebSocket(relay);
-            socket.send(JSON.stringify(subscription));
-            confirmationOnlineUserModal.classList.add("display-none");
-        })
-    }
+            // Listen for the event of creating a new board and trigger data sending
+            window.addEventListener("newBoardEvent", async function (e) {
+                const newBoardContent = localStorage.getItem("newBoardLS");
+                const encryptedBoard = encrypt(privKey, pubKey, newBoardContent);
+                const privateBoard = {
+                    "content": encryptedBoard,
+                    "created_at": Math.floor(Date.now() / 1000),
+                    "kind": privateBoardKindNumber,
+                    "tags": [['p', pubKey]],
+                    "pubkey": pubKey,
+                };
+                currentRetry = 0;
+                sendEventWithRetry(privateBoard);
+            });
 
-    // Listen on websocket close
-    socket.addEventListener('close', function (event) {
-        if (event.wasClean) {
-            console.log(`WebSocket connection closed cleanly, code: ${event.code}, reason: ${event.reason}`);
-            isUserOnline()
-        } else {
-            isUserOnline()
-            console.error(`WebSocket connection was abruptly closed, code: ${event.code}, reason: ${event.reason}`);
-        }
-    });
+            // Listen for the event of creating a new workspace and trigger data sending
+            window.addEventListener("newWorkspaceEvent", async function (e) {
+                const newBoardContent = localStorage.getItem("newWorkspaceLS");
+                const encryptedBoard = encrypt(privKey, pubKey, newBoardContent);
+                const privateBoard = {
+                    "content": encryptedBoard,
+                    "created_at": Math.floor(Date.now() / 1000),
+                    "kind": privateWorkspaceKindNumber,
+                    "tags": [['p', pubKey]],
+                    "pubkey": pubKey,
+                };
+                currentRetry = 0;
+                sendEventWithRetry(privateBoard);
+            });
 
-    // Signing event
-    async function getSignedEvent(event, privKey) {
-        var eventData = JSON.stringify([
-            0,
-            event['pubkey'],
-            event['created_at'],
-            event['kind'],
-            event['tags'],
-            event['content']
-        ])
-        event.id = sha256(eventData).toString('hex')
-        event.sig = await schnorr.sign(event.id, privKey)
-        return event
-    }
-
-    // Event sender with 3 retry attempts function
-    let currentRetry = 0;
-    async function sendEventWithRetry(event) {
-        try {
-            const signedEvent = await getSignedEvent(event, privKey);
-            socket.send(JSON.stringify(["EVENT", signedEvent]));
-            ephemeralNotification("Board created successfully.")
-            window.dispatchEvent(new Event("closeNewBoardModal"));
-            localStorage.removeItem("newSheetLS");
-        } catch (error) {
-            if (currentRetry < 3) {
-                ephemeralNotification(`Unable to send event on try ${currentRetry}. Retrying...`)
-                currentRetry++;
-                setTimeout(() => sendEventWithRetry(event), 1000);
-            } 
-            else if (currentRetry < 2){
+            // Handle WebSocket connection open event
+            socket.addEventListener('open', async function (e) {
                 socket.send(JSON.stringify(subscription));
-            }else {
-                ephemeralNotification("Max retries reached. Unable to send event. Please try again later.")
-            }
+                ephemeralNotification(`Connected to websocket.`)
+            });
         }
+
+        // Initialize the WebSocket connection
+        createWebSocket();
     }
 
-    // Listen event of created sheet, and trigger send event
-    window.addEventListener("newSheetEvent", async function (e) {
-        const newSheetContent = localStorage.getItem("newSheetLS");
-        const encryptedSheet = encrypt(privKey, pubKey, newSheetContent);
-        const privateSheet = {
-            "content": encryptedSheet,
-            "created_at": Math.floor(Date.now() / 1000),
-            "kind": privateSheetKindNumber,
-            "tags": [['p', pubKey]],
-            "pubkey": pubKey,
-        };
-        currentRetry = 0;
-        sendEventWithRetry(privateSheet);
-    });
-
-    // Listen event of created board, and trigger send event
-    window.addEventListener("newBoardEvent", async function (e) {
-        const newBoardContent = localStorage.getItem("newBoardLS");
-        const encryptedBoard = encrypt(privKey, pubKey, newBoardContent);
-        const privateBoard = {
-            "content": encryptedBoard,
-            "created_at": Math.floor(Date.now() / 1000),
-            "kind": privateBoardKindNumber,
-            "tags": [['p', pubKey]],
-            "pubkey": pubKey,
-        };
-        currentRetry = 0;
-        sendEventWithRetry(privateBoard);
-    });
-
-    // Listen event of created workspace, and trigger send event
-    window.addEventListener("newWorkspaceEvent", async function (e) {
-        const newBoardContent = localStorage.getItem("newWorkspaceLS");
-        const encryptedBoard = encrypt(privKey, pubKey, newBoardContent);
-        const privateBoard = {
-            "content": encryptedBoard,
-            "created_at": Math.floor(Date.now() / 1000),
-            "kind": privateWorkspaceKindNumber,
-            "tags": [['p', pubKey]],
-            "pubkey": pubKey,
-        };
-        currentRetry = 0;
-        sendEventWithRetry(privateBoard);
-    });
+    // Call the function to set up the WebSocket connection
+    setupWebSocketConnection();
 
 })();
 

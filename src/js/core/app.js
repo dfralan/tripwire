@@ -25,18 +25,6 @@
             window.location.href = 'index.html';
         });
 
-        // Show or hide Draft Zone 
-        const draftBoardShowToggle = document.getElementById('draftBoardShowToggle')
-        const draftBoard = document.getElementById('draftBoard')
-
-        draftBoardShowToggle.addEventListener("click", function () {
-            if (draftBoard.classList.contains("display-none")){
-                draftBoard.classList.remove("display-none");
-            } else {
-                draftBoard.classList.add("display-none");
-            }
-        });
-
         // Show or hide Trash Zone 
         const trashBoard = document.getElementById('trashBoard')
         deletionZone.addEventListener("click", function () {
@@ -49,14 +37,28 @@
 
         // Background switcher
         const backgroundSwitchers = document.querySelectorAll('.backgroundSwitcher');
+
+        // Retrieve the saved background from localStorage on app launch
+        const savedBackground = localStorage.getItem('selectedBackground');
+
+        var htmlElement = document.documentElement;
+
+        if (savedBackground) {
+            htmlElement.classList.remove(htmlElement.classList.item(0));
+            // Set the new class as the class for the <html> element
+            htmlElement.classList.add(savedBackground);
+        }
+        
+
         backgroundSwitchers.forEach(function(element) {
             element.addEventListener('click', function() {
                 // Get the raw attribute value
                 const rawAttributeValue = element.getAttribute('raw-theme');
-                var htmlElement = document.documentElement;
                 while (htmlElement.classList.length > 0) {
                     htmlElement.classList.remove(htmlElement.classList.item(0));
                 }
+
+                localStorage.setItem('selectedBackground', rawAttributeValue);
                 
                 // Set the new class as the class for the <html> element
                 htmlElement.classList.add(rawAttributeValue);

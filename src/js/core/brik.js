@@ -81,6 +81,25 @@ html {
     box-sizing: border-box;
 }
 
+.customScrollbar::-webkit-scrollbar {
+    width: 8px;
+    height: 8px
+}
+
+.customScrollbar:hover::-webkit-scrollbar-thumb {
+    background-color: rgba(var(--primary-color-rgb), var(--shadow-opacity));
+    border-radius: 20px;
+}
+  
+.customScrollbar::-webkit-scrollbar-track {
+    background: transparent;
+}
+  
+.customScrollbar::-webkit-scrollbar-thumb {
+    background-color: rgba(var(--primary-color-rgb), 0);
+    border-radius: 20px;
+}
+
 .hide-scrollbar::-webkit-scrollbar {
     display: none;
 }
@@ -103,11 +122,19 @@ html {
 }
 
 .min-w-250{
-    min-width: 250px !important;
+    min-width: 250px;
 }
 
 .max-w-350{
-    max-width: 350px !important;
+    max-width: 350px;
+}
+
+.max-w-50{
+    max-width: 50% !important;
+}
+
+.max-width-100 {
+    max-width: calc(100vh - 60px);
 }
 
 .board {
@@ -124,7 +151,7 @@ html {
 }
 
 .shadow-one {
-    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.15);
+    box-shadow: 0px 2px 10px rgba(var(--black-color-rgb), var(--shadow-opacity));
 }
 
 .shadow-dynamic {
@@ -149,28 +176,6 @@ html {
 
 .shadow-two {
     box-shadow: 0px 5px 15px 5px rgba(0, 0, 0, 0.2);
-}
-
-/* Redondeo */
-
-.rounded-s {
-    border-radius: var(--rounded-s);
-}
-
-.rounded {
-    border-radius: var(--rounded-m);
-}
-
-.rounded-l {
-    border-radius: var(--rounded-l);
-}
-
-.rounded-xl {
-    border-radius: var(--rounded-xl);
-}
-
-.rounded-max {
-    border-radius: var(--rounded-xxl);
 }
 
 .overflow-hidden {
@@ -206,8 +211,16 @@ html {
     white-space: nowrap;
 }
 
+.wrap {
+    white-space: wrap;
+}
+
 .no-bullets {
     list-style-type: none;
+}
+
+.xxs-padded {
+    padding: 2px 7px 3px 7px;
 }
 
 .xs-padded {
@@ -820,41 +833,28 @@ html {
     color: var(--primary-color);
 }
 
-
-.pastel1 {
-    background: none;
-    background-color: #C1EBC0;
-    color: var(--black-color);
+.rounded-s {
+    border-radius: var(--rounded-s);
 }
 
-.pastel2 {
-    background: none;
-    background-color: #C7CAFF;
-    color: var(--black-color);
+.rounded {
+    border-radius: var(--rounded-m);
 }
 
-.pastel3 {
-    background: none;
-    background-color: #FAFABE;
-    color: var(--black-color);
+.rounded-l {
+    border-radius: var(--rounded-l);
 }
 
-.pastel4 {
-    background: none;
-    background-color: #F6C2F3;
-    color: var(--black-color);
+.rounded-xl {
+    border-radius: var(--rounded-xl);
+}
+
+.rounded-max {
+    border-radius: var(--rounded-xxl);
 }
 
 .bg-g-penny {
     background: linear-gradient(90deg, #21D4FD 0%, #B721FF 100%);
-}
-
-.bg-g-melon {
-    background: linear-gradient(90deg, #f8ff00 0%, #3ad59f 100%);
-}
-
-.bg-g-forest {
-    background: linear-gradient( 90deg,  rgba(61,131,97,1) 0%, rgba(28,103,88,1) 100% );
 }
 
 .bg-g-rainbow {
@@ -901,6 +901,11 @@ html {
 
 .grayscale {
     filter: grayscale(100%);
+}
+
+.border-none {
+    border-width: 0px;
+    border-color: transparent;
 }
 
 .border-solid {
@@ -1005,10 +1010,6 @@ html {
     background-color: transparent !important;
 }
 
-.dropbtn {
-    border: none;
-}
-
 .dropdown {
     position: relative;
     display: inline-block;
@@ -1104,35 +1105,4 @@ html {
     })
 
 })();
-
-// Ephemeral Hash
-const genHex = (a) => Math.random().toString(16).slice(2, (a + 2));
-
-// Hide all dropwdowns
-function hideAllDropdowns(){
-    var dropdowncontainers = document.getElementsByClassName("dropdown-content");
-    var i;
-    for (i = 0; i < dropdowncontainers.length; i++) {
-        var openDropdown = dropdowncontainers[i];
-        if (openDropdown.classList.contains('display-block')) {
-            openDropdown.classList.remove('display-block');
-        }
-    }
-}
-window.onclick = function(event) {
-    if (!event.target.matches('.dropbtn') && !event.target.closest('.dropbtn')) {
-        hideAllDropdowns();
-    }
-}
-
-document.addEventListener("DOMContentLoaded", function() {
-    var dropBtns = document.querySelectorAll(".dropbtn");
-    
-    dropBtns.forEach(function(dropBtn) {
-        dropBtn.addEventListener("click", function() {
-            var dropdownContent = dropBtn.nextElementSibling;
-            dropdownContent.classList.toggle("display-block");
-        });
-    });
-});
 

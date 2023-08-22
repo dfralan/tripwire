@@ -9,8 +9,6 @@
     }
   
     let currentStatus = checkConnectionStatus();
-    console.log("Initial connection status:", currentStatus);
-  
     window.addEventListener("online", function() {
       if (checkConnectionStatus() !== currentStatus) {
         currentStatus = "Online";

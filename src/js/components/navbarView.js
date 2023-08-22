@@ -1,3 +1,7 @@
+let visualsDropdownId = genHex(12);
+let loomDropdownId = genHex(12);
+let navUserDropdownId = genHex(12);
+
 var navbar =`
 <div class="bg-body stick-top z-3 steady-1 s-padded spaced display-flex flex-wrap full-center">
 
@@ -6,17 +10,47 @@ var navbar =`
         
         <div class="display-flex flex-row full-center s-padded no-padded-bottom no-padded-top">
             ${clipIcon}
-            <p class="font-500 color-primary on-mobile-pass">Tripwire</p>
+            <p class="font-500 color-primary">Tripwire</p>
         </div>
 
         <div class="display-flex flex-row s-gap full-center s-padded no-padded-bottom no-padded-top">
 
+        <div id='${visualsDropdownId}' class="dropdown">
+            <button onclick="toggleDropdown('${visualsDropdownId}')" class="btn btn-secondary no-wrap">
+                ${contrastIcon}
+                ${chevronDown}
+            </button>
+            <ul class="dropdown-content to-left z-1 absolute text-center rounded shadow-two bg-body xs-padded border-solid-s border-primary">
+
+                <li class="text-center font-xs font-500 dropdown-element inactive block-mode color-secondary">Theme</li>
+                <li id="theme-btn" class="dropdown-element btn" id="logoutButton">
+                    <span>${sunIcon}${moonIcon}</span>
+                </li>
+
+                <div class="text-center color-grey block-mode divider"></div>
+
+                <li class="text-center font-xs font-500 dropdown-element inactive block-mode color-secondary">Backgrounds</li>
+                <li class='${backgroundSwitcherClass}' raw-theme='bg-tertiary'>
+                    <div class='avatar-s shadow-dynamic bg-tertiary'></div>
+                    &nbspBody
+                </li>
+                <li class='${backgroundSwitcherClass}' raw-theme='bg-g-penny'>
+                    <div class='avatar-s shadow-dynamic bg-g-penny'></div>
+                    &nbspPenny
+                </li>
+                <li class='${backgroundSwitcherClass}' raw-theme='bg-g-rainbow'>
+                    <div class='avatar-s shadow-dynamic bg-g-rainbow'></div>
+                    &nbspRainbow
+                </li>
+
+            </ul>
+        </div>
+
 
             <!-- Language Switcher -->
 
-            <loom class="dropdown">
-                <button class="display-flex dropbtn btn btn-secondary no-wrap">
-
+            <loom id='${loomDropdownId}' class="dropdown">
+                <button onclick="toggleDropdown('${loomDropdownId}')" class="display-flex btn btn-secondary no-wrap">
                     <span loom-indicator>
                     </span>
                     ${globeIcon}
@@ -32,8 +66,8 @@ var navbar =`
 
             <!-- Avatar Dropdown -->
 
-            <div class="dropdown">
-                <div class="dropbtn display-flex cursor-pointer xs-padded">
+            <div id='${navUserDropdownId}' class="dropdown">
+                <div onclick="toggleDropdown('${navUserDropdownId}')" class="btn display-flex cursor-pointer xs-padded">
                     <span class='avatar-m shadow-dynamic bg-primary'></span>
                 </div>
                 <ul class="dropdown-content to-right z-1 absolute text-right rounded shadow-two bg-body xs-padded border-solid-s border-primary">
