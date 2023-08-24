@@ -1,15 +1,18 @@
+
+
 // New sheet form variables
 const sheetCreationModal = document.getElementById('sheetCreationModal')
 const newSheetForm = document.getElementById('newSheetForm')
 const cancelAddNewSheet = document.getElementById('cancelAddNewSheet')
 const newSheetSubmitButton = document.getElementById('newSheetSubmitButton')
 const newSheetNameInput = document.getElementById('newSheetName')
-const newSheetInputDescriptionInput = document.getElementById('newSheetInputDescription')
+const newSheetInputDescription = document.getElementById('newSheetInputDescription')
 const newSheetInputTagsInput = document.getElementById('newSheetInputTags')
 const boardReference = document.getElementById('boardReference')
 const sheetModalIndicator = document.getElementById('sheetModalIndicator')
 var linkedBoardId = ''
 var newSheetHash = ''
+var newSheetRevisionsAmount = 0
 
 // show add new sheet modal
 function showNewSheetModal(){
@@ -38,18 +41,46 @@ window.addEventListener("closeNewSheetModal", function() {
     hideNewSheetModal()
 });
 
-// Launch Modal and fullfill inputs needed
-function launchModalSheet(workspaceId, boardId, boardTitle, sheetHash, sheetTitle, sheetDescription, sheetTags) {
 
-    newSheetHash = (sheetHash === '') ? genHex(8) : sheetHash
+// Launch Modal and fullfill inputs needed
+function launchModalSheet(workspaceId, boardId, sheetHash) {
+
+    // If sheet hash comes empty, means brand new sheet
+    if (sheetHash === '') {
+        newSheetHash = genHex(8)
+        sheetModalIndicator.textContent = 'New Sheet'
+        newSheetSubmitButton.textContent = 'Add Sheet'
+        newSheetNameInput.value = ''
+        newSheetInputDescription.value = ''
+        newSheetInputTagsInput.value = ''
+        newSheetRevisionsAmount = 0
+     
+        
+    } else { // Existent sheet edition
+
+        // target existen sheet and extract => title, description, and tags
+        let sheetTargetted = document.getElementById(sheetHash)
+        // Extract tags from sheet
+        let sheetTargettedTagsContainer = sheetTargetted.querySelector('.sheetTagsContainer');
+        let sheetTargettedTitle = sheetTargetted.querySelector('.sheetTitle').textContent
+        let sheetTargettedDescription = sheetTargetted.querySelector('.sheetDescription').textContent
+        
+        newSheetHash = sheetHash
+        sheetModalIndicator.textContent = 'Edit Sheet'
+        newSheetSubmitButton.textContent = 'Confirm'
+        newSheetNameInput.value = sheetTargettedTitle
+        newSheetInputDescription.value = sheetTargettedDescription
+        newSheetInputTagsInput.value = ExtractTags(sheetTargettedTagsContainer)
+
+    }
+
+    // get boardTitle with ID
+    let targettedBoard = document.getElementById(boardId)
+    let targettedBoardTitle = targettedBoard.querySelector('.boardTitle').textContent
+
+    boardReference.textContent = targettedBoardTitle
     linkedBoardId = boardId
     workspaceHash = workspaceId
-    sheetModalIndicator.textContent = (sheetHash === '') ? 'New Sheet' : 'Edit Sheet'
-    boardReference.textContent = boardTitle
-    newSheetSubmitButton.textContent = (sheetHash === '') ? 'Add Sheet' : 'Confirm'
-    newSheetNameInput.value = sheetTitle
-    newSheetInputDescriptionInput.value = sheetDescription
-    newSheetInputTagsInput.value = sheetTags
 
     showNewSheetModal()
     
@@ -60,19 +91,20 @@ newSheetForm.addEventListener('submit', function (event) {
     event.preventDefault()
     const newSheetName = newSheetNameInput.value
     const newSheetInputTags = newSheetInputTagsInput.value
-    const newSheetInputDescription = newSheetInputDescriptionInput.value
+    const newSheetDescription = newSheetInputDescription.value
 
-    //0 workspaceId, 1 boardId, 2 sheetId, 3 title, 4 description, 5 tags, 6 deadline, 7 at, 8 participants,
+    //0 workspaceId, 1 boardId, 2 sheetId, 3 title, 4 description, 5 tags, 6 deadline, 7 at, 8 participants, 9 revisions
     const newSheetArrayed = [
         workspaceHash,
         linkedBoardId,
         newSheetHash,
         encodeURIComponent(newSheetName),
-        encodeURIComponent(newSheetInputDescription),
+        encodeURIComponent(newSheetDescription),
         arrayTags(newSheetInputTags),
         'tomorrow',
         'now',
-        'onlyme',
+        '',
+        newSheetRevisionsAmount
     ];
 
     if (newSheetName) {

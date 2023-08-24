@@ -10,7 +10,6 @@ function constructBoard(workspaceId, boardId, title, tags, deadline, at, partici
     }
 
     // Concatenated tags variable declaration
-    parsedTags = JSON.parse(tags)
     var boardTags = ''
 
     // Amount of tags and clasification declaration
@@ -21,10 +20,10 @@ function constructBoard(workspaceId, boardId, title, tags, deadline, at, partici
     var boardRevisionsAmount = 1
 
     // Create and append tag elements
-    parsedTags.forEach(tag => {
+    tags.forEach(tag => {
 
         var boardTagContent = decodeURIComponent(tag)
-        var urlTagClass = `pastel-${Math.floor(Math.random() * 5) + 1} xxs-padded font-xs rounded-s no-wrap hide-scrollbar overflow-scroll max-w-50`
+        var urlTagClass = `pastel-${Math.floor(Math.random() * 5) + 1} tag xxs-padded font-xs rounded-s no-wrap hide-scrollbar overflow-scroll max-w-100`
 
         if (isValidUrl(`${boardTagContent}`)){
 
@@ -102,16 +101,16 @@ function constructBoard(workspaceId, boardId, title, tags, deadline, at, partici
     if (phoneNumbersAmount > 0) {boardDetails += phoneTagsAmountElement}
 
     var easyBoard = `
-    <div class="border-dashed boardDropZone rounded bg-tertiary display-flex flex-col s-gap shadow-one">
+    <div class="border-dashed boardDropZone rounded bg-tertiary display-flex flex-col s-gap shadow-one matcher">
         <div class="xs-padded no-padded-right no-padded-top">
             <h4 class="display-flex spaced color-primary font-500 font-m s-padded no-padded-bottom">
-                <div><span class="boardTitle">${title}</span></div>
+                <div class='hide-scrollbar overflow-scroll max-width-100'><span class="boardTitle no-wrap">${title}</span></div>
                 <div id='dropdown-${boardId}' class="dropdown">
-                    <button onclick="toggleDropdown('dropdown-${boardId}')" class="dropbtn border-none cursor-pointer bg-none hover-color-tint hover-fill-tint focus-fill-tint focus-color-tint">
+                    <button onclick="toggleDropdown('dropdown-${boardId}')" class=" border-none cursor-pointer bg-none hover-color-tint hover-fill-tint focus-fill-tint focus-color-tint">
                         ${dotOptionsIcon}
                     </button>
                     <ul class="dropdown-content to-right z-1 absolute text-right rounded shadow-two bg-body xs-padded border-solid-s border-primary">
-                        <li onclick="launchModalSheet('${workspaceId}', '${boardId}', '${title}', '', '', '', '')" class="dropdown-element block-mode color-secondary rounded-xs cursor-pointer" data-parent-id="${boardId}">Add new sheet +</li>
+                        <li onclick="launchModalSheet('${workspaceId}', '${boardId}', '')" class="dropdown-element block-mode color-secondary rounded-xs cursor-pointer" data-parent-id="${boardId}">Add new sheet +</li>
                         <li onclick="launchModalBoard('${workspaceId}', '${boardId}', '${title}', '')" class="dropdown-element block-mode color-secondary rounded-xs cursor-pointer" data-parent-id="${boardId}">Edit Board</li>
                     </ul>
                 </div>
@@ -142,7 +141,6 @@ function constructBoard(workspaceId, boardId, title, tags, deadline, at, partici
     // Add access button to toolbar
     const toolbarAccessButton = document.createElement('button');
     toolbarAccessButton.className = "btn btn-secondary no-wrap rounded-max";
-    toolbarAccessButton.style.opacity = 0.5
     toolbarAccessButton.id = `accessBtn-${boardId}`
     toolbarAccessButton.innerHTML = title;
     toolbarAccessButton.onclick = function() {
@@ -161,6 +159,13 @@ function constructBoard(workspaceId, boardId, title, tags, deadline, at, partici
 
 }
 
+
+
+
+
+
+
+
 //0 workspaceId, 1 boardId, 2 sheetId, 3 title, 4 description, 5 tags, 6 deadline, 7 at, 8 participants,
 function constructSheet(workspaceId, boardId, sheetId, title, description, tags, deadline, at, participants) {
 
@@ -174,8 +179,6 @@ function constructSheet(workspaceId, boardId, sheetId, title, description, tags,
     var existentSheet = document.getElementById(sheetId)
     var update = existentSheet ? true : false
 
-    // Concatenated tags variable declaration
-    parsedTags = JSON.parse(tags)
     var sheetTags = ''
 
     // Amount of tags and clasification declaration
@@ -186,10 +189,10 @@ function constructSheet(workspaceId, boardId, sheetId, title, description, tags,
     var sheetRevisionsAmount = 1
 
     // Create and append tag elements
-    parsedTags.forEach(tag => {
+    tags.forEach(tag => {
 
         var sheetTagContent = decodeURIComponent(tag)
-        var urlTagClass = `pastel-${Math.floor(Math.random() * 5) + 1} xxs-padded font-xs rounded-s no-wrap hide-scrollbar overflow-scroll max-w-50`
+        var urlTagClass = `pastel-${Math.floor(Math.random() * 5) + 1} tag xxs-padded font-xs rounded-s no-wrap hide-scrollbar overflow-scroll max-w-100`
 
         if (isValidUrl(`${sheetTagContent}`)){
 
@@ -270,12 +273,12 @@ function constructSheet(workspaceId, boardId, sheetId, title, description, tags,
     <div class="display-flex flex-row spaced">
         <h4 class="sheetTitle hide-scrollbar overflow-scroll no-wrap font-s font-500">${title}</h4>
         <div class="display-flex flex-row">
-            <div id='dropdown-${sheetId}' class="dropdown">
-                <button onclick="toggleDropdown('dropdown-${sheetId}')" class="dropbtn border-none cursor-pointer bg-none hover-color-tint hover-fill-tint focus-fill-tint focus-color-tint">
+            <div id='dropdown-${sheetId}' class="dropdown position-relative display-block-inline">
+                <button onclick="toggleDropdown('dropdown-${sheetId}')" class="border-none cursor-pointer bg-none hover-color-tint hover-fill-tint focus-fill-tint focus-color-tint">
                     ${dotOptionsIcon}
                 </button>
                 <ul class="dropdown-content to-right z-1 absolute text-right rounded shadow-two bg-body xs-padded border-solid-s border-primary">
-                    <li class="dropdown-element font-xs block-mode color-secondary rounded-xs cursor-pointer" data-parent-id="${sheetId}">Edit Sheet</li>
+                    <li onclick="launchModalSheet('${workspaceId}', '${boardId}', '${sheetId}')" class="dropdown-element font-xs block-mode color-secondary rounded-xs cursor-pointer" data-parent-id="${sheetId}">Edit Sheet</li>
                     <li class="dropdown-element font-xs block-mode color-secondary rounded-xs cursor-pointer" data-parent-id="${sheetId}">Delete Sheet</li>
                 </ul>
             </div>
@@ -285,12 +288,8 @@ function constructSheet(workspaceId, boardId, sheetId, title, description, tags,
         </div>
     </div>
     <div class="sheetExpansion display-none s-gap flex-col color-primary">
-        <p class='sheetDescription'>
-            ${description}
-        </p>
-        <div class="sheetTagsContainer display-flex flex-wrap s-gap">
-            ${sheetTags}
-        </div>
+        <p class='sheetDescription'>${description}</p>
+        <div class="sheetTagsContainer display-flex flex-wrap s-gap">${sheetTags}</div>
     </div>
     <div class="display-flex flex-row s-gap">
         <p class="timestamp font-xs color-secondary no-wrap" data-timestamp="${at}" loom='now'></p>

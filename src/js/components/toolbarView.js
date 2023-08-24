@@ -3,8 +3,6 @@ var toolbar =`
 
     <div class="toolbar customScrollbar overflow-scroll overflow-y-hidden display-flex flex-row s-gap s-padded no-padded-bottom no-padded-right">
 
-        
-
     </div>
 
 </div>`

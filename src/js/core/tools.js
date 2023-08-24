@@ -98,24 +98,23 @@ function toggleBoardVisibility(boardIdentificator, buttonIdentificator){
     if (targettedBoard.classList.contains("display-none")){
         targettedBoard.classList.remove("display-none")
         targettedBoard.classList.add("display-block")
-        targettedButton.style.opacity = 0.5;
+        targettedButton.style.opacity = 1;
     } else {
         targettedBoard.classList.add("display-none")
         targettedBoard.classList.remove("display-block")
-        targettedButton.style.opacity = 1;
+        targettedButton.style.opacity = 0.7;
     }
+}
+
+function hideAllDropdowns() {
+    var allDropContents = document.querySelectorAll('.dropdown-content')
+    allDropContents.forEach(function(element) {
+        element.classList.remove('display-block');
+    });
 }
 
 // Toggle dropdown
 function toggleDropdown(id){
-    console.log("drop shut")
-    function hideAllDropdowns() {
-        var allDropContents = document.querySelectorAll('.dropdown-content')
-        allDropContents.forEach(function(element) {
-            element.classList.remove('display-block');
-        });
-    }
-
     let targettedSheet = document.getElementById(id)
     let dropContent = targettedSheet.querySelector('.dropdown-content')
     if (dropContent.classList.contains("display-block")){
@@ -126,5 +125,26 @@ function toggleDropdown(id){
     }
 }
 
+// Add a global click event listener
+document.addEventListener('click', function(event) {
+    const clickedElement = event.target;
+    const dropdowns = document.querySelectorAll('.dropdown-content');
+
+    // Check if the clicked element is not within any dropdown
+    if (!clickedElement.closest('.dropdown')) {
+        dropdowns.forEach(function(dropContent) {
+            hideAllDropdowns()
+        });
+    }
+});
+
+
 // Ephemeral Hash
 const genHex = (a) => Math.random().toString(16).slice(2, (a + 2));
+
+// Extract tags from tagsContainer
+function ExtractTags(x) {
+    const sheetTargettedTags = x.querySelectorAll('.tag');
+    const tagTextArray = Array.from(sheetTargettedTags).map(tag => tag.textContent.trim());
+    return tagTextArray.join(', ');
+}

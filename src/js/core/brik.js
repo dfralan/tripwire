@@ -134,7 +134,7 @@ html {
 }
 
 .max-width-100 {
-    max-width: calc(100vh - 60px);
+    max-width: 100%;
 }
 
 .board {
@@ -1015,10 +1015,8 @@ html {
     display: inline-block;
 }
 
-.dropdown .dropbtn{
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.position-relative {
+    position: relative;
 }
 
 .h-center {
@@ -1045,6 +1043,11 @@ html {
 .display-none {
     display: none;
 }
+
+.display-inline-block {
+    display: inline-block;
+}
+
 
 .divider{
     border-bottom: 1px solid var(--tertiary-color);
