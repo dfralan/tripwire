@@ -103,10 +103,10 @@ function constructBoard(workspaceId, boardId, title, tags, deadline, at, partici
     var easyBoard = `
     <div class="border-dashed boardDropZone rounded bg-tertiary display-flex flex-col s-gap shadow-one matcher">
         <div class="xs-padded no-padded-right no-padded-top">
-            <h4 class="display-flex spaced color-primary font-500 font-m s-padded no-padded-bottom">
+            <h4 class="display-flex full-center spaced color-primary font-500 font-m s-padded no-padded-bottom">
                 <div class='hide-scrollbar overflow-scroll max-width-100'><span class="boardTitle no-wrap">${title}</span></div>
                 <div id='dropdown-${boardId}' class="dropdown">
-                    <button onclick="toggleDropdown('dropdown-${boardId}')" class=" border-none cursor-pointer bg-none hover-color-tint hover-fill-tint focus-fill-tint focus-color-tint">
+                    <button onclick="toggleDropdown('dropdown-${boardId}')" class="hover-bg-lighter rounded-max btn cursor-pointer hover-fill-primary fill-secondary">
                         ${dotOptionsIcon}
                     </button>
                     <ul class="dropdown-content to-right z-1 absolute text-right rounded shadow-two bg-body xs-padded border-solid-s border-primary">
@@ -271,24 +271,24 @@ function constructSheet(workspaceId, boardId, sheetId, title, description, tags,
 
     var easySheet = `
     <div class="display-flex flex-row spaced">
-        <h4 class="sheetTitle hide-scrollbar overflow-scroll no-wrap font-s font-500">${title}</h4>
-        <div class="display-flex flex-row">
+        <h4 class="sheetTitle hide-scrollbar overflow-scroll no-wrap font-400 full-center">${title}</h4>
+        <div class="display-flex flex-row full-center">
+        <button onclick="expandSheet('${sheetId}')" class="hover-bg-lighter rounded-max btn hover-fill-primary fill-secondary">
+            ${chevronDown}
+        </button>
             <div id='dropdown-${sheetId}' class="dropdown position-relative display-block-inline">
-                <button onclick="toggleDropdown('dropdown-${sheetId}')" class="border-none cursor-pointer bg-none hover-color-tint hover-fill-tint focus-fill-tint focus-color-tint">
-                    ${dotOptionsIcon}
+                <button onclick="toggleDropdown('dropdown-${sheetId}')" class="hover-bg-lighter rounded-max btn cursor-pointer hover-fill-primary fill-secondary">
+                ${dotOptionsIcon}
                 </button>
                 <ul class="dropdown-content to-right z-1 absolute text-right rounded shadow-two bg-body xs-padded border-solid-s border-primary">
                     <li onclick="launchModalSheet('${workspaceId}', '${boardId}', '${sheetId}')" class="dropdown-element font-xs block-mode color-secondary rounded-xs cursor-pointer" data-parent-id="${sheetId}">Edit Sheet</li>
                     <li class="dropdown-element font-xs block-mode color-secondary rounded-xs cursor-pointer" data-parent-id="${sheetId}">Delete Sheet</li>
                 </ul>
             </div>
-            <button onclick="expandSheet('${sheetId}')" class="btn font-l font-600 fill-secondary">
-                ${chevronDown}
-            </button>
         </div>
     </div>
     <div class="sheetExpansion display-none s-gap flex-col color-primary">
-        <p class='sheetDescription'>${description}</p>
+        <p class='sheetDescription s-padded no-padded-left no-padded-right no-padded-top font-s'>${description}</p>
         <div class="sheetTagsContainer display-flex flex-wrap s-gap">${sheetTags}</div>
     </div>
     <div class="display-flex flex-row s-gap">

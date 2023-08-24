@@ -62,6 +62,20 @@
         return dmsg;
     }
 
+    function decryptArray(privkey, pubkey, inputArray) {
+        // Create a new array to store the processed values
+        const processedArray = [];
+      
+        // Process each element of the input array
+        for (let i = 0; i < inputArray.length; i++) {
+          const processedValue = decrypt(privkey, pubkey, inputArray[i])/* Process the inputArray[i] here */;
+          const dURIProcessedValue = decodeURIComponent(processedValue)
+          processedArray.push(processedValue);
+        }
+      
+        return processedArray;
+    }
+
     // Generate public key from private key
     function generatePublicKey(privateKeyHex) {
         const keyPair = ec.keyFromPrivate(privateKeyHex, 'hex');
@@ -139,12 +153,13 @@
                 if (kind === privateBoardKindNumber) {
 
                     console.log('createdBoard')
+                    console.log(xTags)
 
                     var workspaceIsReady = true
                     let eventWorkspaceHash = wsHash[0]
                     let eventBoardId = dTags[0]
-                    let eventTitle = decodeURIComponent(sTitle[0])
-                    let eventTagsArray = xTags
+                    let eventTitle = decodeURIComponent(decrypt(privKey, event.pubkey, sTitle[0]))
+                    let eventTagsArray = decryptArray(privKey, event.pubkey, xTags)
                     let eventDeadline = ddLine[0]
                     let eventTimeCreation = event.created_at
                     let eventParticipants = event.pubkey
@@ -173,8 +188,8 @@
                     let eventWorkspaceHash = wsHash[0]
                     let eventBoardId = bHash[0]
                     let eventSheetId = dTags[0]
-                    let eventTitle = decodeURIComponent(sTitle[0])
-                    let eventDescription = content
+                    let eventTitle = decodeURIComponent(decrypt(privKey, event.pubkey, sTitle[0]))
+                    let eventDescription = decodeURIComponent(content)
                     let eventTagsArray = xTags
                     let eventDeadline = ddLine[0]
                     let eventTimeCreation = event.created_at

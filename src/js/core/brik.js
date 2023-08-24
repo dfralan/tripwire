@@ -14,8 +14,7 @@ let brikStyleSheet = `
     --violet-color: #570DF2;
     --shadow-opacity: 0.07;
     --shadow-opacity-hover: 0.1;
-    --glow-opacity: 0.15;
-    --glow-opacity-hover: 0.25;
+    --glow-opacity: 0.05;
     --tint-color: #FF622C;
     --bg-body-color: #FCFEFB;
     --bg-body-color-rgb: 252, 254, 251; 
@@ -46,8 +45,6 @@ html[data-theme='light'] {
     --secondary-color: #898D9A;
     --tertiary-color: #F6F7F8;
     --violet-color: #601CF2;
-    --glow-opacity: 0.15;
-    --glow-opacity-hover: 0.25;
 }
 
 html[data-theme='dark'] {
@@ -60,8 +57,6 @@ html[data-theme='dark'] {
     --tint-color: #FF7742;
     --shadow-opacity: 0.3;
     --shadow-opacity-hover: 0.6;
-    --glow-opacity: 0.03;
-    --glow-opacity-hover: 0.07;
 }
 
 [data-theme='light'] .d-block-light,
@@ -358,8 +353,16 @@ html {
     fill: var(--tint-color) !important;
 }
 
+.hover-fill-primary:hover {
+    fill: var(--primary-color) !important;
+}
+
 .hover-color-tint:hover {
     color: var(--tint-color) !important;
+}
+
+.hover-bg-lighter:hover {
+    background-color: rgba(var(--primary-color-rgb), var(--glow-opacity));
 }
 
 .focus-fill-tint:focus {
@@ -431,7 +434,7 @@ html {
 }
 
 .fill-primary {
-    fill: var(--primary-color);
+    fill: var(--primary-color) !important;
 }
 
 .fill-secondary {
