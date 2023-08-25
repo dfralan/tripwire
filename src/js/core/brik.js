@@ -960,6 +960,10 @@ html {
     border-color: var(--cyan-color);
 }
 
+.hideMeMan {
+    display: none !important;
+}
+
 .modal {
     position: fixed;
     width: 100%;

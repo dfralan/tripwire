@@ -1,61 +1,63 @@
 
 // Variables to handle sheet creation
-const newBoardForm = document.getElementById('newBoardForm');
-const addNewBoardButton = document.getElementById('addNewBoardButton')
-const cancelAddNewBoard = document.getElementById('cancelAddNewBoard')
-const closeAddNewBoard = document.getElementById('closeAddNewBoard')
 const boardCreationModal = document.getElementById('boardCreationModal')
+const newBoardForm = document.getElementById('newBoardForm');
 const newBoardSubmitButton = document.getElementById('newBoardSubmitButton')
 const newBoardNameInput = document.getElementById('newBoardName')
+const newBoardInputDescription = document.getElementById('newSheetInputDescription')
 const newBoardInputTags = document.getElementById('newBoardInputTags')
+// here go mentions but for now only private boards ()
 const boardModalIndicator = document.getElementById('boardModalIndicator')
 var workspaceHash = '' 
 var newBoardHash = ''
+var existentBoardLS = ''
+var boardRevisionsAmount = ''
 
+// show add new board modal
 function showNewBoardModal() {
     boardCreationModal.classList.remove("display-none");
     boardCreationModal.classList.add("display-flex");
 }
+
+// hide add new board modal
 function hideNewBoardModal() {
     boardCreationModal.classList.remove("display-flex");
     boardCreationModal.classList.add("display-none");
 }
 
-// show add new sheet modal
-//0 workspaceId, 1 boardId, 2 title, 3 tags, 4 deadline, 5 at, 6 participants
-addNewBoardButton.addEventListener("click", function () {
-    var workspaceTargetted = document.getElementById("workspace");
-    workspaceHash = workspaceTargetted.getAttribute("data-workspace-hash");
-    launchModalBoard(workspaceHash, '', '', '')
-});
-
-// hide add new sheet modal
-cancelAddNewBoard.addEventListener("click", function () {
-    hideNewBoardModal()
-});
-
-// hide add new sheet modal
-closeAddNewBoard.addEventListener("click", function () {
-    hideNewBoardModal()
-});
-
 // listen event that allow close new sheet modal when success on sending the event
+//0 workspaceId, 1 boardId, 2 title, 3 description, 4 tags, 5 deadline, 6 at, 7 participants, 8 revisions
 window.addEventListener("closeNewBoardModal", function() {
     hideNewBoardModal()
 });
 
-function launchModalBoard(workspaceId, boardId, boardTitle, boardTags) {
+// Launch Modal and fullfill inputs needed
+function launchModalBoard(boardId) {
 
-    newBoardHash = (boardId === '') ? genHex(8) : boardId
+    // If board hash comes empty, means brand new board
+    if (boardId === '') {
+        newBoardHash = genHex(12)
+        workspaceHash = 'aWorkspace'
+        newBoardNameInput.value = ''
+        newBoardInputDescription.value = ''
+        newBoardInputTags.value = ''
+        boardModalIndicator.textContent = 'New Board'
+        newBoardSubmitButton.textContent = 'Create Board'
+        boardRevisionsAmount = '-1'
 
-    boardModalIndicator.textContent = (boardId === '') ? 'New Board' : 'Edit Board'
-    newBoardSubmitButton.textContent = (boardId === '') ? 'Create Board' : 'Confirm'
-    newBoardNameInput.value = boardTitle
-    newBoardInputTags.value = boardTags
-    workspaceHash = workspaceId
+    } else { // Existent board edition
+
+        existentBoardLS = JSON.parse(localStorage.getItem(boardId))
+        workspaceHash = existentBoardLS[0]
+        newBoardHash = existentBoardLS[1]
+        newBoardNameInput.value = existentBoardLS[2]
+        newBoardInputTags.value = existentBoardLS[3]
+        boardModalIndicator.textContent = 'Edit Board'
+        newBoardSubmitButton.textContent = 'Confirm'
+        boardRevisionsAmount = existentBoardLS[8]
+    }
 
     showNewBoardModal()
-
 
 }
 
@@ -64,6 +66,7 @@ newBoardForm.addEventListener('submit', function (event) {
     event.preventDefault()
 
     const newBoardName = newBoardNameInput.value
+    const newBoardDescription = newBoardInputDescription.value
     const newBoardTags = newBoardInputTags.value
 
     //0 workspaceId, 1 boardId, 2 title, 3 tags, 4 deadline, 5 at, 6 participants
@@ -71,15 +74,18 @@ newBoardForm.addEventListener('submit', function (event) {
         workspaceHash,
         newBoardHash,
         encodeURIComponent(newBoardName),
+        encodeURIComponent(newBoardDescription),
         arrayTags(newBoardTags),
         'tomorrow',
         'now',
         'onlyme',
+        boardRevisionsAmount,
     ];
 
     if (newBoardName) {
         
-        localStorage.setItem("newBoardLS", JSON.stringify(newBoardArrayed));
+        localStorage.setItem("newBoardLS", newBoardHash);
+        localStorage.setItem(newBoardHash, JSON.stringify(newBoardArrayed));
         const event = new Event("newBoardEvent");
         window.dispatchEvent(event);
         console.log(newBoardName);

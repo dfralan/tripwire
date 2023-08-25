@@ -110,15 +110,15 @@
                 var { kind, content, tags } = event || {}
                 if (!event || event === true) return
                 console.log(event)
-                if (kind === privateSheetKindNumber) {
-                    content = await decrypt(privKey, event.pubkey, content)
-                }
+                content = await decrypt(privKey, event.pubkey, content)
+                
                 let workspace = document.getElementById('workspace')
                 let workspaceHash = workspace.getAttribute('data-workspace-hash')
 
                 // Initialize arrays to store 'p' and 'x' tags
                 let pTags = [];
-                let dTags = [];
+                let dTag = [];
+                let rTag = [];
                 let wsHash = [];
                 let bHash = [];
                 let sTitle = [];
@@ -130,7 +130,7 @@
                     if (tagType === 'p') {
                         pTags.push(tagValue);
                     } else if (tagType === 'd') {
-                        dTags.push(tagValue);
+                        dTag.push(tagValue);
                     } else if (tagType === 'wsHash') {
                         wsHash.push(tagValue);
                     } else if (tagType === 'bHash') {
@@ -141,13 +141,10 @@
                         ddLine.push(tagValue);
                     } else if (tagType === 'x') {
                         xTags.push(tagValue);
+                    } else if (tagType === 'r') {
+                        rTag.push(tagValue);
                     }
                 }
-
-                console.log('pTags:', wsHash[0]);
-                console.log('xTags:', xTags);
-
-
 
                 // Private board event handler
                 if (kind === privateBoardKindNumber) {
@@ -157,17 +154,21 @@
 
                     var workspaceIsReady = true
                     let eventWorkspaceHash = wsHash[0]
-                    let eventBoardId = dTags[0]
+                    let eventBoardId = dTag[0]
                     let eventTitle = decodeURIComponent(decrypt(privKey, event.pubkey, sTitle[0]))
+                    let eventDescription = decodeURIComponent(content)
                     let eventTagsArray = decryptArray(privKey, event.pubkey, xTags)
                     let eventDeadline = ddLine[0]
                     let eventTimeCreation = event.created_at
                     let eventParticipants = event.pubkey
+                    let revisionsAmount = rTag[0]
 
                     function boardCreationHandler() {
-                        constructBoard(eventWorkspaceHash, eventBoardId, eventTitle, eventTagsArray, eventDeadline, eventTimeCreation, eventParticipants);
+                        const newBoardDecryptedArrayed = [eventWorkspaceHash, eventBoardId, eventTitle, eventDescription, eventTagsArray, eventDeadline, eventTimeCreation, eventParticipants, revisionsAmount]
+                        localStorage.setItem(eventBoardId, JSON.stringify(newBoardDecryptedArrayed));
+                        constructBoard(eventBoardId);
+
                         if (!workspaceIsReady) {
-                            c
                             window.removeEventListener(eventWorkspaceHash, boardCreationHandler);
                         }
                         workspaceIsReady = true
@@ -187,22 +188,27 @@
                     var boardIsReady = true
                     let eventWorkspaceHash = wsHash[0]
                     let eventBoardId = bHash[0]
-                    let eventSheetId = dTags[0]
+                    let eventSheetId = dTag[0]
                     let eventTitle = decodeURIComponent(decrypt(privKey, event.pubkey, sTitle[0]))
                     let eventDescription = decodeURIComponent(content)
-                    let eventTagsArray = xTags
+                    let eventTagsArray = decryptArray(privKey, event.pubkey, xTags)
                     let eventDeadline = ddLine[0]
                     let eventTimeCreation = event.created_at
                     let eventParticipants = event.pubkey
+                    let revisionsAmount = rTag[0]
 
                     function sheetCreationHandler() {
-                        constructSheet(eventWorkspaceHash, eventBoardId, eventSheetId, eventTitle, eventDescription, eventTagsArray, eventDeadline, eventTimeCreation, eventParticipants);
+                        const newSheetDecryptedArrayed = [eventWorkspaceHash, eventBoardId, eventSheetId, eventTitle, eventDescription, eventTagsArray, eventDeadline, eventTimeCreation, eventParticipants, revisionsAmount];
+                        localStorage.setItem(eventSheetId, JSON.stringify(newSheetDecryptedArrayed));
+                        constructSheet(eventSheetId)
+                        
                         if (!boardIsReady) { // Remove the event listener after it's been executed if applies
                             window.removeEventListener(eventBoardId, sheetCreationHandler);
                         }
                         boardIsReady = true
                     }
                     if (eventWorkspaceHash === workspaceHash && document.getElementById(eventBoardId)) {
+                        boardIsReady = true
                         sheetCreationHandler()
                     } else {
                         boardIsReady = false
@@ -280,7 +286,8 @@
             // Listen for the local event of creating a new sheet that trigger event compose and send
             //0 workspaceId, 1 boardId, 2 sheetId, 3 title, 4 content, 5 tags, 6 deadline, 7 at, 8 participants, 9 revisions
             window.addEventListener("newSheetEvent", async function (e) {
-                const newSheetContent = localStorage.getItem("newSheetLS");
+                const newSheetEventHash = localStorage.getItem("newSheetLS");
+                const newSheetContent = localStorage.getItem(newSheetEventHash);
                 let newSheetLS = JSON.parse(newSheetContent);
 
                 const workspaceHash = newSheetLS[0]
@@ -292,6 +299,7 @@
                 const newSheetDeadline = newSheetLS[6]
                 const newSheetCreation = Math.floor(Date.now() / 1000)
                 //const mentions = newSheetLS[8]
+                const newSheetRevisions = (parseInt(newSheetLS[9]) + 1).toString()
                 
                 // Private sheet composing
                 const privateSheet = {
@@ -307,6 +315,7 @@
                         ['ddLine', newSheetDeadline],
                         ...createXTagsFromArray(newSheetXTags),
                         //...createPTagsFromArray(mentions)
+                        ['r', newSheetRevisions],
                     ],
                     "pubkey": pubKey,
                 };
@@ -317,19 +326,22 @@
             // Listen for the local event of creating a new BOARD that trigger event compose and send
             //0 workspaceId, 1 boardId, 2 title, 3 tags, 4 deadline, 5 at, 6 participants
             window.addEventListener("newBoardEvent", async function (e) {
-                const newBoardContent = localStorage.getItem("newBoardLS");
+                const newBoardEventHash = localStorage.getItem("newBoardLS");
+                const newBoardContent = localStorage.getItem(newBoardEventHash);
                 let newBoardLS = JSON.parse(newBoardContent);
 
                 const workspaceHash = newBoardLS[0]
                 const newBoardHash = newBoardLS[1]
                 const newBoardEncryptedTitle = encrypt(privKey, pubKey, newBoardLS[2]);
-                const newBoardXTags = JSON.parse(newBoardLS[3]);
-                const newBoardDeadline = newBoardLS[4]
+                const newBoardEncryptedContent = encrypt(privKey, pubKey, newBoardLS[3]);
+                const newBoardXTags = JSON.parse(newBoardLS[4]);
+                const newBoardDeadline = newBoardLS[5]
                 const newBoardCreation = Math.floor(Date.now() / 1000)
-                //const mentions = newSheetLS[6]
+                //const mentions = newBoardLS[7]
+                const newBoardRevisions = (parseInt(newBoardLS[8]) + 1).toString()
                 
                 const privateBoard = {
-                    "content": '',
+                    "content": newBoardEncryptedContent,
                     "created_at": newBoardCreation,
                     "kind": privateBoardKindNumber,
                     "tags": [
@@ -339,7 +351,8 @@
                         ['sTitle', newBoardEncryptedTitle],
                         ['ddLine', newBoardDeadline],
                         ...createXTagsFromArray(newBoardXTags),
-                        //...createPTagsFromArray(mentions)
+                        //...createPTagsFromArray(mentions);
+                        ['r', newBoardRevisions],
                     ],
                     "pubkey": pubKey,
                 };

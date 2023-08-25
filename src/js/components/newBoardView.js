@@ -5,7 +5,7 @@ var boardcreationform =`
         <div class="modal-bg o-2 bg-primary"></div>
         <form id="newBoardForm" class="max-w-350 bg-body z-2 padded rounded brick flex-col m-gap">
             <div class="display-flex flex-col">
-                <div id="closeAddNewBoard" class="display-flex flex-end fill-primary cursor-pointer">
+                <div onclick="hideNewBoardModal()" class="display-flex flex-end fill-primary cursor-pointer">
                     <svg xmlns="http://www.w3.org/2000/svg" height="35" viewBox="0 -960 960 960" width="35"><path d="M480-438 270-228q-9 9-21 9t-21-9q-9-9-9-21t9-21l210-210-210-210q-9-9-9-21t9-21q9-9 21-9t21 9l210 210 210-210q9-9 21-9t21 9q9 9 9 21t-9 21L522-480l210 210q9 9 9 21t-9 21q-9 9-21 9t-21-9L480-438Z"/></svg>
                 </div>
                 <div class="full-center flex-col">
@@ -24,6 +24,9 @@ var boardcreationform =`
                     type="text" placeholder="" autofocus>
                 <small class="color-primary" for="newBoardName">👋 It is necessary to indicate the title of the board</small>
             </div>
+            <textarea id="newBoardInputDescription" name="" cols="30" rows="3"
+                class="s-padded bg-body border-secondary border-solid rounded-s placeholder-secondary font-m color-primary"
+                placeholder="Description here..."></textarea>
             
             <div class="display-flex flex-col xs-gap">
                 <label class="color-primary font-xs" for="newBoardName">
@@ -45,7 +48,7 @@ var boardcreationform =`
 
             <div class="flex-col display-flex s-gap">
                 <button id='newBoardSubmitButton' class="btn btn-tint" type="submit">Create Board</button>
-                <button id="cancelAddNewBoard" class="btn btn-primary" type="button">Cancel</button>
+                <button onclick="hideNewBoardModal()" class="btn btn-primary" type="button">Cancel</button>
             </div>
         </form>
     </div>`

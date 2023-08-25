@@ -3,13 +3,6 @@ let loomDropdownId = genHex(12);
 let navUserDropdownId = genHex(12);
 
 var navbar =`
-
-<style>
-
-.hidememan {
-  display: none !important;
-}
-</style>
 <div class="bg-body stick-top z-3 steady-1 s-padded spaced display-flex flex-wrap full-center">
 
     <!-- Brand -->
@@ -25,7 +18,7 @@ var navbar =`
             ${filterIcon}
         </span>
         
-        <input style='margin-left: -30px; padding-left: 35px !important' class="s-padded bg-tertiary rounded-max border-none shadow-dynamic placeholder-secondary font-m color-primary" type="text" id="searchInput" placeholder="Filter">
+        <input style='margin-left: -30px; padding-left: 35px !important' class="s-padded bg-tertiary rounded-max border-none shadow-dynamic placeholder-secondary font-m color-primary" type="text" id="filterInput" placeholder="Filter">
     </div>
         
 

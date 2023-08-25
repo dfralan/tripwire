@@ -106,6 +106,7 @@ function toggleBoardVisibility(boardIdentificator, buttonIdentificator){
     }
 }
 
+// Hide all dropdowns
 function hideAllDropdowns() {
     var allDropContents = document.querySelectorAll('.dropdown-content')
     allDropContents.forEach(function(element) {
@@ -113,7 +114,7 @@ function hideAllDropdowns() {
     });
 }
 
-// Toggle dropdown
+// Toggle dropdown by id and hide all others
 function toggleDropdown(id){
     let targettedSheet = document.getElementById(id)
     let dropContent = targettedSheet.querySelector('.dropdown-content')
@@ -138,13 +139,5 @@ document.addEventListener('click', function(event) {
     }
 });
 
-
 // Ephemeral Hash
 const genHex = (a) => Math.random().toString(16).slice(2, (a + 2));
-
-// Extract tags from tagsContainer
-function ExtractTags(x) {
-    const sheetTargettedTags = x.querySelectorAll('.tag');
-    const tagTextArray = Array.from(sheetTargettedTags).map(tag => tag.textContent.trim());
-    return tagTextArray.join(', ');
-}

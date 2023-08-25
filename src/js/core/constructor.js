@@ -1,7 +1,18 @@
 
 
-//0 workspaceId, 1 boardId, 2 title, 3 tags, 4 deadline, 5 at, 6 participants
-function constructBoard(workspaceId, boardId, title, tags, deadline, at, participants) {
+function constructBoard(BoardHash) {
+
+    var newBoardDecrypted = JSON.parse(localStorage.getItem(BoardHash))
+
+    let workspaceId = newBoardDecrypted[0]
+    let boardId = newBoardDecrypted[1]
+    let title = newBoardDecrypted[2]
+    let description = newBoardDecrypted[3]
+    let tags = newBoardDecrypted[4]
+    let deadline = newBoardDecrypted[5]
+    let at = newBoardDecrypted[6]
+    let participants = newBoardDecrypted[7]
+    let revisions = newBoardDecrypted[8]
 
     // Check if is an update, or an older than the actual one with same ID,
     if (document.getElementById(boardId)){
@@ -17,7 +28,6 @@ function constructBoard(workspaceId, boardId, title, tags, deadline, at, partici
     var emailsAmount = 0
     var urlsAmount = 0
     var tagsAmount = 0
-    var boardRevisionsAmount = 1
 
     // Create and append tag elements
     tags.forEach(tag => {
@@ -59,10 +69,10 @@ function constructBoard(workspaceId, boardId, title, tags, deadline, at, partici
     let revisionTagsAmountElement = `
     <p class="${detailIndicatorBoardClass}">
         <span>${revisionsIcon}</span>
-        <span data-revisions-amount="${boardRevisionsAmount}">${tagsAmount}</span>
+        <span>${revisions}</span>
     </p>
     `
-    if (boardRevisionsAmount > 0) {boardDetails += revisionTagsAmountElement}
+    if (revisions != '0') {boardDetails += revisionTagsAmountElement}
 
     // tags count
     let simpleTagsAmountElement = `
@@ -101,22 +111,21 @@ function constructBoard(workspaceId, boardId, title, tags, deadline, at, partici
     if (phoneNumbersAmount > 0) {boardDetails += phoneTagsAmountElement}
 
     var easyBoard = `
-    <div class="border-dashed boardDropZone rounded bg-tertiary display-flex flex-col s-gap shadow-one matcher">
-        <div class="xs-padded no-padded-right no-padded-top">
-            <h4 class="display-flex full-center spaced color-primary font-500 font-m s-padded no-padded-bottom">
-                <div class='hide-scrollbar overflow-scroll max-width-100'><span class="boardTitle no-wrap">${title}</span></div>
-                <div id='dropdown-${boardId}' class="dropdown">
-                    <button onclick="toggleDropdown('dropdown-${boardId}')" class="hover-bg-lighter rounded-max btn cursor-pointer hover-fill-primary fill-secondary">
-                        ${dotOptionsIcon}
-                    </button>
-                    <ul class="dropdown-content to-right z-1 absolute text-right rounded shadow-two bg-body xs-padded border-solid-s border-primary">
-                        <li onclick="launchModalSheet('${workspaceId}', '${boardId}', '')" class="dropdown-element block-mode color-secondary rounded-xs cursor-pointer" data-parent-id="${boardId}">Add new sheet +</li>
-                        <li onclick="launchModalBoard('${workspaceId}', '${boardId}', '${title}', '')" class="dropdown-element block-mode color-secondary rounded-xs cursor-pointer" data-parent-id="${boardId}">Edit Board</li>
-                    </ul>
-                </div>
-            </h4>
-        </div>
+    <div class="border-dashed boardDropZone rounded bg-tertiary display-flex flex-col s-gap shadow-one">
+        <h4 class="display-flex full-center spaced color-primary font-500 font-m s-padded no-padded-bottom">
+            <div class='hide-scrollbar overflow-scroll max-width-100'><span class="boardTitle no-wrap">${title}</span></div>
+            <div id='dropdown-${boardId}' class="dropdown">
+                <button onclick="toggleDropdown('dropdown-${boardId}')" class="hover-bg-lighter rounded-max btn cursor-pointer hover-fill-primary fill-secondary">
+                    ${dotOptionsIcon}
+                </button>
+                <ul class="dropdown-content to-right z-1 absolute text-right rounded shadow-two bg-body xs-padded border-solid-s border-primary">
+                    <li onclick="launchModalSheet('${boardId}', '')" class="dropdown-element block-mode color-secondary rounded-xs cursor-pointer" data-parent-id="${boardId}">Add new sheet +</li>
+                    <li onclick="launchModalBoard('${boardId}')" class="dropdown-element block-mode color-secondary rounded-xs cursor-pointer" data-parent-id="${boardId}">Edit Board</li>
+                </ul>
+            </div>
+        </h4>
         <ul class="sheetContainer hide-scrollbar display-flex flex-col s-gap overflow-scroll s-padded" style="max-height: 300px;"></ul>
+        <p class='sheetDescription s-padded no-padded-left no-padded-right no-padded-top font-s'>${description}</p>
         <div class="boardTagsContainer display-flex flex-wrap s-gap s-padded no-padded-bottom no-padded-top">
             ${boardTags}
         </div>
@@ -128,7 +137,7 @@ function constructBoard(workspaceId, boardId, title, tags, deadline, at, partici
 
     // Create the outermost div with class "responsive-4"
     const newBoardDiv = document.createElement("div")
-    newBoardDiv.className = "max-w-350 display-block"
+    newBoardDiv.className = "max-w-350 display-block matchMeMan"
     newBoardDiv.id = boardId
     newBoardDiv.innerHTML = easyBoard
 
@@ -166,14 +175,28 @@ function constructBoard(workspaceId, boardId, title, tags, deadline, at, partici
 
 
 
-//0 workspaceId, 1 boardId, 2 sheetId, 3 title, 4 description, 5 tags, 6 deadline, 7 at, 8 participants,
-function constructSheet(workspaceId, boardId, sheetId, title, description, tags, deadline, at, participants) {
+//0 workspaceId, 1 boardId, 2 sheetId, 3 title, 4 description, 5 tags, 6 deadline, 7 at, 8 participants, 9 revisions
+function constructSheet(sheetHash) {
+    // sheetId, title, description, tags, deadline, at, participants
 
+    var newSheetDecrypted = JSON.parse(localStorage.getItem(sheetHash))
     // Check if is an update, or an older than the actual one with same ID,
-    if (document.getElementById(sheetId)){
+    if (document.getElementById(sheetHash)){
         console.log('repeated sheet id')
         return
     }
+
+    let sheetId = newSheetDecrypted[2]
+    let boardId = newSheetDecrypted[1]
+    let title = newSheetDecrypted[3]
+    let sheetDescription = newSheetDecrypted[4]
+    let tags = newSheetDecrypted[5]
+    let deadline = newSheetDecrypted[6]
+    let at = newSheetDecrypted[7]
+    let participants = newSheetDecrypted[8]
+    let revisions = newSheetDecrypted[9]
+
+
 
     // Check if sheet already exist to know is only an update
     var existentSheet = document.getElementById(sheetId)
@@ -186,7 +209,6 @@ function constructSheet(workspaceId, boardId, sheetId, title, description, tags,
     var emailsAmount = 0
     var urlsAmount = 0
     var tagsAmount = 0
-    var sheetRevisionsAmount = 1
 
     // Create and append tag elements
     tags.forEach(tag => {
@@ -228,10 +250,10 @@ function constructSheet(workspaceId, boardId, sheetId, title, description, tags,
     let revisionTagsAmountElement = `
     <p class="${detailIndicatorSheetClass} boardRevisionsCount">
         <span>${revisionsIcon}</span>
-        <span>${tagsAmount}</span>
+        <span>${revisions}</span>
     </p>
     `
-    if (sheetRevisionsAmount > 0) {sheetDetails += revisionTagsAmountElement}
+    if (revisions =! '0') {sheetDetails += revisionTagsAmountElement}
 
     // tags count
     let simpleTagsAmountElement = `
@@ -281,14 +303,14 @@ function constructSheet(workspaceId, boardId, sheetId, title, description, tags,
                 ${dotOptionsIcon}
                 </button>
                 <ul class="dropdown-content to-right z-1 absolute text-right rounded shadow-two bg-body xs-padded border-solid-s border-primary">
-                    <li onclick="launchModalSheet('${workspaceId}', '${boardId}', '${sheetId}')" class="dropdown-element font-xs block-mode color-secondary rounded-xs cursor-pointer" data-parent-id="${sheetId}">Edit Sheet</li>
+                    <li onclick="launchModalSheet('${boardId}', '${sheetId}')" class="dropdown-element font-xs block-mode color-secondary rounded-xs cursor-pointer" data-parent-id="${sheetId}">Edit Sheet</li>
                     <li class="dropdown-element font-xs block-mode color-secondary rounded-xs cursor-pointer" data-parent-id="${sheetId}">Delete Sheet</li>
                 </ul>
             </div>
         </div>
     </div>
     <div class="sheetExpansion display-none s-gap flex-col color-primary">
-        <p class='sheetDescription s-padded no-padded-left no-padded-right no-padded-top font-s'>${description}</p>
+        <p class='sheetDescription s-padded no-padded-left no-padded-right no-padded-top font-s'>${sheetDescription}</p>
         <div class="sheetTagsContainer display-flex flex-wrap s-gap">${sheetTags}</div>
     </div>
     <div class="display-flex flex-row s-gap">
@@ -299,7 +321,7 @@ function constructSheet(workspaceId, boardId, sheetId, title, description, tags,
     const newSheetLi = document.createElement('li');
     newSheetLi.id = sheetId;
     newSheetLi.draggable = true;
-    newSheetLi.className = 'tripSheet show-my-child cursor-pointer bg-body shadow-dynamic color-primary s-padded display-flex flex-col rounded-s s-gap';
+    newSheetLi.className = 'tripSheet matchMeManChild show-my-child cursor-pointer bg-body shadow-dynamic color-primary s-padded display-flex flex-col rounded-s s-gap';
     
     newSheetLi.innerHTML = easySheet
 
