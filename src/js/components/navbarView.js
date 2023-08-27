@@ -18,7 +18,7 @@ var navbar =`
         ${filterIcon}
     </span>
     
-    <input style='margin-left: -30px; padding-left: 35px !important' class="s-padded bg-tertiary rounded-max border-none shadow-dynamic placeholder-secondary font-m color-primary" type="text" id="filterInput" placeholder="Filter">
+    <input style='margin-left: -30px; padding-left: 35px !important' class="s-padded bg-body rounded border-solid border-tertiary shadow-dynamic placeholder-secondary font-s color-primary" type="text" id="filterInput" placeholder="Filter">
 </div>
         
         <!-- Visuals Dropdown -->
@@ -32,7 +32,7 @@ var navbar =`
             <ul class="dropdown-content to-right z-1 absolute text-center rounded shadow-two bg-body xs-padded border-solid-s border-primary">
                 <!-- Theme -->
                 <li class="text-center font-xs font-500 dropdown-element inactive block-mode color-secondary">Theme</li>
-                <li onclick="logout()" id="theme-btn" class="dropdown-element btn">
+                <li id="theme-btn" class="dropdown-element btn">
                     <span>${sunIcon}${moonIcon}</span>
                 </li>
                 <div class="text-center color-grey block-mode divider"></div>

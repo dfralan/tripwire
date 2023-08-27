@@ -26,6 +26,7 @@ let brikStyleSheet = `
 
     --rounded-s: 1vh;
     --rounded-m: 1.5vh;
+    --rounded-m-up: 1.5vh 1.5vh 0 0;
     --rounded-l: 2vh;
     --rounded-xl: 2.5vh;
     --rounded-xxl: 3vh;
@@ -365,6 +366,10 @@ html {
 }
 
 .hover-bg-lighter:hover {
+    background-color: rgba(var(--primary-color-rgb), var(--glow-opacity));
+}
+
+.bg-lighter {
     background-color: rgba(var(--primary-color-rgb), var(--glow-opacity));
 }
 
@@ -851,6 +856,10 @@ html {
     border-radius: var(--rounded-m);
 }
 
+.rounded-up {
+    border-radius: var(--rounded-m-up);
+}
+
 .rounded-l {
     border-radius: var(--rounded-l);
 }
@@ -943,7 +952,7 @@ html {
 }
 
 .border-solid {
-    border-width: 1px;
+    border-width: 0.8px;
     border-style: solid;
     border-color: transparent;
 }

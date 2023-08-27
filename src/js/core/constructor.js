@@ -119,14 +119,14 @@ function constructBoard(BoardHash) {
     if (phoneNumbersAmount > 0) {boardDetails += phoneTagsAmountElement}
 
     var easyBoard = `
-    <div class="rounded bg-body display-flex flex-col border-solid border-secondary transition-300">
-        <div class="display-flex border-solid border-secondary border-top-none border-left-none border-right-none full-center spaced color-primary font-400 font-m s-padded">
+    <div class="rounded bg-body display-flex flex-col border-solid border-secondary transition-300 shadow-dynamic">
+        <div class="bg-tertiary display-flex rounded-up border-solid border-tertiary border-top-none border-left-none border-right-none full-center spaced color-primary font-400 font-m s-padded">
             <div class='hide-scrollbar overflow-scroll max-width-100'><span class="boardTitle no-wrap">${title}</span></div>
             <div id='dropdown-${boardId}' class="dropdown">
                 <button onclick="toggleDropdown('dropdown-${boardId}')" class="hover-bg-lighter rounded-max btn cursor-pointer hover-fill-primary fill-secondary">
                     ${dotOptionsIcon}
                 </button>
-                <ul class="dropdown-content to-right z-1 absolute text-right rounded shadow-two bg-body xs-padded border-solid-s border-primary">
+                <ul class="dropdown-content to-right z-1 absolute text-right rounded shadow-two bg-body xs-padded border-solid border-secondary">
                     <li onclick="launchModalSheet('${boardId}', '')" class="dropdown-element block-mode color-secondary rounded-xs cursor-pointer" data-parent-id="${boardId}">Add new sheet +</li>
                     <li onclick="launchModalBoard('${boardId}')" class="dropdown-element block-mode color-secondary rounded-xs cursor-pointer" data-parent-id="${boardId}">Edit Board</li>
                 </ul>
@@ -178,7 +178,7 @@ function constructBoard(BoardHash) {
 
         // Add access button to toolbar
         const toolbarAccessButton = document.createElement('button');
-        toolbarAccessButton.className = "btn btn-secondary no-wrap rounded-max";
+        toolbarAccessButton.className = "btn btn-secondary no-wrap rounded-s bg-lighter border-solid border-tertiary";
         toolbarAccessButton.id = `accessBtn-${boardId}`
         toolbarAccessButton.innerHTML = title;
         toolbarAccessButton.onclick = function() {
@@ -362,7 +362,7 @@ function constructSheet(sheetHash) {
         const newSheetLi = document.createElement('li');
         newSheetLi.setAttribute('data-event-hash', hashEventHash)
         newSheetLi.draggable = true
-        newSheetLi.className = 'tripSheet matchMeManChild show-my-child cursor-pointer bg-tertiary shadow-dynamic color-primary s-padded display-flex flex-col rounded-s s-gap'
+        newSheetLi.className = 'tripSheet matchMeManChild show-my-child cursor-pointer bg-tertiary shadow-dynamic color-primary s-padded display-flex flex-col rounded-s s-gap border-solid border-secondary'
         newSheetLi.id = sheetId;
         
         newSheetLi.innerHTML = easySheet
