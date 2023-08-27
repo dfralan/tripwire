@@ -34,6 +34,13 @@ const arrayTags = (x = '') => {
     return arrayedTags
 }
 
+function arrayToCommaString(inputArray) {
+    console.log(inputArray)
+    var decodedArray = inputArray.map(item => decodeURIComponent(item));
+    var result = decodedArray.join(', ');
+    return result;
+}
+
 // Timestamp human readable format
 const formatTimeAgo = (timestamp = '') => {
     const now = Math.floor(Date.now() / 1000);

@@ -4,7 +4,7 @@ const boardCreationModal = document.getElementById('boardCreationModal')
 const newBoardForm = document.getElementById('newBoardForm');
 const newBoardSubmitButton = document.getElementById('newBoardSubmitButton')
 const newBoardNameInput = document.getElementById('newBoardName')
-const newBoardInputDescription = document.getElementById('newSheetInputDescription')
+const newBoardInputDescription = document.getElementById('newBoardInputDescription')
 const newBoardInputTags = document.getElementById('newBoardInputTags')
 // here go mentions but for now only private boards ()
 const boardModalIndicator = document.getElementById('boardModalIndicator')
@@ -12,6 +12,7 @@ var workspaceHash = ''
 var newBoardHash = ''
 var existentBoardLS = ''
 var boardRevisionsAmount = ''
+var boardEventHash = ''
 
 // show add new board modal
 function showNewBoardModal() {
@@ -44,6 +45,7 @@ function launchModalBoard(boardId) {
         boardModalIndicator.textContent = 'New Board'
         newBoardSubmitButton.textContent = 'Create Board'
         boardRevisionsAmount = '-1'
+        boardEventHash = genHex(20)
 
     } else { // Existent board edition
 
@@ -51,10 +53,13 @@ function launchModalBoard(boardId) {
         workspaceHash = existentBoardLS[0]
         newBoardHash = existentBoardLS[1]
         newBoardNameInput.value = existentBoardLS[2]
-        newBoardInputTags.value = existentBoardLS[3]
+        newBoardInputDescription.value = existentBoardLS[3]
+        newBoardInputTags.value = arrayToCommaString(existentBoardLS[4])
+        console.log(existentBoardLS[4])
         boardModalIndicator.textContent = 'Edit Board'
         newBoardSubmitButton.textContent = 'Confirm'
         boardRevisionsAmount = existentBoardLS[8]
+        boardEventHash = existentBoardLS[9]
     }
 
     showNewBoardModal()
@@ -80,6 +85,7 @@ newBoardForm.addEventListener('submit', function (event) {
         'now',
         'onlyme',
         boardRevisionsAmount,
+        boardEventHash
     ];
 
     if (newBoardName) {
@@ -88,7 +94,6 @@ newBoardForm.addEventListener('submit', function (event) {
         localStorage.setItem(newBoardHash, JSON.stringify(newBoardArrayed));
         const event = new Event("newBoardEvent");
         window.dispatchEvent(event);
-        console.log(newBoardName);
         
     } else {
         ephemeralNotification("Board name cannot be empty")

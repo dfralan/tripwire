@@ -13,6 +13,7 @@ var boardHash = ''
 var newSheetHash = ''
 var existentSheetLS = ''
 var sheetRevisionsAmount = ''
+var sheetEventHash = ''
 
 // show add new sheet modal
 function showNewSheetModal(){
@@ -45,17 +46,20 @@ function launchModalSheet(boardId, sheetHash) {
         sheetModalIndicator.textContent = 'New Sheet'
         newSheetSubmitButton.textContent = 'Add Sheet'
         sheetRevisionsAmount = '-1'
+        sheetEventHash = genHex(20)
 
     } else { // Existent sheet edition
 
-        existentSheetLS = JSON.parse(localStorage.getItem(sheetHash))
+        existentSheetLS = JSON.parse(localStorage.getItem(`descypher-${sheetHash}`))
         newSheetHash = existentSheetLS[2]
         newSheetNameInput.value = existentSheetLS[3]
         newSheetInputDescription.value = existentSheetLS[4]
-        newSheetInputTags.value = existentSheetLS[5]
+        newSheetInputTags.value = arrayToCommaString(existentSheetLS[5])
         sheetModalIndicator.textContent = 'Edit Sheet'
         newSheetSubmitButton.textContent = 'Confirm'
         sheetRevisionsAmount = existentSheetLS[9]
+        console.log(`existent sheet revisions amount ${sheetRevisionsAmount}`)
+        sheetEventHash = existentSheetLS[10]
     }
     boardHash = boardId
     let targettedBoardLS = localStorage.getItem(boardId)
@@ -85,8 +89,13 @@ newSheetForm.addEventListener('submit', function (event) {
         'tomorrow',
         'now',
         'onlyme',
-        sheetRevisionsAmount
+        sheetRevisionsAmount,
+        sheetEventHash
     ];
+
+    
+    console.log('sheet hash from new sheet in newsheetfile')
+    console.log(newSheetHash)
 
     if (newSheetName) {
 
@@ -94,7 +103,6 @@ newSheetForm.addEventListener('submit', function (event) {
         localStorage.setItem(newSheetHash, JSON.stringify(newSheetArrayed));
         const event = new Event("newSheetEvent");
         window.dispatchEvent(event);
-        console.log(newSheetName);
         
     } else {
         ephemeralNotification("Sheet name cannot be empty")

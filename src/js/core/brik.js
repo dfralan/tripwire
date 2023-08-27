@@ -360,6 +360,9 @@ html {
 .hover-color-tint:hover {
     color: var(--tint-color) !important;
 }
+.hover-color-primary:hover {
+    color: var(--primary-color) !important;
+}
 
 .hover-bg-lighter:hover {
     background-color: rgba(var(--primary-color-rgb), var(--glow-opacity));
@@ -507,6 +510,10 @@ html {
 
 .font-xxxl {
     font-size: 50px
+}
+
+.font-max {
+    font-size: 80px
 }
 
 .italic {
@@ -905,6 +912,30 @@ html {
 .grayscale {
     filter: grayscale(100%);
 }
+
+.flow {
+    filter: hue-rotate(200deg);
+}
+
+.border-top-none {
+    border-top: none !important;
+}
+
+
+.border-bottom-none {
+    border-bottom: none !important;
+}
+
+
+.border-left-none {
+    border-left: none !important;
+}
+
+
+.border-right-none {
+    border-right: none !important;
+}
+
 
 .border-none {
     border-width: 0px;

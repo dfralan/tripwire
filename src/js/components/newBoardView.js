@@ -25,8 +25,8 @@ var boardcreationform =`
                 <small class="color-primary" for="newBoardName">👋 It is necessary to indicate the title of the board</small>
             </div>
             <textarea id="newBoardInputDescription" name="" cols="30" rows="3"
-                class="s-padded bg-body border-secondary border-solid rounded-s placeholder-secondary font-m color-primary"
-                placeholder="Description here..."></textarea>
+                class="s-padded bg-body border-secondary border-solid rounded-s placeholder-secondary font-s color-primary"
+                placeholder=""></textarea>
             
             <div class="display-flex flex-col xs-gap">
                 <label class="color-primary font-xs" for="newBoardName">

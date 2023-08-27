@@ -33,28 +33,37 @@
         <brik toolbar></brik>
         <script src="src/js/components/toolbarView.js"></script>
 
+        <!-- New Dashboard -->
+        <brik newdashboard></brik>
+        <script src="src/js/components/newDashboard.js"></script>
+
         <!-- Board Container -->
         <brik boardcontainer></brik>
         <script src="src/js/components/boardContainerView.js"></script>
-        
 
-    </div>
+        <!-- New board modal -->
+        <brik boardcreationform></brik>
+        <script src="src/js/components/newBoardView.js"></script>
 
-    <!-- New board modal -->
-    <brik boardcreationform></brik>
-    <script src="src/js/components/newBoardView.js"></script>
+        <!-- New sheet modal -->
+        <brik sheetcreationform></brik>
+        <script src="src/js/components/newSheetView.js"></script>
 
-    <!-- New sheet modal -->
-    <brik sheetcreationform></brik>
-    <script src="src/js/components/newSheetView.js"></script>
+        <!-- Deletion Board Zone -->
+        <div id="deletionZone"
+            class="fill-white padded border-dashed rounded-s boardDropZone display-flex fixed to-bottom to-right">
+            <button class="btn display-flex flex-col">
+                <h1 class="font-xxxl">🗑️</h1><span class="color-primary">Trash</span>
+            </button>
+        </div>
 
-    <!-- Deletion Board Zone -->
-    <div id="deletionZone"
-        class="fill-white padded border-dashed rounded-s boardDropZone display-flex fixed to-bottom to-right">
-        <button class="btn display-flex flex-col">
-            <h1 class="font-xxxl">🗑️</h1><span class="color-primary">Trash</span>
-        </button>
-    </div>
+
+    
+    <!-- New workspace modal -->
+    <brik newworkspaceform></brik>
+    <script src="src/js/components/newWorkspaceView.js"></script>
+
+
 
     <!-- Ephemeral Notifications -->
     <div id="ephemeralNotificationsModal"
@@ -70,6 +79,7 @@
     <script src="src/js/link/connectionStatus.js"></script>
     <script src="src/js/core/newBoard.js"></script>
     <script src="src/js/core/newSheet.js"></script>
+    <script src="src/js/core/newWorkspace.js"></script>
     <script src="src/js/core/filter.js"></script>
 </body>
 

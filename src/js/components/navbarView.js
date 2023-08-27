@@ -11,17 +11,16 @@ var navbar =`
         <p class="font-500 color-primary">Tripwire</p>
     </div>
 
-    <div class="display-flex flex-row s-gap full-center s-padded no-padded-bottom no-padded-top">
-        
-    <div class="display-flex flex-row full-center s-padded no-padded-bottom no-padded-top fill-secondary">
-        <span class='z-i full-center'>
-            ${filterIcon}
-        </span>
-        
-        <input style='margin-left: -30px; padding-left: 35px !important' class="s-padded bg-tertiary rounded-max border-none shadow-dynamic placeholder-secondary font-m color-primary" type="text" id="filterInput" placeholder="Filter">
-    </div>
-        
+    <div class="display-flex flex-wrap s-gap full-center s-padded no-padded-bottom no-padded-top">
 
+    <div class="display-flex flex-row full-center s-padded no-padded-bottom no-padded-top fill-secondary">
+    <span class='z-i full-center'>
+        ${filterIcon}
+    </span>
+    
+    <input style='margin-left: -30px; padding-left: 35px !important' class="s-padded bg-tertiary rounded-max border-none shadow-dynamic placeholder-secondary font-m color-primary" type="text" id="filterInput" placeholder="Filter">
+</div>
+        
         <!-- Visuals Dropdown -->
         <div id='${visualsDropdownId}' class="dropdown">
             <!-- Dropdown button -->
@@ -33,7 +32,7 @@ var navbar =`
             <ul class="dropdown-content to-right z-1 absolute text-center rounded shadow-two bg-body xs-padded border-solid-s border-primary">
                 <!-- Theme -->
                 <li class="text-center font-xs font-500 dropdown-element inactive block-mode color-secondary">Theme</li>
-                <li id="theme-btn" class="dropdown-element btn" id="logoutButton">
+                <li onclick="logout()" id="theme-btn" class="dropdown-element btn">
                     <span>${sunIcon}${moonIcon}</span>
                 </li>
                 <div class="text-center color-grey block-mode divider"></div>
@@ -78,11 +77,16 @@ var navbar =`
                 <span class='avatar-m shadow-dynamic bg-primary'></span>
             </div>
             <!-- Dropdown content -->
-            <ul class="dropdown-content to-right z-1 absolute text-right rounded shadow-two bg-body xs-padded border-solid-s border-primary">
+            <ul style='min-width: 200px' class="dropdown-content to-right z-1 absolute text-right rounded shadow-two bg-body xs-padded border-solid-s border-primary">
                 <li class="text-right font-xs font-500 dropdown-element inactive block-mode color-secondary">Workspaces</li>
                 <li class="text-right font-xs font-300 dropdown-element block-mode color-primary cursor-pointer">Sales Approach</li>
                 <div class="text-right color-grey block-mode divider"></div>
-                <li class="text-right flex-end font-xs font-300 dropdown-element block-mode rounded-xs cursor-pointer full-center color-primary fill-primary" id="logoutButton">
+                <li onclick="launchModalWorkspace('')" class="text-right flex-end font-xs font-300 dropdown-element block-mode rounded-xs cursor-pointer full-center color-primary fill-primary">
+                    New Workspace
+                    ${boxIcon}
+                </li>
+                <div class="text-right color-grey block-mode divider"></div>
+                <li onclick="logout()" class="text-right flex-end font-xs font-300 dropdown-element block-mode rounded-xs cursor-pointer full-center color-primary fill-primary">
                     Logout
                     ${doorIcon}
                 </li>

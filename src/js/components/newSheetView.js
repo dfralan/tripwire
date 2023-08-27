@@ -26,8 +26,8 @@ var sheetcreationform = `
 
 
     <textarea id="newSheetInputDescription" name="" cols="30" rows="3"
-        class="s-padded bg-body border-secondary border-solid rounded-s placeholder-secondary font-m color-primary"
-        placeholder="Description here..."></textarea>
+        class="s-padded bg-body border-secondary border-solid rounded-s placeholder-secondary font-s color-primary"
+        placeholder=""></textarea>
     
     <div class="display-flex flex-col xs-gap">
         <label class="color-primary font-xs" >

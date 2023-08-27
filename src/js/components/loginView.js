@@ -7,7 +7,7 @@ var login =
             <form id="loginForm" class="display-flex flex-row s-gap">
                 <input id="pkInput" class="s-padded bg-tertiary border-secondary 
                 border-solid rounded-s placeholder-secondary font-m color-primary" 
-                type="password" autocomplete="new-password" placeholder="Your private key" value='d2cc1a8d2fd059021dfd37be4bf872e3b378e63e6099f93746db879046956014'>
+                type="password" autocomplete="new-password" placeholder="Your private key" value='6bf248b2f0c5e1e5b1743b666b6577c8431edbb6371f2c3c7527c651193be9be'>
                 <button class="btn btn-primary" type="submit">Login</button>
             </form>
             <p class="color-alert" id="loginFormInfo"></p>

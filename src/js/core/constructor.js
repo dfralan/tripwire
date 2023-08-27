@@ -1,3 +1,10 @@
+function constructWorkspace(workspaceHash) {
+
+    var newWorkspaceDecrypted = JSON.parse(localStorage.getItem(workspaceHash))
+    console.log(newWorkspaceDecrypted)
+    console.log('WEPP')
+}
+
 
 
 function constructBoard(BoardHash) {
@@ -13,21 +20,16 @@ function constructBoard(BoardHash) {
     let at = newBoardDecrypted[6]
     let participants = newBoardDecrypted[7]
     let revisions = newBoardDecrypted[8]
-
-    // Check if is an update, or an older than the actual one with same ID,
-    if (document.getElementById(boardId)){
-        console.log('repeated board id')
-        return
-    }
-
-    // Concatenated tags variable declaration
-    var boardTags = ''
+    let boardEventHash = newBoardDecrypted[9]
 
     // Amount of tags and clasification declaration
     var phoneNumbersAmount = 0
     var emailsAmount = 0
     var urlsAmount = 0
     var tagsAmount = 0
+
+    // Concatenated tags variable declaration
+    var boardTags = ''
 
     // Create and append tag elements
     tags.forEach(tag => {
@@ -64,6 +66,12 @@ function constructBoard(BoardHash) {
 
     var boardDetails = ''
     let detailIndicatorBoardClass = 'font-xs color-primary fill-secondary display-flex flex-row'
+
+    // revisions count
+    let boardTimeStamp = `
+    <p class="timestamp font-xs color-secondary overflow-scroll no-wrap" data-timestamp="${at}">now</p>
+    `
+    boardDetails += boardTimeStamp
 
     // revisions count
     let revisionTagsAmountElement = `
@@ -111,8 +119,8 @@ function constructBoard(BoardHash) {
     if (phoneNumbersAmount > 0) {boardDetails += phoneTagsAmountElement}
 
     var easyBoard = `
-    <div class="border-dashed boardDropZone rounded bg-tertiary display-flex flex-col s-gap shadow-one">
-        <h4 class="display-flex full-center spaced color-primary font-500 font-m s-padded no-padded-bottom">
+    <div class="rounded bg-body display-flex flex-col border-solid border-secondary transition-300">
+        <div class="display-flex border-solid border-secondary border-top-none border-left-none border-right-none full-center spaced color-primary font-400 font-m s-padded">
             <div class='hide-scrollbar overflow-scroll max-width-100'><span class="boardTitle no-wrap">${title}</span></div>
             <div id='dropdown-${boardId}' class="dropdown">
                 <button onclick="toggleDropdown('dropdown-${boardId}')" class="hover-bg-lighter rounded-max btn cursor-pointer hover-fill-primary fill-secondary">
@@ -123,44 +131,63 @@ function constructBoard(BoardHash) {
                     <li onclick="launchModalBoard('${boardId}')" class="dropdown-element block-mode color-secondary rounded-xs cursor-pointer" data-parent-id="${boardId}">Edit Board</li>
                 </ul>
             </div>
-        </h4>
+        </div>
+        <p class='boardDescription s-padded  font-s color-primary'>${description}</p>
         <ul class="sheetContainer hide-scrollbar display-flex flex-col s-gap overflow-scroll s-padded" style="max-height: 300px;"></ul>
-        <p class='sheetDescription s-padded no-padded-left no-padded-right no-padded-top font-s'>${description}</p>
-        <div class="boardTagsContainer display-flex flex-wrap s-gap s-padded no-padded-bottom no-padded-top">
+        <div class="boardTagsContainer display-flex flex-wrap s-gap s-padded">
             ${boardTags}
         </div>
         <div class="boardDetailsContainer display-flex flex-row s-gap s-padded no-padded-top overflow-hidden overflow-scroll">
-            <p class="timestamp font-xs color-secondary overflow-scroll no-wrap" data-timestamp="${at}">now</p>
             ${boardDetails}
         </div>
     </div>`
 
-    // Create the outermost div with class "responsive-4"
-    const newBoardDiv = document.createElement("div")
-    newBoardDiv.className = "max-w-350 display-block matchMeMan"
-    newBoardDiv.id = boardId
-    newBoardDiv.innerHTML = easyBoard
-
     const targettedWorkspace = document.getElementById('workspace')
     // const workspaceHash = targettedWorkspace.getAttribute('data-workspace-hash');
     const boardcontainer = targettedWorkspace.querySelector('.boardsContainer')
-    boardcontainer.appendChild(newBoardDiv)
 
+    // Check if is an update, or an older than the actual one with same ID,
+    if (document.querySelector(`[data-event-hash="${boardEventHash}"]`)){
 
-    // Add access button to toolbar
-    const toolbarAccessButton = document.createElement('button');
-    toolbarAccessButton.className = "btn btn-secondary no-wrap rounded-max";
-    toolbarAccessButton.id = `accessBtn-${boardId}`
-    toolbarAccessButton.innerHTML = title;
-    toolbarAccessButton.onclick = function() {
-        toggleBoardVisibility(boardId, `accessBtn-${boardId}`);
-    };
+        const targettedBoard = document.getElementById(BoardHash)
 
+        const existentAccessButton = targettedWorkspace.querySelector(`#accessBtn-${BoardHash}`)
+        existentAccessButton.innerHTML = title;
 
+        const existentBoardTitle = targettedBoard.querySelector(`.boardTitle`)
+        existentBoardTitle.innerHTML = title;
 
-    let workspace = document.getElementById('workspace')
-    let toolbar = workspace.querySelector('.toolbar')
-    toolbar.appendChild(toolbarAccessButton)
+        const existentBoardDescription = targettedBoard.querySelector(`.boardDescription`)
+        existentBoardDescription.innerHTML = description;
+
+        const existentBoardTagsContainer = targettedBoard.querySelector(`.boardTagsContainer`)
+        existentBoardTagsContainer.innerHTML = boardTags;
+
+        const existentBoardDetailsContainer = targettedBoard.querySelector(`.boardDetailsContainer`)
+        existentBoardDetailsContainer.innerHTML = boardDetails;
+
+    } else {
+
+        // Create the outermost div with class "responsive-4"
+        const newBoardDiv = document.createElement("div")
+        newBoardDiv.className = "max-w-350 display-block matchMeMan border-dashed boardDropZone rounded"
+        newBoardDiv.id = boardId
+        newBoardDiv.setAttribute('data-event-hash', boardEventHash)
+        newBoardDiv.innerHTML = easyBoard
+        boardcontainer.appendChild(newBoardDiv)
+
+        // Add access button to toolbar
+        const toolbarAccessButton = document.createElement('button');
+        toolbarAccessButton.className = "btn btn-secondary no-wrap rounded-max";
+        toolbarAccessButton.id = `accessBtn-${boardId}`
+        toolbarAccessButton.innerHTML = title;
+        toolbarAccessButton.onclick = function() {
+            toggleBoardVisibility(boardId, `accessBtn-${boardId}`);
+        };
+
+        let toolbar = document.querySelector('.toolbar')
+        toolbar.appendChild(toolbarAccessButton)
+    }
     
     // Dispatch changes on trip
     window.dispatchEvent(new Event("brikChange"));
@@ -168,26 +195,13 @@ function constructBoard(BoardHash) {
 
 }
 
-
-
-
-
-
-
-
-//0 workspaceId, 1 boardId, 2 sheetId, 3 title, 4 description, 5 tags, 6 deadline, 7 at, 8 participants, 9 revisions
+//0 workspaceId, 1 boardId, 2 sheetId, 3 title, 4 description, 5 tags, 6 deadline, 7 at, 8 participants, 9 revisions, 10 eventHash
 function constructSheet(sheetHash) {
-    // sheetId, title, description, tags, deadline, at, participants
 
-    var newSheetDecrypted = JSON.parse(localStorage.getItem(sheetHash))
-    // Check if is an update, or an older than the actual one with same ID,
-    if (document.getElementById(sheetHash)){
-        console.log('repeated sheet id')
-        return
-    }
+    var newSheetDecrypted = JSON.parse(localStorage.getItem(`descypher-${sheetHash}`))
 
-    let sheetId = newSheetDecrypted[2]
     let boardId = newSheetDecrypted[1]
+    let sheetId = newSheetDecrypted[2]
     let title = newSheetDecrypted[3]
     let sheetDescription = newSheetDecrypted[4]
     let tags = newSheetDecrypted[5]
@@ -195,20 +209,14 @@ function constructSheet(sheetHash) {
     let at = newSheetDecrypted[7]
     let participants = newSheetDecrypted[8]
     let revisions = newSheetDecrypted[9]
-
-
-
-    // Check if sheet already exist to know is only an update
-    var existentSheet = document.getElementById(sheetId)
-    var update = existentSheet ? true : false
-
-    var sheetTags = ''
+    let hashEventHash = newSheetDecrypted[10]
 
     // Amount of tags and clasification declaration
     var phoneNumbersAmount = 0
     var emailsAmount = 0
     var urlsAmount = 0
     var tagsAmount = 0
+    var sheetTags = ''
 
     // Create and append tag elements
     tags.forEach(tag => {
@@ -253,7 +261,7 @@ function constructSheet(sheetHash) {
         <span>${revisions}</span>
     </p>
     `
-    if (revisions =! '0') {sheetDetails += revisionTagsAmountElement}
+    if (revisions != '0') {sheetDetails += revisionTagsAmountElement}
 
     // tags count
     let simpleTagsAmountElement = `
@@ -295,16 +303,16 @@ function constructSheet(sheetHash) {
     <div class="display-flex flex-row spaced">
         <h4 class="sheetTitle hide-scrollbar overflow-scroll no-wrap font-400 full-center">${title}</h4>
         <div class="display-flex flex-row full-center">
-        <button onclick="expandSheet('${sheetId}')" class="hover-bg-lighter rounded-max btn hover-fill-primary fill-secondary">
-            ${chevronDown}
-        </button>
+            <button onclick="expandSheet('${sheetId}')" class="hover-bg-lighter rounded-max btn hover-fill-primary fill-secondary">
+                ${chevronDown}
+            </button>
             <div id='dropdown-${sheetId}' class="dropdown position-relative display-block-inline">
                 <button onclick="toggleDropdown('dropdown-${sheetId}')" class="hover-bg-lighter rounded-max btn cursor-pointer hover-fill-primary fill-secondary">
                 ${dotOptionsIcon}
                 </button>
                 <ul class="dropdown-content to-right z-1 absolute text-right rounded shadow-two bg-body xs-padded border-solid-s border-primary">
-                    <li onclick="launchModalSheet('${boardId}', '${sheetId}')" class="dropdown-element font-xs block-mode color-secondary rounded-xs cursor-pointer" data-parent-id="${sheetId}">Edit Sheet</li>
-                    <li class="dropdown-element font-xs block-mode color-secondary rounded-xs cursor-pointer" data-parent-id="${sheetId}">Delete Sheet</li>
+                    <li onclick="launchModalSheet('${boardId}', '${sheetId}')" class="dropdown-element block-mode color-secondary rounded-xs cursor-pointer" data-parent-id="${sheetId}">Edit Sheet</li>
+                    <li class="dropdown-element block-mode color-secondary rounded-xs cursor-pointer" data-parent-id="${sheetId}">Delete Sheet</li>
                 </ul>
             </div>
         </div>
@@ -318,19 +326,53 @@ function constructSheet(sheetHash) {
         ${sheetDetails}
     </div>
     `
-    const newSheetLi = document.createElement('li');
-    newSheetLi.id = sheetId;
-    newSheetLi.draggable = true;
-    newSheetLi.className = 'tripSheet matchMeManChild show-my-child cursor-pointer bg-body shadow-dynamic color-primary s-padded display-flex flex-col rounded-s s-gap';
-    
-    newSheetLi.innerHTML = easySheet
 
-    // Find the .boardContainer element within the specified board element
-    var targettedBoard = document.getElementById(boardId);
-    var targettedBoardContainer = targettedBoard.querySelector('.sheetContainer');
-
-    targettedBoardContainer.appendChild(newSheetLi)
+    const eventHash = document.querySelector(`[data-event-hash="${hashEventHash}"]`)
     
+    // Check if is an update, or an older than the actual one with same ID,
+    if (eventHash){
+
+        const eventHashId = eventHash.id;
+
+        const existenSheeti = document.getElementById(sheetHash)
+
+        if (newSheetDecrypted[1] === eventHashId) {
+            existenSheeti.innerHTML = easySheet
+            console.log(`hash Event ${hashEventHash}`)
+            console.log(`revisions ${revisions}`)
+        } else {
+            existenSheeti.remove()
+            const newSheetLi = document.createElement('li');
+        newSheetLi.setAttribute('data-event-hash', hashEventHash)
+        newSheetLi.draggable = true;
+        newSheetLi.className = 'tripSheet matchMeManChild show-my-child cursor-pointer bg-body shadow-dynamic color-primary s-padded display-flex flex-col rounded-s s-gap';
+        newSheetLi.id = sheetId;
+        
+        newSheetLi.innerHTML = easySheet
+
+        // Find the .boardContainer element within the specified board element
+        var targettedBoard = document.getElementById(boardId);
+        var targettedBoardContainer = targettedBoard.querySelector('.sheetContainer');
+        
+        targettedBoardContainer.appendChild(newSheetLi)
+        }
+
+
+    } else {
+        const newSheetLi = document.createElement('li');
+        newSheetLi.setAttribute('data-event-hash', hashEventHash)
+        newSheetLi.draggable = true
+        newSheetLi.className = 'tripSheet matchMeManChild show-my-child cursor-pointer bg-tertiary shadow-dynamic color-primary s-padded display-flex flex-col rounded-s s-gap'
+        newSheetLi.id = sheetId;
+        
+        newSheetLi.innerHTML = easySheet
+
+        // Find the .boardContainer element within the specified board element
+        var targettedBoard = document.getElementById(boardId);
+        var targettedBoardContainer = targettedBoard.querySelector('.sheetContainer');
+        
+        targettedBoardContainer.appendChild(newSheetLi)
+    }
 
     // Dispatch changes on trip
     window.dispatchEvent(new Event("brikChange"));

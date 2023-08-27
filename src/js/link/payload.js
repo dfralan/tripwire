@@ -76,6 +76,20 @@
         return processedArray;
     }
 
+    function generateKeypair(){
+        var { getSharedSecret, schnorr, utils } = nobleSecp256k1
+        var crypto = window.crypto
+        var getRand = size => crypto.getRandomValues(new Uint8Array (size))
+        var sha256 = bitcoinjs.crypto.sha256
+        var keypair = bitcoinjs.ECPair.makeRandom()
+        var privkey = keypair.privateKey.toString("hex")
+        var pubkey = keypair.publicKey.toString("hex")
+        pubkey = pubkey.substring(2)
+        console.log(`newPubKey= ${privkey}`);
+        console.log(`newprivKey= ${pubkey}`);
+    }
+    generateKeypair()
+
     // Generate public key from private key
     function generatePublicKey(privateKeyHex) {
         const keyPair = ec.keyFromPrivate(privateKeyHex, 'hex');
@@ -109,7 +123,6 @@
                 var [type, subId, event] = JSON.parse(message.data);
                 var { kind, content, tags } = event || {}
                 if (!event || event === true) return
-                console.log(event)
                 content = await decrypt(privKey, event.pubkey, content)
                 
                 let workspace = document.getElementById('workspace')
@@ -121,6 +134,7 @@
                 let rTag = [];
                 let wsHash = [];
                 let bHash = [];
+                let sHash = [];
                 let sTitle = [];
                 let ddLine = [];
                 let xTags = [];
@@ -135,6 +149,8 @@
                         wsHash.push(tagValue);
                     } else if (tagType === 'bHash') {
                         bHash.push(tagValue);
+                    } else if (tagType === 'sHash') {
+                        sHash.push(tagValue);
                     } else if (tagType === 'sTitle') {
                         sTitle.push(tagValue);
                     } else if (tagType === 'ddLine') {
@@ -147,14 +163,54 @@
                 }
 
                 // Private board event handler
+            if (kind === privateWorkspaceKindNumber) {
+
+
+                console.log(event)
+                var workspaceIsReady = true
+                let eventWorkspaceHash = wsHash[0]
+                let eventTitle = decodeURIComponent(decrypt(privKey, event.pubkey, sTitle[0]))
+                let eventDescription = decodeURIComponent(content)
+                let eventTagsArray = decryptArray(privKey, event.pubkey, xTags)
+                let eventDeadline = ddLine[0]
+                let eventTimeCreation = event.created_at
+                let eventParticipants = event.pubkey
+                let revisionsAmount = rTag[0]
+                let eventSocketHash = dTag[0]
+
+                document.dispatchEvent(new Event(eventSocketHash));
+
+                // Replace 'data-target' with the attribute name and 'example' with the attribute value you're looking for
+                const attributeName = 'data-target';
+                const attributeValue = 'example';
+
+                // Check if an element with the specified attribute value exists
+                const elementWithAttributeValue = document.querySelector(`[${attributeName}="${attributeValue}"]`);
+
+                function workspaceCreationHandler() {
+                    const newWorkspaceDecryptedArrayed = [eventWorkspaceHash, eventTitle, eventDescription, eventTagsArray, eventDeadline, eventTimeCreation, eventParticipants, revisionsAmount, eventSocketHash]
+                    localStorage.setItem(eventWorkspaceHash, JSON.stringify(newWorkspaceDecryptedArrayed));
+                    constructWorkspace(eventWorkspaceHash);
+
+                    if (!workspaceIsReady) {
+                        window.removeEventListener(eventWorkspaceHash, workspaceCreationHandler);
+                    }
+                    workspaceIsReady = true
+                }
+                if (eventWorkspaceHash === workspaceHash) { // Event is from current workspace
+                    workspaceIsReady = true
+                    workspaceCreationHandler()
+                } else { // Event is not from current workspace
+                    workspaceIsReady = false
+                    window.addEventListener(eventWorkspaceHash, workspaceCreationHandler);
+                }
+            }
+
+                // Private board event handler
                 if (kind === privateBoardKindNumber) {
-
-                    console.log('createdBoard')
-                    console.log(xTags)
-
                     var workspaceIsReady = true
                     let eventWorkspaceHash = wsHash[0]
-                    let eventBoardId = dTag[0]
+                    let eventBoardId = bHash[0]
                     let eventTitle = decodeURIComponent(decrypt(privKey, event.pubkey, sTitle[0]))
                     let eventDescription = decodeURIComponent(content)
                     let eventTagsArray = decryptArray(privKey, event.pubkey, xTags)
@@ -162,9 +218,12 @@
                     let eventTimeCreation = event.created_at
                     let eventParticipants = event.pubkey
                     let revisionsAmount = rTag[0]
+                    let eventSocketHash = dTag[0]
+
+                    document.dispatchEvent(new Event(eventSocketHash));
 
                     function boardCreationHandler() {
-                        const newBoardDecryptedArrayed = [eventWorkspaceHash, eventBoardId, eventTitle, eventDescription, eventTagsArray, eventDeadline, eventTimeCreation, eventParticipants, revisionsAmount]
+                        const newBoardDecryptedArrayed = [eventWorkspaceHash, eventBoardId, eventTitle, eventDescription, eventTagsArray, eventDeadline, eventTimeCreation, eventParticipants, revisionsAmount, eventSocketHash]
                         localStorage.setItem(eventBoardId, JSON.stringify(newBoardDecryptedArrayed));
                         constructBoard(eventBoardId);
 
@@ -188,7 +247,7 @@
                     var boardIsReady = true
                     let eventWorkspaceHash = wsHash[0]
                     let eventBoardId = bHash[0]
-                    let eventSheetId = dTag[0]
+                    let eventSheetId = sHash[0]
                     let eventTitle = decodeURIComponent(decrypt(privKey, event.pubkey, sTitle[0]))
                     let eventDescription = decodeURIComponent(content)
                     let eventTagsArray = decryptArray(privKey, event.pubkey, xTags)
@@ -196,10 +255,13 @@
                     let eventTimeCreation = event.created_at
                     let eventParticipants = event.pubkey
                     let revisionsAmount = rTag[0]
+                    let eventSocketHash = dTag[0]
+                    
+                    document.dispatchEvent(new Event(eventSocketHash));
 
                     function sheetCreationHandler() {
-                        const newSheetDecryptedArrayed = [eventWorkspaceHash, eventBoardId, eventSheetId, eventTitle, eventDescription, eventTagsArray, eventDeadline, eventTimeCreation, eventParticipants, revisionsAmount];
-                        localStorage.setItem(eventSheetId, JSON.stringify(newSheetDecryptedArrayed));
+                        const newSheetDecryptedArrayed = [eventWorkspaceHash, eventBoardId, eventSheetId, eventTitle, eventDescription, eventTagsArray, eventDeadline, eventTimeCreation, eventParticipants, revisionsAmount, eventSocketHash];
+                        localStorage.setItem(`descypher-${eventSheetId}`, JSON.stringify(newSheetDecryptedArrayed));
                         constructSheet(eventSheetId)
                         
                         if (!boardIsReady) { // Remove the event listener after it's been executed if applies
@@ -250,11 +312,6 @@
                     try {
                         const signedEvent = await getSignedEvent(event, privKey);
                         socket.send(JSON.stringify(["EVENT", signedEvent]));
-                        ephemeralNotification("Board created successfully.");
-                        localStorage.removeItem("newSheetLS");
-                        localStorage.removeItem("newBoardLS");
-                        window.dispatchEvent(new Event("closeNewBoardModal"));
-                        window.dispatchEvent(new Event("closeNewSheetModal"));
                         return;
                     } catch (error) {
                         retries++;
@@ -272,7 +329,6 @@
                 return new Promise(resolve => setTimeout(resolve, ms));
             }
 
-
             // Function to append X tags to event with encryption handling
             function createXTagsFromArray(tagArray) {
                 return tagArray.map(tag => ['x', encrypt(privKey, pubKey, tag)]);
@@ -283,9 +339,57 @@
                 return tagArray.map(tag => ['p', tag]);
             }
 
+            // Listen for the local event of creating a new WORKSPACE that trigger event compose and send
+            //0 workspaceId, 2 title, 3 tags, 4 deadline, 5 at, 6 participants, 7 revisions, 8 hash event
+            function handleNewWorkspaceEvent(e) {
+                const newWorkspaceEventHash = localStorage.getItem("newWorkspaceLS");
+                const newWorkspaceContent = localStorage.getItem(newWorkspaceEventHash);
+                let newWorkspaceLS = JSON.parse(newWorkspaceContent);
+            
+                const workspaceHash = newWorkspaceLS[0];
+                const newWorkspaceEncryptedTitle = encrypt(privKey, pubKey, newWorkspaceLS[1]);
+                const newWorkspaceEncryptedContent = encrypt(privKey, pubKey, newWorkspaceLS[2]);
+                const newWorkspaceXTags = JSON.parse(newWorkspaceLS[3]);
+                const newWorkspaceDeadline = newWorkspaceLS[4];
+                const newWorkspaceCreation = Math.floor(Date.now() / 1000);
+                //const mentions = newWorkspaceLS[6];
+                const newWorkspaceRevisions = (parseInt(newWorkspaceLS[7]) + 1).toString();
+                const eventSocketHashAgain = newWorkspaceLS[8];
+            
+                const privateWorkspace = {
+                    "content": newWorkspaceEncryptedContent,
+                    "created_at": newWorkspaceCreation,
+                    "kind": privateWorkspaceKindNumber,
+                    "tags": [
+                        ['p', pubKey], 
+                        ['d', eventSocketHashAgain], // 'd' tag allows to replace existent event with same: 'pubkey', 'kind' and 'd' tag.
+                        ['wsHash', workspaceHash],
+                        ['sTitle', newWorkspaceEncryptedTitle],
+                        ['ddLine', newWorkspaceDeadline],
+                        ...createXTagsFromArray(newWorkspaceXTags),
+                        //...createPTagsFromArray(mentions);
+                        ['r', newWorkspaceRevisions],
+                    ],
+                    "pubkey": pubKey,
+                };
+                
+                currentRetry = 0;
+                sendEventWithRetry(privateWorkspace);
+                
+                document.addEventListener(eventSocketHashAgain, function(event) {
+                    window.dispatchEvent(new Event("closeNewWorkspaceModal"));
+                    localStorage.removeItem("newWorkspaceLS");
+                    ephemeralNotification("Workspace created successfully.");
+                    document.removeEventListener("newWorkspaceEvent", handleNewWorkspaceEvent);
+                });
+            }
+            
+            // Listen for the local event of creating a new BOARD that triggers the event composition and sending
+            window.addEventListener("newWorkspaceEvent", handleNewWorkspaceEvent);
+
             // Listen for the local event of creating a new sheet that trigger event compose and send
             //0 workspaceId, 1 boardId, 2 sheetId, 3 title, 4 content, 5 tags, 6 deadline, 7 at, 8 participants, 9 revisions
-            window.addEventListener("newSheetEvent", async function (e) {
+            function handleNewSheetEvent(e) {
                 const newSheetEventHash = localStorage.getItem("newSheetLS");
                 const newSheetContent = localStorage.getItem(newSheetEventHash);
                 let newSheetLS = JSON.parse(newSheetContent);
@@ -300,6 +404,10 @@
                 const newSheetCreation = Math.floor(Date.now() / 1000)
                 //const mentions = newSheetLS[8]
                 const newSheetRevisions = (parseInt(newSheetLS[9]) + 1).toString()
+                const eventSocketHashAgain = newSheetLS[10]
+                
+                console.log(`revisions sheet ${newSheetRevisions}`)
+                console.log(newSheetHash)
                 
                 // Private sheet composing
                 const privateSheet = {
@@ -308,9 +416,11 @@
                     "kind": privateSheetKindNumber,
                     "tags": [
                         ['p', pubKey], 
-                        ['d', newSheetHash], // 'd' tag allows to replace existent event with same: 'pubkey', 'kind' and 'd' tag.
+                        ['p', '3cede65c95e85ccd630f28e251e468404de54d7da099f9811099c31d743d88e1'], 
+                        ['d', eventSocketHashAgain], // 'd' tag allows to replace existent event with same: 'pubkey', 'kind' and 'd' tag.
                         ['wsHash', workspaceHash],
                         ['bHash', newSheetLinkedBoardHash],
+                        ['sHash', newSheetHash],
                         ['sTitle', newSheetEncryptedTitle],
                         ['ddLine', newSheetDeadline],
                         ...createXTagsFromArray(newSheetXTags),
@@ -321,33 +431,44 @@
                 };
                 currentRetry = 0;
                 sendEventWithRetry(privateSheet);
-            });
+                document.addEventListener(eventSocketHashAgain, function(event) {
+                    window.dispatchEvent(new Event("closeNewSheetModal"));
+                    localStorage.removeItem("newSheetLS");
+                    ephemeralNotification("Sheet created successfully.");
+                    document.removeEventListener("newSheetEvent", handleNewSheetEvent);
+                });
+            };
+
+            // Listen for the local event of creating a new SHEET that triggers the event composition and sending
+            window.addEventListener("newSheetEvent", handleNewSheetEvent);
 
             // Listen for the local event of creating a new BOARD that trigger event compose and send
             //0 workspaceId, 1 boardId, 2 title, 3 tags, 4 deadline, 5 at, 6 participants
-            window.addEventListener("newBoardEvent", async function (e) {
+            function handleNewBoardEvent(e) {
                 const newBoardEventHash = localStorage.getItem("newBoardLS");
                 const newBoardContent = localStorage.getItem(newBoardEventHash);
                 let newBoardLS = JSON.parse(newBoardContent);
-
-                const workspaceHash = newBoardLS[0]
-                const newBoardHash = newBoardLS[1]
+            
+                const workspaceHash = newBoardLS[0];
+                const newBoardHash = newBoardLS[1];
                 const newBoardEncryptedTitle = encrypt(privKey, pubKey, newBoardLS[2]);
                 const newBoardEncryptedContent = encrypt(privKey, pubKey, newBoardLS[3]);
                 const newBoardXTags = JSON.parse(newBoardLS[4]);
-                const newBoardDeadline = newBoardLS[5]
-                const newBoardCreation = Math.floor(Date.now() / 1000)
-                //const mentions = newBoardLS[7]
-                const newBoardRevisions = (parseInt(newBoardLS[8]) + 1).toString()
-                
+                const newBoardDeadline = newBoardLS[5];
+                const newBoardCreation = Math.floor(Date.now() / 1000);
+                //const mentions = newBoardLS[7];
+                const newBoardRevisions = (parseInt(newBoardLS[8]) + 1).toString();
+                const eventSocketHashAgain = newBoardLS[9];
+            
                 const privateBoard = {
                     "content": newBoardEncryptedContent,
                     "created_at": newBoardCreation,
                     "kind": privateBoardKindNumber,
                     "tags": [
                         ['p', pubKey], 
-                        ['d', newBoardHash], // 'd' tag allows to replace existent event with same: 'pubkey', 'kind' and 'd' tag.
+                        ['d', eventSocketHashAgain], // 'd' tag allows to replace existent event with same: 'pubkey', 'kind' and 'd' tag.
                         ['wsHash', workspaceHash],
+                        ['bHash', newBoardHash], 
                         ['sTitle', newBoardEncryptedTitle],
                         ['ddLine', newBoardDeadline],
                         ...createXTagsFromArray(newBoardXTags),
@@ -356,9 +477,23 @@
                     ],
                     "pubkey": pubKey,
                 };
+                
                 currentRetry = 0;
                 sendEventWithRetry(privateBoard);
-            });
+                
+                document.addEventListener(eventSocketHashAgain, function(event) {
+                    window.dispatchEvent(new Event("closeNewBoardModal"));
+                    localStorage.removeItem("newBoardLS");
+                    ephemeralNotification("Board created successfully.");
+                    document.removeEventListener("newBoardEvent", handleNewBoardEvent);
+                });
+            }
+            
+            // Listen for the local event of creating a new BOARD that triggers the event composition and sending
+            window.addEventListener("newBoardEvent", handleNewBoardEvent);
+            
+
+            
 
             // Handle WebSocket connection open event
             socket.addEventListener('open', async function (e) {
