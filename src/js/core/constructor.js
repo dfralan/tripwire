@@ -1,16 +1,13 @@
+// WORKSPACE CONSTRUCTOR
 function constructWorkspace(workspaceHash) {
-
-    var newWorkspaceDecrypted = JSON.parse(localStorage.getItem(workspaceHash))
-    console.log(newWorkspaceDecrypted)
-    console.log('WEPP')
+    console.log(`CONSTRUCTOR WORKSPACE LAUNCHED CORRECTLY ${workspaceHash}`)
+    window.dispatchEvent(new Event(workspaceHash));
 }
 
-
-
+// BOARD CONSTRUCTOR
 function constructBoard(BoardHash) {
 
     var newBoardDecrypted = JSON.parse(localStorage.getItem(BoardHash))
-
     let workspaceId = newBoardDecrypted[0]
     let boardId = newBoardDecrypted[1]
     let title = newBoardDecrypted[2]
@@ -35,24 +32,24 @@ function constructBoard(BoardHash) {
     tags.forEach(tag => {
 
         var boardTagContent = decodeURIComponent(tag)
-        var urlTagClass = `pastel-${Math.floor(Math.random() * 5) + 1} tag xxs-padded font-xs rounded-s no-wrap hide-scrollbar overflow-scroll max-w-100`
+        const urlTagClass = `bg-tint-lighter color-tint tag xxs-padded font-xs rounded-max no-wrap hide-scrollbar overflow-scroll max-w-100`
 
         if (isValidUrl(`${boardTagContent}`)){
 
             urlsAmount++
-            var urlTagElement = `<a class="${urlTagClass}" target="_blank" href="${boardTagContent}">${boardTagContent}</a>`
+            var urlTagElement = `<a class="${urlTagClass} text-decoration-none underlined" target="_blank" href="${boardTagContent}">${boardTagContent}</a>`
             boardTags += urlTagElement;
 
         } else if (isValidEmail(`${decodeURIComponent(tag)}`)) {
 
             emailsAmount++
-            var emailTagElement = `<a class="${urlTagClass}" target="_blank" href="mailto:${boardTagContent}">${boardTagContent}</a>`
+            var emailTagElement = `<a class="${urlTagClass} text-decoration-none underlined" target="_blank" href="mailto:${boardTagContent}">${boardTagContent}</a>`
             boardTags += emailTagElement;
             
         } else if (isValidPhoneNumber(`${decodeURIComponent(tag)}`)) {
 
             phoneNumbersAmount++
-            var phoneTagElement = `<a class="${urlTagClass}" target="_blank" href="tel:${boardTagContent}">${boardTagContent}</a>`
+            var phoneTagElement = `<a class="${urlTagClass} text-decoration-none underlined" target="_blank" href="tel:${boardTagContent}">${boardTagContent}</a>`
             boardTags += phoneTagElement;
 
         } else {
@@ -119,14 +116,14 @@ function constructBoard(BoardHash) {
     if (phoneNumbersAmount > 0) {boardDetails += phoneTagsAmountElement}
 
     var easyBoard = `
-    <div class="rounded bg-body display-flex flex-col border-solid border-secondary transition-300 shadow-dynamic">
-        <div class="bg-tertiary display-flex rounded-up border-solid border-tertiary border-top-none border-left-none border-right-none full-center spaced color-primary font-400 font-m s-padded">
+    <div class="rounded bg-body display-flex flex-col border-solid border-secondary transition-300">
+        <div class="bg-tertiary display-flex rounded-up border-solid border-secondary border-top-none border-left-none border-right-none full-center spaced color-primary font-400 font-m s-padded">
             <div class='hide-scrollbar overflow-scroll max-width-100'><span class="boardTitle no-wrap">${title}</span></div>
             <div id='dropdown-${boardId}' class="dropdown">
                 <button onclick="toggleDropdown('dropdown-${boardId}')" class="hover-bg-lighter rounded-max btn cursor-pointer hover-fill-primary fill-secondary">
                     ${dotOptionsIcon}
                 </button>
-                <ul class="dropdown-content to-right z-1 absolute text-right rounded shadow-two bg-body xs-padded border-solid border-secondary">
+                <ul class="dropdown-content to-right z-1 absolute text-right rounded shadow-two bg-body xs-padded border-solid-s border-primary">
                     <li onclick="launchModalSheet('${boardId}', '')" class="dropdown-element block-mode color-secondary rounded-xs cursor-pointer" data-parent-id="${boardId}">Add new sheet +</li>
                     <li onclick="launchModalBoard('${boardId}')" class="dropdown-element block-mode color-secondary rounded-xs cursor-pointer" data-parent-id="${boardId}">Edit Board</li>
                 </ul>
@@ -178,7 +175,7 @@ function constructBoard(BoardHash) {
 
         // Add access button to toolbar
         const toolbarAccessButton = document.createElement('button');
-        toolbarAccessButton.className = "btn btn-secondary no-wrap rounded-s bg-lighter border-solid border-tertiary";
+        toolbarAccessButton.className = "bg-tertiary display-flex rounded bg-lighter color-secondary border-none full-center font-400 font-s s-padded-wide";
         toolbarAccessButton.id = `accessBtn-${boardId}`
         toolbarAccessButton.innerHTML = title;
         toolbarAccessButton.onclick = function() {
@@ -195,7 +192,7 @@ function constructBoard(BoardHash) {
 
 }
 
-//0 workspaceId, 1 boardId, 2 sheetId, 3 title, 4 description, 5 tags, 6 deadline, 7 at, 8 participants, 9 revisions, 10 eventHash
+// SHEET CONSTRUCTOR
 function constructSheet(sheetHash) {
 
     var newSheetDecrypted = JSON.parse(localStorage.getItem(`descypher-${sheetHash}`))
@@ -222,8 +219,7 @@ function constructSheet(sheetHash) {
     tags.forEach(tag => {
 
         var sheetTagContent = decodeURIComponent(tag)
-        var urlTagClass = `pastel-${Math.floor(Math.random() * 5) + 1} tag xxs-padded font-xs rounded-s no-wrap hide-scrollbar overflow-scroll max-w-100`
-
+        const urlTagClass = `bg-tint-lighter color-tint tag xxs-padded font-xs rounded-max no-wrap hide-scrollbar overflow-scroll max-w-100`
         if (isValidUrl(`${sheetTagContent}`)){
 
             urlsAmount++
@@ -293,7 +289,7 @@ function constructSheet(sheetHash) {
     // phone count
     let phoneTagsAmountElement = `
     <p class="${detailIndicatorSheetClass}">
-        <span>${emailIcon}</span>
+        <span>${phoneIcon}</span>
         <span>${phoneNumbersAmount}</span>
     </p>
     `
@@ -328,12 +324,12 @@ function constructSheet(sheetHash) {
     `
 
     const eventHash = document.querySelector(`[data-event-hash="${hashEventHash}"]`)
+    const sheetClass = `tripSheet matchMeManChild show-my-child cursor-pointer bg-tertiary shadow-dynamic color-primary s-padded display-flex flex-col rounded-s s-gap border-solid border-secondary`
     
     // Check if is an update, or an older than the actual one with same ID,
     if (eventHash){
 
         const eventHashId = eventHash.id;
-
         const existenSheeti = document.getElementById(sheetHash)
 
         if (newSheetDecrypted[1] === eventHashId) {
@@ -345,7 +341,7 @@ function constructSheet(sheetHash) {
             const newSheetLi = document.createElement('li');
         newSheetLi.setAttribute('data-event-hash', hashEventHash)
         newSheetLi.draggable = true;
-        newSheetLi.className = 'tripSheet matchMeManChild show-my-child cursor-pointer bg-body shadow-dynamic color-primary s-padded display-flex flex-col rounded-s s-gap';
+        newSheetLi.className =  `${sheetClass}`
         newSheetLi.id = sheetId;
         
         newSheetLi.innerHTML = easySheet
@@ -357,14 +353,12 @@ function constructSheet(sheetHash) {
         targettedBoardContainer.appendChild(newSheetLi)
         }
 
-
     } else {
         const newSheetLi = document.createElement('li');
         newSheetLi.setAttribute('data-event-hash', hashEventHash)
         newSheetLi.draggable = true
-        newSheetLi.className = 'tripSheet matchMeManChild show-my-child cursor-pointer bg-tertiary shadow-dynamic color-primary s-padded display-flex flex-col rounded-s s-gap border-solid border-secondary'
+        newSheetLi.className = `${sheetClass}`
         newSheetLi.id = sheetId;
-        
         newSheetLi.innerHTML = easySheet
 
         // Find the .boardContainer element within the specified board element

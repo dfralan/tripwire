@@ -14,7 +14,7 @@ var newWorkspaceHash = ''
 var existentWorkspaceLS = ''
 var workspaceRevisionsAmount = ''
 var workspaceEventHash = ''
-var isFirstTime = false
+var isFirstTime = true
 
 // show add new workspace modal
 function showNewWorkspaceModal() {
@@ -34,9 +34,8 @@ function showNewDashboardModal(){
     workspaceCreationModal.classList.add("display-none");
 }
 
-if (isFirstTime) {
-    showNewDashboardModal()
-}
+showNewDashboardModal()
+
 
 // listen event that allow close new sheet modal when success on sending the event
 //0 workspaceId, 1 workspaceId, 2 title, 3 description, 4 tags, 5 deadline, 6 at, 7 participants, 8 revisions

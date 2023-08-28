@@ -130,10 +130,6 @@ function dragEnd() {
     });
     // Remove the event listeners when dragging ends
     removeDragAndDropHandlers();
-
-    console.log('item drag end');
-    console.log(dragItemId)
-    console.log(zoneWhereItemDropsId)
     aDragHappen()
 
 }
@@ -168,27 +164,20 @@ setupDragAndDropHandlers();
 // Function that get item in local storage, if exist check if the dropped zone is different from the origin
 // in case it is, launch sheet event creation with new parameters
 function aDragHappen(){
-    const draggedSheetLS = localStorage.getItem(dragItemId);
+    const draggedSheetLS = localStorage.getItem(`descypher-${dragItemId}`)
     let draggedSheetLSParsed = JSON.parse(draggedSheetLS);
     const draggedSheetLastBoardId = draggedSheetLSParsed[1]
-    
-
     if (draggedSheetLastBoardId === zoneWhereItemDropsId) {
-        console.log('dragged on somae board bebop')
         return
     } else {
-        console.log('dragged to another board, need to write event and construct')
-        console.log(draggedSheetLSParsed[5])
-
         // HANDLE NEW SHEET
-
         const newDraggedSheetArrayed = [
             draggedSheetLSParsed[0],
             zoneWhereItemDropsId,
             draggedSheetLSParsed[2],
             draggedSheetLSParsed[3],
             draggedSheetLSParsed[4],
-            arrayTags(arrayToCommaString(JSON.parse(draggedSheetLSParsed[5]))),
+            arrayTags(arrayToCommaString(draggedSheetLSParsed[5])),
             'tomorrow',
             'now',
             'onlyme',

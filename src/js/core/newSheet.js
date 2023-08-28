@@ -36,6 +36,9 @@ window.addEventListener("closeNewSheetModal", function() {
 // Launch Modal and fullfill inputs needed
 function launchModalSheet(boardId, sheetHash) {
 
+    const actualWorkspace = document.getElementById("workspace");
+    var actualWorkspaceHash = actualWorkspace.getAttribute("data-workspace-hash");
+
     // If sheet hash comes empty, means brand new sheet
     if (sheetHash === '') {
         newSheetHash = genHex(12)
@@ -65,7 +68,7 @@ function launchModalSheet(boardId, sheetHash) {
     let targettedBoardLS = localStorage.getItem(boardId)
     let boardTitleParse = JSON.parse(targettedBoardLS)
     boardReference.textContent = boardTitleParse[2]
-    workspaceHash = 'aWorkspace'
+    workspaceHash = actualWorkspaceHash
     showNewSheetModal()
     
 };

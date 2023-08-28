@@ -35,10 +35,13 @@ window.addEventListener("closeNewBoardModal", function() {
 // Launch Modal and fullfill inputs needed
 function launchModalBoard(boardId) {
 
+    const actualWorkspace = document.getElementById("workspace");
+    var actualWorkspaceHash = actualWorkspace.getAttribute("data-workspace-hash");
+
     // If board hash comes empty, means brand new board
     if (boardId === '') {
         newBoardHash = genHex(12)
-        workspaceHash = 'aWorkspace'
+        workspaceHash = actualWorkspaceHash
         newBoardNameInput.value = ''
         newBoardInputDescription.value = ''
         newBoardInputTags.value = ''

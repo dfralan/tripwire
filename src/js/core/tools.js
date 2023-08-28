@@ -35,7 +35,6 @@ const arrayTags = (x = '') => {
 }
 
 function arrayToCommaString(inputArray) {
-    console.log(inputArray)
     var decodedArray = inputArray.map(item => decodeURIComponent(item));
     var result = decodedArray.join(', ');
     return result;
@@ -105,11 +104,12 @@ function toggleBoardVisibility(boardIdentificator, buttonIdentificator){
     if (targettedBoard.classList.contains("display-none")){
         targettedBoard.classList.remove("display-none")
         targettedBoard.classList.add("display-block")
-        targettedButton.style.opacity = 1;
+        targettedButton.classList.remove('bg-lighter', 'color-primary')
+        targettedButton.classList.add('bg-secondary', 'color-secondary')
     } else {
         targettedBoard.classList.add("display-none")
-        targettedBoard.classList.remove("display-block")
-        targettedButton.style.opacity = 0.7;
+        targettedButton.classList.add('bg-lighter', 'color-primary')
+        targettedButton.classList.remove('bg-secondary', 'color-secondary')
     }
 }
 

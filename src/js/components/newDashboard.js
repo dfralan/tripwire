@@ -5,10 +5,10 @@ var newdashboard = `
         ${newDashBoardSVG}
     </div>
     <p class='color-primary padded'>🫠 You didn't create any workspace yet</p>
-    <button onclick="launchModalWorkspace('first')" class="border-none cursor-pointer color-black font-m bg-g-rainbow rounded s-padded">
+    <button onclick="launchModalWorkspace('first')" class="border-none cursor-pointer color-white font-m bg-tint rounded-s s-padded border-none">
         Create New Workspace
     </button>
-    <p onclick="logout()" class='cursor-pointer color-primary fill-primary display-flex flex-row full-center'>
+    <p onclick="logout()" class='cursor-pointer color-primary fill-primary display-flex flex-row full-center padded'>
         Cancel
     </p>
 </div>

@@ -85,10 +85,8 @@
         var privkey = keypair.privateKey.toString("hex")
         var pubkey = keypair.publicKey.toString("hex")
         pubkey = pubkey.substring(2)
-        console.log(`newPubKey= ${privkey}`);
-        console.log(`newprivKey= ${pubkey}`);
+        console.log( pubKey);
     }
-    generateKeypair()
 
     // Generate public key from private key
     function generatePublicKey(privateKeyHex) {
@@ -124,9 +122,6 @@
                 var { kind, content, tags } = event || {}
                 if (!event || event === true) return
                 content = await decrypt(privKey, event.pubkey, content)
-                
-                let workspace = document.getElementById('workspace')
-                let workspaceHash = workspace.getAttribute('data-workspace-hash')
 
                 // Initialize arrays to store 'p' and 'x' tags
                 let pTags = [];
@@ -165,9 +160,17 @@
                 // Private board event handler
             if (kind === privateWorkspaceKindNumber) {
 
+                // Hide the first time window
+                const firstTimeWindow = document.getElementById("newDashboardModal");
+                firstTimeWindow.remove();
 
-                console.log(event)
-                var workspaceIsReady = true
+                // Show new board button
+                document.getElementById('createBoardButton').classList.remove('display-none')
+
+                // Set data-workspace-hash to current workspace
+                const dashboardWorkspace = document.getElementById("workspace");
+                dashboardWorkspace.setAttribute("data-workspace-hash", wsHash[0]);
+
                 let eventWorkspaceHash = wsHash[0]
                 let eventTitle = decodeURIComponent(decrypt(privKey, event.pubkey, sTitle[0]))
                 let eventDescription = decodeURIComponent(content)
@@ -178,37 +181,21 @@
                 let revisionsAmount = rTag[0]
                 let eventSocketHash = dTag[0]
 
-                document.dispatchEvent(new Event(eventSocketHash));
-
-                // Replace 'data-target' with the attribute name and 'example' with the attribute value you're looking for
-                const attributeName = 'data-target';
-                const attributeValue = 'example';
-
-                // Check if an element with the specified attribute value exists
-                const elementWithAttributeValue = document.querySelector(`[${attributeName}="${attributeValue}"]`);
-
                 function workspaceCreationHandler() {
                     const newWorkspaceDecryptedArrayed = [eventWorkspaceHash, eventTitle, eventDescription, eventTagsArray, eventDeadline, eventTimeCreation, eventParticipants, revisionsAmount, eventSocketHash]
                     localStorage.setItem(eventWorkspaceHash, JSON.stringify(newWorkspaceDecryptedArrayed));
                     constructWorkspace(eventWorkspaceHash);
 
-                    if (!workspaceIsReady) {
-                        window.removeEventListener(eventWorkspaceHash, workspaceCreationHandler);
-                    }
-                    workspaceIsReady = true
+                    console.log(`ABOUT TO CONSTRUCT WORKSPACE WITH THIS WS HASH ${eventWorkspaceHash}`)
                 }
-                if (eventWorkspaceHash === workspaceHash) { // Event is from current workspace
-                    workspaceIsReady = true
-                    workspaceCreationHandler()
-                } else { // Event is not from current workspace
-                    workspaceIsReady = false
-                    window.addEventListener(eventWorkspaceHash, workspaceCreationHandler);
-                }
+                workspaceCreationHandler()
+
+                let workspace = document.getElementById('workspace')
             }
 
                 // Private board event handler
                 if (kind === privateBoardKindNumber) {
-                    var workspaceIsReady = true
+
                     let eventWorkspaceHash = wsHash[0]
                     let eventBoardId = bHash[0]
                     let eventTitle = decodeURIComponent(decrypt(privKey, event.pubkey, sTitle[0]))
@@ -220,7 +207,9 @@
                     let revisionsAmount = rTag[0]
                     let eventSocketHash = dTag[0]
 
-                    document.dispatchEvent(new Event(eventSocketHash));
+                    var workspaceIsReady = false 
+
+                    console.log(`KIND BOARD EVENT ENTERED: WS HASH => ${eventWorkspaceHash}`)
 
                     function boardCreationHandler() {
                         const newBoardDecryptedArrayed = [eventWorkspaceHash, eventBoardId, eventTitle, eventDescription, eventTagsArray, eventDeadline, eventTimeCreation, eventParticipants, revisionsAmount, eventSocketHash]
@@ -230,14 +219,18 @@
                         if (!workspaceIsReady) {
                             window.removeEventListener(eventWorkspaceHash, boardCreationHandler);
                         }
-                        workspaceIsReady = true
                     }
+                    
+                    let workspaceHash = workspace.getAttribute('data-workspace-hash')
                     if (eventWorkspaceHash === workspaceHash) { // Event is from current workspace
                         workspaceIsReady = true
                         boardCreationHandler()
                     } else { // Event is not from current workspace
                         workspaceIsReady = false
-                        window.addEventListener(eventWorkspaceHash, boardCreationHandler);
+                        console.log(`WORKSPACE IS NOT READY YET, LISTEN FOR CREATION EVENT WITH THIS NAME ${eventWorkspaceHash}`)
+                        window.addEventListener(eventWorkspaceHash, function() {
+                            boardCreationHandler()
+                        });
                     }
                 }
 
@@ -405,9 +398,6 @@
                 //const mentions = newSheetLS[8]
                 const newSheetRevisions = (parseInt(newSheetLS[9]) + 1).toString()
                 const eventSocketHashAgain = newSheetLS[10]
-                
-                console.log(`revisions sheet ${newSheetRevisions}`)
-                console.log(newSheetHash)
                 
                 // Private sheet composing
                 const privateSheet = {

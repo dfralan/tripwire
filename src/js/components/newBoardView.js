@@ -47,8 +47,8 @@ var boardcreationform =`
             </p>
 
             <div class="flex-col display-flex s-gap">
-                <button id='newBoardSubmitButton' class="btn btn-tint" type="submit">Create Board</button>
-                <button onclick="hideNewBoardModal()" class="btn btn-primary" type="button">Cancel</button>
+                <button id='newBoardSubmitButton' class="bg-tint color-white full-center text-center display-flex flex-row font-m font-500 s-padded-wide border-solid border-tertiary fill-white rounded-s no-wrap cursor-pointer border-none" type="submit">Create Board</button>
+                <button onclick="hideNewBoardModal()" class="bg-primary color-body full-center text-center display-flex flex-row font-m font-500 s-padded-wide border-solid border-tertiary fill-white rounded-s no-wrap cursor-pointer border-none" type="button">Cancel</button>
             </div>
         </form>
     </div>`

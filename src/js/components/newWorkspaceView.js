@@ -1,6 +1,6 @@
 var newworkspaceform = `
     <!-- New workspace modal -->
-    <div id="workspaceCreationModal" class="modal full-center blur-behind smooth-300 display-none">
+    <div id="workspaceCreationModal" class="modal z-i full-center blur-behind smooth-300 display-none">
 
         <div class="modal-bg o-2 bg-primary"></div>
         <form id="newWorkspaceForm" class="max-w-350 bg-body z-2 padded rounded brick flex-col s-gap">
@@ -45,9 +45,9 @@ var newworkspaceform = `
             </p>
 
             <div class="flex-col display-flex s-gap">
-                <button id='newWorkspaceSubmitButton' class="border-none cursor-pointer color-black font-m bg-g-rainbow rounded s-padded border-none" type="submit">Start</button>
-                <button id="cancelNewWorkspaceModal" onclick="hideNewWorkspaceModal()" class="border-none cursor-pointer color-body font-m bg-primary rounded s-padded border-none" type="button">Cancel</button>
-                <button id="goBackNewWorkspaceModal" onclick="showNewDashboardModal()" class="border-none cursor-pointer color-body font-m bg-primary rounded s-padded border-none" type="button">Go back</button>
+                <button id='newWorkspaceSubmitButton' class="border-none cursor-pointer color-white font-m bg-tint rounded-s s-padded border-none" type="submit">Start</button>
+                <button id="cancelNewWorkspaceModal" onclick="hideNewWorkspaceModal()" class="border-none cursor-pointer color-body font-m bg-primary rounded-s s-padded border-none" type="button">Cancel</button>
+                <button id="goBackNewWorkspaceModal" onclick="showNewDashboardModal()" class="border-none cursor-pointer color-body font-m bg-primary rounded-s s-padded border-none" type="button">Go back</button>
             </div>
         </form>
         
