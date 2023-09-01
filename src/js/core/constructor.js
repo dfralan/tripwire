@@ -1,7 +1,81 @@
 // WORKSPACE CONSTRUCTOR
+//0 workspaceId, 2 title, 3 tags, 4 deadline, 5 at, 6 participants, 7 revisions, 8 hash event
 function constructWorkspace(workspaceHash) {
-    console.log(`CONSTRUCTOR WORKSPACE LAUNCHED CORRECTLY ${workspaceHash}`)
     window.dispatchEvent(new Event(workspaceHash));
+    let workspaceContent = JSON.parse(localStorage.getItem(workspaceHash))
+
+    let workspaceId = workspaceContent[0]
+    let title = workspaceContent[1]
+    let description = workspaceContent[2]
+
+    let tags = workspaceContent[3]
+    let deadline = workspaceContent[4]
+    let at = workspaceContent[5]
+    let participants = workspaceContent[6]
+    let revisions = workspaceContent[7]
+    let workspaceEventHash = workspaceContent[8]
+
+
+    let workspaceSideBar = document.getElementById('sidebar')
+    let sidebarContent = workspaceSideBar.querySelector('.sidebarContent')
+
+    // Amount of tags and clasification declaration
+    var phoneNumbersAmount = 0
+    var emailsAmount = 0
+    var urlsAmount = 0
+    var tagsAmount = 0
+    // Concatenated tags variable declaration
+    var workspaceTags = ''
+
+    // Create and append tag elements
+    tags.forEach(tag => {
+
+        var workspaceTagContent = decodeURIComponent(tag)
+        const urlTagClass = `bg-tint-lighter color-tint tag xxs-padded font-xs rounded-max no-wrap hide-scrollbar overflow-scroll`
+        if (isValidUrl(`${workspaceTagContent}`)){
+
+            urlsAmount++
+            var urlTagElement = `<a class="${urlTagClass}" target="_blank" href="${workspaceTagContent}">${workspaceTagContent}</a>`
+            workspaceTags += urlTagElement;
+
+        } else if (isValidEmail(`${decodeURIComponent(tag)}`)) {
+
+            emailsAmount++
+            var emailTagElement = `<a class="${urlTagClass}" target="_blank" href="mailto:${workspaceTagContent}">${workspaceTagContent}</a>`
+            workspaceTags += emailTagElement;
+            
+        } else if (isValidPhoneNumber(`${decodeURIComponent(tag)}`)) {
+
+            phoneNumbersAmount++
+            var phoneTagElement = `<a class="${urlTagClass}" target="_blank" href="tel:${workspaceTagContent}">${workspaceTagContent}</a>`
+            workspaceTags += phoneTagElement;
+
+        } else {
+            
+            tagsAmount++
+            var simpleTagElement = `<p class="${urlTagClass}">${workspaceTagContent}</p>`
+            workspaceTags += simpleTagElement;
+
+        }
+    });
+
+    var workspaceConstructor = `
+    <div class='display-flex display-row xs-gap s-padded rounded-s hover-bg-lighter'>
+        <div>
+            <span class="avatar-s display-block bg-primary"></span>
+        </div>
+        <div class='display-flex flex-col xs-gap'>
+            <p class="sidebarTitle font-s color-primary font-400">${title}</p>
+            <p class="font-xs color-secondary font-200">${description}</p>
+            <ul class="sidebarTags display-flex flex-wrap overflow-scroll xs-gap">
+                ${workspaceTags}
+            </ul>
+        </div>
+    <div>
+    `
+
+    sidebarContent.innerHTML = workspaceConstructor
+
 }
 
 // BOARD CONSTRUCTOR
@@ -66,7 +140,7 @@ function constructBoard(BoardHash) {
 
     // revisions count
     let boardTimeStamp = `
-    <p class="timestamp font-xs color-secondary overflow-scroll no-wrap" data-timestamp="${at}">now</p>
+    <p class="timestamp font-xs color-secondary hide-scrollbar no-wrap" data-timestamp="${at}">now</p>
     `
     boardDetails += boardTimeStamp
 
@@ -115,6 +189,32 @@ function constructBoard(BoardHash) {
     `
     if (phoneNumbersAmount > 0) {boardDetails += phoneTagsAmountElement}
 
+    // Looking for youtube urls match
+    var iframeConstructor = ''
+    const youtubeLinks = transformYouTubeLinks(description);
+    if (youtubeLinks != '') {
+        // Aquí hay enlaces transformados en el array
+            let iframe = `
+            <div class="ratio ratio-16x9">
+                <iframe class='border-none w-100 h-56' src="${youtubeLinks}" title="YouTube video" allowfullscreen></iframe>
+            </div>
+            `
+            iframeConstructor = iframe;
+    }
+   
+    var boardBody = `
+            ${iframeConstructor}
+            <ul class="sheetContainer hide-scrollbar display-flex flex-col s-gap overflow-scroll s-padded" style="max-height: 300px;"></ul>
+            <p class='boardDescription s-padded ${description == '' ? 'display-none' : ''} font-s color-primary'>${replaceUrlsWithLinks(description)}</p>
+            <div class="boardTagsContainer display-flex flex-wrap s-gap s-padded">
+                ${boardTags}
+            </div>
+            <div class="boardDetailsContainer display-flex flex-row s-gap s-padded no-padded-top overflow-hidden overflow-scroll">
+                ${boardDetails}
+            </div>
+    `
+
+
     var easyBoard = `
     <div class="rounded bg-body display-flex flex-col border-solid border-secondary transition-300">
         <div class="bg-tertiary display-flex rounded-up border-solid border-secondary border-top-none border-left-none border-right-none full-center spaced color-primary font-400 font-m s-padded">
@@ -129,13 +229,8 @@ function constructBoard(BoardHash) {
                 </ul>
             </div>
         </div>
-        <p class='boardDescription s-padded  font-s color-primary'>${description}</p>
-        <ul class="sheetContainer hide-scrollbar display-flex flex-col s-gap overflow-scroll s-padded" style="max-height: 300px;"></ul>
-        <div class="boardTagsContainer display-flex flex-wrap s-gap s-padded">
-            ${boardTags}
-        </div>
-        <div class="boardDetailsContainer display-flex flex-row s-gap s-padded no-padded-top overflow-hidden overflow-scroll">
-            ${boardDetails}
+        <div class='display-flex flex-col boardBody'>
+            ${boardBody}
         </div>
     </div>`
 
@@ -148,20 +243,14 @@ function constructBoard(BoardHash) {
 
         const targettedBoard = document.getElementById(BoardHash)
 
-        const existentAccessButton = targettedWorkspace.querySelector(`#accessBtn-${BoardHash}`)
+        const existentAccessButton = targettedWorkspace.querySelector(`#${BoardHash}`)
         existentAccessButton.innerHTML = title;
 
         const existentBoardTitle = targettedBoard.querySelector(`.boardTitle`)
         existentBoardTitle.innerHTML = title;
 
-        const existentBoardDescription = targettedBoard.querySelector(`.boardDescription`)
-        existentBoardDescription.innerHTML = description;
-
-        const existentBoardTagsContainer = targettedBoard.querySelector(`.boardTagsContainer`)
-        existentBoardTagsContainer.innerHTML = boardTags;
-
-        const existentBoardDetailsContainer = targettedBoard.querySelector(`.boardDetailsContainer`)
-        existentBoardDetailsContainer.innerHTML = boardDetails;
+        const existentBoardDescription = targettedBoard.querySelector(`.boardBody`)
+        existentBoardDescription.innerHTML = boardBody;
 
     } else {
 
@@ -175,8 +264,9 @@ function constructBoard(BoardHash) {
 
         // Add access button to toolbar
         const toolbarAccessButton = document.createElement('button');
-        toolbarAccessButton.className = "bg-tertiary display-flex rounded bg-lighter color-secondary border-none full-center font-400 font-s s-padded-wide";
+        toolbarAccessButton.className = "border-solid border-secondary bg-body display-flex rounded bg-lighter color-secondary border-none full-center font-400 font-s s-padded-wide no-wrap";
         toolbarAccessButton.id = `accessBtn-${boardId}`
+        toolbarAccessButton.style.opacity = '0.5'
         toolbarAccessButton.innerHTML = title;
         toolbarAccessButton.onclick = function() {
             toggleBoardVisibility(boardId, `accessBtn-${boardId}`);
@@ -295,8 +385,21 @@ function constructSheet(sheetHash) {
     `
     if (phoneNumbersAmount > 0) {sheetDetails += phoneTagsAmountElement}
 
+    // Looking for youtube urls match
+    var iframeConstructor = ''
+    const youtubeLinks = transformYouTubeLinks(sheetDescription);
+    if (youtubeLinks != '') {
+        // Aquí hay enlaces transformados en el array
+            let iframe = `
+            <div class="ratio ratio-16x9">
+                <iframe class='border-none w-100 h-56' src="${youtubeLinks}" title="YouTube video" allowfullscreen></iframe>
+            </div>
+            `
+            iframeConstructor = iframe;
+    }
+
     var easySheet = `
-    <div class="display-flex flex-row spaced">
+    <div class="display-flex flex-row spaced s-padded no-padded-bottom">
         <h4 class="sheetTitle hide-scrollbar overflow-scroll no-wrap font-400 full-center">${title}</h4>
         <div class="display-flex flex-row full-center">
             <button onclick="expandSheet('${sheetId}')" class="hover-bg-lighter rounded-max btn hover-fill-primary fill-secondary">
@@ -313,18 +416,19 @@ function constructSheet(sheetHash) {
             </div>
         </div>
     </div>
-    <div class="sheetExpansion display-none s-gap flex-col color-primary">
-        <p class='sheetDescription s-padded no-padded-left no-padded-right no-padded-top font-s'>${sheetDescription}</p>
-        <div class="sheetTagsContainer display-flex flex-wrap s-gap">${sheetTags}</div>
+    <div class="sheetExpansion display-none display-flex s-gap flex-col color-primary">
+        ${iframeConstructor}
+        <p class='sheetDescription s-padded no-padded-top font-s'>${replaceUrlsWithLinks(sheetDescription)}</p>
+        <div class="sheetTagsContainer s-padded no-padded-top no-padded-bottom display-flex flex-wrap s-gap">${sheetTags}</div>
     </div>
-    <div class="display-flex flex-row s-gap">
-        <p class="timestamp font-xs color-secondary no-wrap" data-timestamp="${at}" loom='now'></p>
+    <div class="display-flex flex-row s-gap s-padded no-padded-top">
+        <p class="timestamp font-xs color-secondary no-wrap" data-timestamp="${at}"></p>
         ${sheetDetails}
     </div>
     `
 
     const eventHash = document.querySelector(`[data-event-hash="${hashEventHash}"]`)
-    const sheetClass = `tripSheet matchMeManChild show-my-child cursor-pointer bg-tertiary shadow-dynamic color-primary s-padded display-flex flex-col rounded-s s-gap border-solid border-secondary`
+    const sheetClass = `tripSheet matchMeManChild show-my-child cursor-pointer bg-tertiary shadow-dynamic color-primary display-flex flex-col rounded-s s-gap border-solid border-secondary`
     
     // Check if is an update, or an older than the actual one with same ID,
     if (eventHash){
