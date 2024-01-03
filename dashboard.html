@@ -10,45 +10,51 @@
     <meta name="description"
         content="Enhance your sales approach with Tripwire's expert insights. Discover effective strategies, tools, and techniques to boost sales performance. Stay ahead in the competitive market with our proven sales solutions.">
     <link rel="icon" type="image/x-icon" href="src/img/logo.svg">
-    <script src="src/js/encryption/bitcoinjs-lib.js"></script>
-    <script src="src/js/encryption/secp256k1-1.2.14.js"></script>
-    <script src="src/js/encryption/browserify-cipher-1.0.1.js"></script>
-    <script src="src/js/core/tools.js"></script>
+    <script src="/src/pages/tripwire/src/js/components/icons.js"></script>
+    <script src="/src/pages/tripwire/src/js/core/tools.js"></script>
+    <script src="/src/pages/tripwire/src/js/encryption/bitcoinjs-lib.js"></script>
+    <script src="/src/pages/tripwire/src/js/encryption/secp256k1-1.2.14.js"></script>
+    <script src="/src/pages/tripwire/src/js/encryption/browserify-cipher-1.0.1.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/elliptic/6.5.4/elliptic.min.js"></script>
-    <script src="src/js/components/icons.js"></script>
-    <script src="src/js/components/cssShorts.js"></script>
-    <script src="src/js/core/constructor.js"></script>
+    <script src="/src/pages/tripwire/src/js/components/cssShorts.js"></script>
+    <script src="/src/pages/tripwire/src/js/core/constructor.js"></script>
     <script ></script>
 
 </head>
 
 <body class="board">
+    
 
+    <!-- Sidebar -->
+    <brik sidebar></brik>
+    <script src="/src/pages/tripwire/src/js/components/sidebarView.js"></script>
+    
     <!-- Navbar -->
     <brik navbar></brik>
-    <script src="src/js/components/navbarView.js"></script>
+    <script src="/src/pages/tripwire/src/js/components/navbarView.js"></script>
+
+    <!-- Coordinator -->
+    <brik coordinator></brik>
+    <brik confirmationlogoutmodal></brik>
+    <script src="/src/pages/tripwire/src/js/components/coordinatorView.js"></script>
 
     <div id='workspace' data-workspace-hash=''>
 
         <!-- Toolbar -->
         <brik toolbar></brik>
-        <script src="src/js/components/toolbarView.js"></script>
-
-        <!-- New Dashboard -->
-        <brik newdashboard></brik>
-        <script src="src/js/components/newDashboard.js"></script>
+        <script src="/src/pages/tripwire/src/js/components/toolbarView.js"></script>
 
         <!-- Board Container -->
         <brik boardcontainer></brik>
-        <script src="src/js/components/boardContainerView.js"></script>
+        <script src="/src/pages/tripwire/src/js/components/boardContainerView.js"></script>
 
         <!-- New board modal -->
         <brik boardcreationform></brik>
-        <script src="src/js/components/newBoardView.js"></script>
+        <script src="/src/pages/tripwire/src/js/components/newBoardView.js"></script>
 
         <!-- New sheet modal -->
         <brik sheetcreationform></brik>
-        <script src="src/js/components/newSheetView.js"></script>
+        <script src="/src/pages/tripwire/src/js/components/newSheetView.js"></script>
 
         <!-- Deletion Board Zone -->
         <div id="deletionZone"
@@ -57,30 +63,34 @@
                 <h1 class="font-xxxl">🗑️</h1><span class="color-primary">Trash</span>
             </button>
         </div>
+
+    </div>
     
     <!-- New workspace modal -->
     <brik newworkspaceform></brik>
-    <script src="src/js/components/newWorkspaceView.js"></script>
+    <script src="/src/pages/tripwire/src/js/components/newWorkspaceView.js"></script>
 
     <!-- Ephemeral Notifications -->
     <div id="ephemeralNotificationsModal"
         class="padded notification-modal display-flex flex-col-reverse s-gap z-i full-center smooth-300">
     </div>
 
-    <script src="src/js/core/brik.js"></script>
-    <script src="src/js/i18n/loomTranslations.js"></script>
-    <script src="src/js/i18n/loom.js"></script>
-    <script src="src/js/core/app.js"></script>
-    <script src="src/js/core/ephemeralNotifications.js"></script>
-    <script src="src/js/link/payload.js"></script>
-    <script src="src/js/link/connectionStatus.js"></script>
-    <script src="src/js/core/newBoard.js"></script>
-    <script src="src/js/core/newSheet.js"></script>
-    <script src="src/js/core/newWorkspace.js"></script>
-    <script src="src/js/core/filter.js"></script>
-</body>
+    <script src="/src/pages/tripwire/src/js/core/tools.js"></script>
+    <script src="/src/pages/tripwire/src/js/core/brik.js"></script>
+    <script src="/src/pages/tripwire/src/js/i18n/loomTranslations.js"></script>
+    <script src="/src/pages/tripwire/src/js/i18n/loom.js"></script>
+    <script src="/src/pages/tripwire/src/js/core/app.js"></script>
+    <script src="/src/pages/tripwire/src/js/core/ephemeralNotifications.js"></script>
+    <script src="/src/pages/tripwire/src/js/link/connectionStatus.js"></script>
+    <script src="/src/pages/tripwire/src/js/core/newBoard.js"></script>
+    <script src="/src/pages/tripwire/src/js/core/newSheet.js"></script>
+    <script src="/src/pages/tripwire/src/js/core/newWorkspace.js"></script>
+    <script src="/src/pages/tripwire/src/js/core/coordinator.js"></script>
+    <script src="/src/pages/tripwire/src/js/link/payload.js"></script>
+    <script src="/src/pages/tripwire/src/js/core/filter.js"></script>
 
 </body>
+
 
 </html>
 

@@ -1,5 +1,7 @@
 // WORKSPACE CONSTRUCTOR
 //0 workspaceId, 2 title, 3 tags, 4 deadline, 5 at, 6 participants, 7 revisions, 8 hash event
+let dropdownElementClass = 'display-flex display-row text-right font-m dropdown-element block-mode hover-bg-lighter hover-color-primary color-secondary hover-fill-primary fill-secondary rounded-xs cursor-pointer'
+
 function constructWorkspace(workspaceHash) {
     window.dispatchEvent(new Event(workspaceHash));
     let workspaceContent = JSON.parse(localStorage.getItem(workspaceHash))
@@ -204,7 +206,6 @@ function constructBoard(BoardHash) {
    
     var boardBody = `
             ${iframeConstructor}
-            <ul class="sheetContainer hide-scrollbar display-flex flex-col s-gap overflow-scroll s-padded" style="max-height: 300px;"></ul>
             <p class='boardDescription s-padded ${description == '' ? 'display-none' : ''} font-s color-primary'>${replaceUrlsWithLinks(description)}</p>
             <div class="boardTagsContainer display-flex flex-wrap s-gap s-padded">
                 ${boardTags}
@@ -216,19 +217,21 @@ function constructBoard(BoardHash) {
 
 
     var easyBoard = `
-    <div class="rounded bg-body display-flex flex-col border-solid border-secondary transition-300">
-        <div class="bg-tertiary display-flex rounded-up border-solid border-secondary border-top-none border-left-none border-right-none full-center spaced color-primary font-400 font-m s-padded">
+    <div class="rounded bg-body shadow-one display-flex flex-col transition-300">
+        <div class="display-flex full-center spaced color-primary font-400 font-m s-padded">
             <div class='hide-scrollbar overflow-scroll max-width-100'><span class="boardTitle no-wrap">${title}</span></div>
             <div id='dropdown-${boardId}' class="dropdown">
                 <button onclick="toggleDropdown('dropdown-${boardId}')" class="hover-bg-lighter rounded-max btn cursor-pointer hover-fill-primary fill-secondary">
                     ${dotOptionsIcon}
                 </button>
-                <ul class="dropdown-content to-right z-1 absolute text-right rounded shadow-two bg-body xs-padded border-solid-s border-primary">
-                    <li onclick="launchModalSheet('${boardId}', '')" class="dropdown-element block-mode color-secondary rounded-xs cursor-pointer" data-parent-id="${boardId}">Add new sheet +</li>
-                    <li onclick="launchModalBoard('${boardId}')" class="dropdown-element block-mode color-secondary rounded-xs cursor-pointer" data-parent-id="${boardId}">Edit Board</li>
+                <ul class="dropdown-content to-right z-1 absolute text-right rounded shadow-two bg-body s-padded btn">
+                    <li onclick="launchModalSheet('${boardId}', '')" data-parent-id="${boardId}" class="${dropdownElementClass}">Add new sheet +</li>
+                    <li onclick="launchModalBoard('${boardId}')" data-parent-id="${boardId}" class="${dropdownElementClass}">Edit Board</li>
                 </ul>
             </div>
         </div>
+
+        <ul class="sheetContainer hide-scrollbar display-flex flex-col s-gap overflow-scroll s-padded" style="max-height: 300px;"></ul>
         <div class='display-flex flex-col boardBody'>
             ${boardBody}
         </div>
@@ -242,8 +245,7 @@ function constructBoard(BoardHash) {
     if (document.querySelector(`[data-event-hash="${boardEventHash}"]`)){
 
         const targettedBoard = document.getElementById(BoardHash)
-
-        const existentAccessButton = targettedWorkspace.querySelector(`#${BoardHash}`)
+        const existentAccessButton = targettedWorkspace.querySelector(`#accessBtn-${BoardHash}`)
         existentAccessButton.innerHTML = title;
 
         const existentBoardTitle = targettedBoard.querySelector(`.boardTitle`)
@@ -256,7 +258,7 @@ function constructBoard(BoardHash) {
 
         // Create the outermost div with class "responsive-4"
         const newBoardDiv = document.createElement("div")
-        newBoardDiv.className = "max-w-350 display-block matchMeMan border-dashed boardDropZone rounded"
+        newBoardDiv.className = "transition-smooth max-w-350 display-block matchMeMan border-dashed boardDropZone rounded"
         newBoardDiv.id = boardId
         newBoardDiv.setAttribute('data-event-hash', boardEventHash)
         newBoardDiv.innerHTML = easyBoard
@@ -264,9 +266,9 @@ function constructBoard(BoardHash) {
 
         // Add access button to toolbar
         const toolbarAccessButton = document.createElement('button');
-        toolbarAccessButton.className = "border-solid border-secondary bg-body display-flex rounded bg-lighter color-secondary border-none full-center font-400 font-s s-padded-wide no-wrap";
+        toolbarAccessButton.className = "bg-tertiary display-flex rounded bg-lighter color-primary border-none full-center font-400 font-s s-padded-wide no-wrap";
         toolbarAccessButton.id = `accessBtn-${boardId}`
-        toolbarAccessButton.style.opacity = '0.5'
+        toolbarAccessButton.style.opacity = '0.3'
         toolbarAccessButton.innerHTML = title;
         toolbarAccessButton.onclick = function() {
             toggleBoardVisibility(boardId, `accessBtn-${boardId}`);
@@ -409,9 +411,8 @@ function constructSheet(sheetHash) {
                 <button onclick="toggleDropdown('dropdown-${sheetId}')" class="hover-bg-lighter rounded-max btn cursor-pointer hover-fill-primary fill-secondary">
                 ${dotOptionsIcon}
                 </button>
-                <ul class="dropdown-content to-right z-1 absolute text-right rounded shadow-two bg-body xs-padded border-solid-s border-primary">
-                    <li onclick="launchModalSheet('${boardId}', '${sheetId}')" class="dropdown-element block-mode color-secondary rounded-xs cursor-pointer" data-parent-id="${sheetId}">Edit Sheet</li>
-                    <li class="dropdown-element block-mode color-secondary rounded-xs cursor-pointer" data-parent-id="${sheetId}">Delete Sheet</li>
+                <ul class="dropdown-content to-right z-1 absolute text-right rounded shadow-two bg-body s-padded btn">
+                    <li class="${dropdownElementClass}" data-parent-id="${sheetId}" onclick="launchModalSheet('${boardId}', '${sheetId}')">Edit Sheet</li>
                 </ul>
             </div>
         </div>
@@ -428,7 +429,7 @@ function constructSheet(sheetHash) {
     `
 
     const eventHash = document.querySelector(`[data-event-hash="${hashEventHash}"]`)
-    const sheetClass = `tripSheet matchMeManChild show-my-child cursor-pointer bg-tertiary shadow-dynamic color-primary display-flex flex-col rounded-s s-gap border-solid border-secondary`
+    const sheetClass = `tripSheet matchMeManChild show-my-child cursor-pointer bg-tertiary shadow-dynamic color-primary display-flex flex-col rounded-s s-gap`
     
     // Check if is an update, or an older than the actual one with same ID,
     if (eventHash){
@@ -451,6 +452,7 @@ function constructSheet(sheetHash) {
         newSheetLi.innerHTML = easySheet
 
         // Find the .boardContainer element within the specified board element
+        console.log(boardId)
         var targettedBoard = document.getElementById(boardId);
         var targettedBoardContainer = targettedBoard.querySelector('.sheetContainer');
         

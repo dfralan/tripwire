@@ -1,10 +1,12 @@
+// Ephemeral Hash
+const genHex = (a) => Math.random().toString(16).slice(2, (a + 2));
+
 // Check key validation
 const isValidHexKey = (key = '') => {
     const hexPattern = /^[0-9a-fA-F]+$/;
     return hexPattern.test(key) && (key.length % 2 === 0);
 }
 
-// Tags to Array: 'naranja, banana' => ['naranja','banana']
 const isValidUrl = (url = '') => {
     try {
         new URL(url);
@@ -13,6 +15,58 @@ const isValidUrl = (url = '') => {
         return false;
     }
 };
+
+function getDateTimeFromTimestamp(timestamp) {
+    const dateObj = new Date(timestamp * 1000);
+
+    const year = dateObj.getFullYear();
+    const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+    const day = String(dateObj.getDate()).padStart(2, '0');
+    const hours = String(dateObj.getHours()).padStart(2, '0');
+    const minutes = String(dateObj.getMinutes()).padStart(2, '0');
+
+    const dateValue = `${year}-${month}-${day}`;
+    const timeValue = `${hours}:${minutes}`;
+
+    return [dateValue, timeValue];
+}
+
+// Match Youtube Video (Only the last one to be beauty)
+const transformYouTubeLinks = (input = '') => {
+    const regex = /(https?:\/\/(?:www\.)?(?:youtu\.be\/|youtube\.com\/watch\?v=|youtube\.com\/embed\/)([a-zA-Z0-9_-]+)(?:\S+)?)/g;
+    let transformedUrl = '';
+    const transformed = input.replace(regex, (match, url) => {
+        if (url.includes('youtu.be') || url.includes('youtube.com/watch?v=')) {
+            const videoId = url.split('/').pop().split('?')[0];
+            transformedUrl = `https://www.youtube.com/embed/${videoId}`;
+        } else if (url.includes('youtube.com/embed')) {
+            transformedUrl = url;
+        } else {
+            transformedUrl = url;
+        }
+    });
+    return transformedUrl;
+}
+
+const replaceUrlsWithLinks = (text) => {
+    const urlRegex = /((http[s]?:\/\/)?[^\s(["<,>]*\.[^\s[",><]*)/g;
+    
+    const replacedText = text.replace(urlRegex, (url) => {
+        if (isValidEmail(url)) {
+            return `<a class='color-tint' target="_blank" href="mailto:${url}">${url}</a>`;
+        }
+        else if (isValidPhoneNumber(url)) {
+            return `<a class='color-tint' target="_blank" href="tel:${url}">${url}</a>`;
+        }
+        else if (isValidUrl(url)) {
+            return `<a class='color-tint' target="_blank" href="${url}">${url}</a>`;
+        }
+        return url;
+    });
+
+    return replacedText;
+};
+
 
 // Email matcher
 const isValidEmail = (email = '') => {
@@ -34,7 +88,10 @@ const arrayTags = (x = '') => {
     return arrayedTags
 }
 
+// Convert 
 function arrayToCommaString(inputArray) {
+    console.log('inputArray')
+    console.log(inputArray)
     var decodedArray = inputArray.map(item => decodeURIComponent(item));
     var result = decodedArray.join(', ');
     return result;
@@ -47,7 +104,7 @@ const formatTimeAgo = (timestamp = '') => {
 
     if (diffInSeconds < 30) {
         return `now`;
-    }else if (diffInSeconds < 60) {
+    } else if (diffInSeconds < 60) {
         return `${diffInSeconds} seconds ago`;
     } else if (diffInSeconds < 3600) {
         const minutes = Math.floor(diffInSeconds / 60);
@@ -68,7 +125,7 @@ const formatTimeAgo = (timestamp = '') => {
         const endMonth = endDate.getUTCMonth();
 
         const diffInMonths = (endYear - startYear) * 12 + (endMonth - startMonth);
-        
+
         return `${diffInMonths} ${diffInMonths === 1 ? 'month' : 'months'} ago`;
     }
 }
@@ -87,10 +144,10 @@ const updateTimestampDisplay = () => {
 setInterval(updateTimestampDisplay, 60000);
 
 // Expand sheet
-function expandSheet(id){
+const expandSheet = (id = '') => {
     let targettedSheet = document.getElementById(id)
     let expansionZone = targettedSheet.querySelector('.sheetExpansion')
-    if (expansionZone.classList.contains("display-none")){
+    if (expansionZone.classList.contains("display-none")) {
         expansionZone.classList.remove("display-none");
     } else {
         expansionZone.classList.add("display-none");
@@ -98,34 +155,33 @@ function expandSheet(id){
 }
 
 // Toggle board visibility
-function toggleBoardVisibility(boardIdentificator, buttonIdentificator){
+function toggleBoardVisibility(boardIdentificator, buttonIdentificator) {
     let targettedBoard = document.getElementById(boardIdentificator)
     let targettedButton = document.getElementById(buttonIdentificator)
-    if (targettedBoard.classList.contains("display-none")){
+    if (targettedBoard.classList.contains("display-none")) {
+
         targettedBoard.classList.remove("display-none")
-        targettedBoard.classList.add("display-block")
-        targettedButton.classList.remove('bg-lighter', 'color-primary')
-        targettedButton.classList.add('bg-secondary', 'color-secondary')
+        targettedButton.style.opacity = '0.5'
     } else {
+
         targettedBoard.classList.add("display-none")
-        targettedButton.classList.add('bg-lighter', 'color-primary')
-        targettedButton.classList.remove('bg-secondary', 'color-secondary')
+        targettedButton.style.opacity = '1'
     }
 }
 
 // Hide all dropdowns
 function hideAllDropdowns() {
     var allDropContents = document.querySelectorAll('.dropdown-content')
-    allDropContents.forEach(function(element) {
+    allDropContents.forEach(function (element) {
         element.classList.remove('display-block');
     });
 }
 
 // Toggle dropdown by id and hide all others
-function toggleDropdown(id){
+function toggleDropdown(id) {
     let targettedSheet = document.getElementById(id)
     let dropContent = targettedSheet.querySelector('.dropdown-content')
-    if (dropContent.classList.contains("display-block")){
+    if (dropContent.classList.contains("display-block")) {
         hideAllDropdowns()
     } else {
         hideAllDropdowns()
@@ -134,17 +190,37 @@ function toggleDropdown(id){
 }
 
 // Add a global click event listener
-document.addEventListener('click', function(event) {
+document.addEventListener('click', function (event) {
     const clickedElement = event.target;
     const dropdowns = document.querySelectorAll('.dropdown-content');
 
     // Check if the clicked element is not within any dropdown
     if (!clickedElement.closest('.dropdown')) {
-        dropdowns.forEach(function(dropContent) {
+        dropdowns.forEach(function (dropContent) {
             hideAllDropdowns()
         });
     }
 });
 
-// Ephemeral Hash
-const genHex = (a) => Math.random().toString(16).slice(2, (a + 2));
+function hideSideBar() {
+    const sidebar = document.querySelector('.sidebar');
+    sidebar.classList.add('hided')
+    sidebar.classList.remove('showed')
+    sidebar.style.transform = 'translateX(-350px)';
+}
+
+function showSideBar() {
+    const sidebar = document.querySelector('.sidebar');
+    sidebar.classList.remove('hided')
+    sidebar.classList.add('showed')
+    sidebar.style.transform = 'translateX(0px)';
+}
+
+function toggleSideBar() {
+    const sidebar = document.querySelector('.sidebar');
+    if (sidebar.classList.contains('hided')) {
+        showSideBar()
+    } else {
+        hideSideBar()
+    }
+}

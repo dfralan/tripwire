@@ -1,5 +1,4 @@
 
-
 let brikStyleSheet = `
 @import url('https://fonts.googleapis.com/css2?family=Edu+SA+Beginner:wght@500&family=IBM+Plex+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap');
 
@@ -26,6 +25,8 @@ let brikStyleSheet = `
     --rounded-s: 1vh;
     --rounded-m: 1.5vh;
     --rounded-m-up: 1.5vh 1.5vh 0 0;
+    --rounded-m-end: 0 1.5vh 1.5vh 0;
+    --rounded-m-top-end: 0 1.5vh 0 0;
     --rounded-l: 2vh;
     --rounded-xl: 2.5vh;
     --rounded-xxl: 3vh;
@@ -110,6 +111,21 @@ html {
     scrollbar-width: none;
 }
 
+*::-webkit-scrollbar {
+    display: none;
+}
+
+*{
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.avatar-l {
+    width: 50px;
+    height: 50px;
+    border-radius: 25px;
+}
+
 .avatar-m {
     width: 30px;
     height: 30px;
@@ -126,6 +142,14 @@ html {
     min-width: 250px;
 }
 
+.min-w-350{
+    min-width: 350px;
+}
+
+.w-auto {
+    width: auto
+}
+
 .max-w-350{
     max-width: 350px;
 }
@@ -138,6 +162,14 @@ html {
     max-width: 100%;
 }
 
+.w-100 {
+    width: 100%;
+}
+
+.h-56{
+    height: 56.25%;
+}
+
 .board {
     padding: 0;
 }
@@ -148,7 +180,7 @@ html {
 }
 
 .transition-smooth {
-    transition: .25s;
+    transition: .2s;
 }
 
 .shadow-one {
@@ -176,7 +208,7 @@ html {
 }
 
 .shadow-two {
-    box-shadow: 0px 5px 15px 5px rgba(0, 0, 0, 0.2);
+    box-shadow: 0px 5px 15px 5px rgba(var(--black-color-rgb), var(--shadow-opacity));
 }
 
 .overflow-hidden {
@@ -233,7 +265,7 @@ html {
 }
 
 .s-padded-wide {
-    padding: 6px 8px 7px 8px;
+    padding: 5px 8px 5px 8px;
 }
 
 .padded {
@@ -668,6 +700,16 @@ html {
     width: 16.66666667%;
 }
 
+.steady-1-of-3 {
+    display: flex;
+    width: calc(100% / 3);
+}
+
+.steady-2-of-3 {
+    display: flex;
+    width: calc(100% / 1.5);
+}
+
 .steady-1 {
     display: flex;
     width: 100%;
@@ -698,11 +740,16 @@ html {
 }
 
 .height-100 {
-    height: 100vh;
+    height: 100%;
 }
 
 .on-mobile-pass {
     visibility: visible;
+}
+
+.on-mobile-show {
+    visibility: collapse;
+    display: none;
 }
 
 @media only screen and (max-width: 1600px) {
@@ -740,6 +787,12 @@ html {
     .on-mobile-pass {
         visibility: collapse;
         display: none;
+    }
+
+
+    .on-mobile-show {
+        visibility: visible;
+        display: block;
     }
 
     .responsive-4 {
@@ -875,6 +928,14 @@ html {
 
 .rounded-up {
     border-radius: var(--rounded-m-up);
+}
+
+.rounded-end {
+    border-radius: var(--rounded-m-end);
+}
+
+.rounded-top-end {
+    border-radius: var(--rounded-m-top-end);
 }
 
 .rounded-l {
@@ -1059,6 +1120,7 @@ html {
 .dropdown-element:active {
     background-color: var(--tint-color) !important;
     color: var(--white-color) !important;
+    fill: var(--white-color) !important;
 }
 
 .inactive {
@@ -1146,6 +1208,30 @@ html {
     fill: black;
 }
 `;
+
+function extractAllContentBetweenBrkTags(inputString) {
+    const brkStart = '<brk>';
+    const brkEnd = '</brk>';
+    const contentArray = [];
+    let startIndex = inputString.indexOf(brkStart);
+  
+    while (startIndex !== -1) {
+      const endIndex = inputString.indexOf(brkEnd, startIndex);
+  
+      if (endIndex !== -1) {
+        const content = inputString.substring(startIndex + brkStart.length, endIndex);
+        contentArray.push(content);
+        startIndex = inputString.indexOf(brkStart, endIndex + brkEnd.length);
+      } else {
+        break;
+      }
+    }
+  
+    return contentArray;
+  }
+  
+
+  
 
 (function () {
 

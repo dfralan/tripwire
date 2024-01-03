@@ -3,40 +3,56 @@ var boardcreationform =`
 <!-- New board modal -->
     <div id="boardCreationModal" class="modal z-i full-center blur-behind smooth-300 display-none">
         <div class="modal-bg o-2 bg-primary"></div>
-        <form id="newBoardForm" class="max-w-350 bg-body z-2 padded rounded brick flex-col m-gap">
+        <form id="newBoardForm" class="max-w-350 bg-body z-2 padded rounded brick flex-col s-gap">
             <div class="display-flex flex-col">
                 <div onclick="hideNewBoardModal()" class="display-flex flex-end fill-primary cursor-pointer">
-                    <svg xmlns="http://www.w3.org/2000/svg" height="35" viewBox="0 -960 960 960" width="35"><path d="M480-438 270-228q-9 9-21 9t-21-9q-9-9-9-21t9-21l210-210-210-210q-9-9-9-21t9-21q9-9 21-9t21 9l210 210 210-210q9-9 21-9t21 9q9 9 9 21t-9 21L522-480l210 210q9 9 9 21t-9 21q-9 9-21 9t-21-9L480-438Z"/></svg>
+                    ${xIcon}
                 </div>
-                <div class="full-center flex-col">
-                    <h1>📎</h1>
+                <div class="full-center flex-row">
+                    <h2>📎</h2>
                     <h4 id ='boardModalIndicator'class="color-primary">New Board</h4>    
                 </div>
             </div>
 
             <div class="display-flex flex-col xs-gap">
-                <label class="color-primary font-xs" for="newBoardName">
+                <label class="color-primary font-xs font-500">
                     <span>Board title</span>
                     <span class="color-alert">*</span>
                 </label>
                 <input id="newBoardName"
                     class="s-padded bg-body border-secondary border-solid rounded-s placeholder-secondary font-m color-primary"
                     type="text" placeholder="" autofocus>
-                <small class="color-primary" for="newBoardName">👋 It is necessary to indicate the title of the board</small>
+                <small class="color-secondary">👋 It is necessary to indicate the title of the board</small>
             </div>
-            <textarea id="newBoardInputDescription" name="" cols="30" rows="3"
-                class="s-padded bg-body border-secondary border-solid rounded-s placeholder-secondary font-s color-primary"
-                placeholder=""></textarea>
+
+            <div class="display-flex flex-col xs-gap">
+                <label class="color-primary font-xs font-500">
+                    <span>Description</span>
+                </label>
+                <textarea id="newBoardInputDescription" name="" cols="30" rows="3"
+                    class="s-padded bg-body border-secondary border-solid rounded-s placeholder-secondary font-s color-primary"
+                    placeholder="">
+                </textarea>
+            </div>
             
             <div class="display-flex flex-col xs-gap">
-                <label class="color-primary font-xs" for="newBoardName">
+                <label class="color-primary font-xs font-500">
                     <span>Tags</span>
                 </label>
                 <input id="newBoardInputTags"
-                        class="s-padded bg-body border-secondary border-solid rounded-s placeholder-secondary font-m color-primary"
+                        class="s-padded bg-body border-secondary border-solid rounded-s placeholder-secondary font-s color-primary"
                         type="text" placeholder="">
-                <small class="color-primary" for="newBoardName">Add some tags splitted by ',' like: +54911234565, john@lotus.com, lotusmotors.com</small>
+                <small class="color-secondary">Add some tags splitted by ',' like: +54911234565, john@lotus.com, lotusmotors.com</small>
+            </div>
 
+            <div class="display-flex flex-col xs-gap">
+                <label class="color-primary font-xs font-500">
+                    <span>Add a deadline</span>
+                </label>
+                <div class="display-flex flex-row s-gap">
+                    <input class='steady-2-of-3 font-s color-primary fill-primary bg-body border-secondary border-solid rounded-s s-padded' type="date" id="datePickerDD" disabled>
+                    <input class='steady-1-of-3 font-s color-primary fill-primary bg-body border-secondary border-solid rounded-s s-padded' type="time" id="timePickerDD" disabled>
+                </div>
             </div>
 
             <p class="display-flex flex-row flex-start color-secondary fill-secondary font-s">

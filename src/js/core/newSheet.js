@@ -27,12 +27,6 @@ function hideNewSheetModal(){
     sheetCreationModal.classList.remove("display-flex");
 }
 
-// listen event that allow close new sheet modal when success on sending the event
-//0 workspaceId, 1 boardId, 2 sheetId, 3 title, 4 content, 5 tags, 6 deadline, 7 at, 8 participants, 9 revisions
-window.addEventListener("closeNewSheetModal", function() {
-    hideNewSheetModal()
-});
-
 // Launch Modal and fullfill inputs needed
 function launchModalSheet(boardId, sheetHash) {
 

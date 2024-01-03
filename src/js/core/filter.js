@@ -1,7 +1,9 @@
+
+// Board Filter
 function searchAndHighlight() {
   const documents = document.querySelectorAll('.matchMeMan');
   let matchedDocuments = [];
-  const searchValue = document.getElementById('filterInput').value.trim().toLowerCase();
+  const searchValue = document.getElementById('boardFilter').value.trim().toLowerCase();
 
   documents.forEach(document => {
     const text = document.textContent.toLowerCase();
@@ -26,5 +28,5 @@ function clearHighlights() {
   matchedDocuments = [];
 }
 
-const filterInput = document.getElementById('filterInput');
-filterInput.addEventListener('input', searchAndHighlight);
+const boardFilter = document.getElementById('boardFilter');
+boardFilter.addEventListener('input', searchAndHighlight);

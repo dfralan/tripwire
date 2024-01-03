@@ -7,7 +7,6 @@ var newworkspaceform = `
 
             <div class="display-flex flex-col">
                 <div class="full-center flex-col">
-                    <h1 style="transform: rotate(120deg) translate(-100px, -100px);" class="flow font-max absolute">🪐</h1>
                     <h4 id='workspaceModalIndicator'class="color-primary">Let's start with a Workspace</h4>    
                 </div>
             </div>
@@ -45,9 +44,8 @@ var newworkspaceform = `
             </p>
 
             <div class="flex-col display-flex s-gap">
-                <button id='newWorkspaceSubmitButton' class="border-none cursor-pointer color-white font-m bg-tint rounded-s s-padded border-none" type="submit">Start</button>
-                <button id="cancelNewWorkspaceModal" onclick="hideNewWorkspaceModal()" class="border-none cursor-pointer color-body font-m bg-primary rounded-s s-padded border-none" type="button">Cancel</button>
-                <button id="goBackNewWorkspaceModal" onclick="showNewDashboardModal()" class="border-none cursor-pointer color-body font-m bg-primary rounded-s s-padded border-none" type="button">Go back</button>
+                <button class="border-none cursor-pointer color-white font-m bg-tint rounded-s s-padded border-none" type="submit">Create</button>
+                <button onclick=" hideNewWorkspaceModal()" class="border-none cursor-pointer color-body font-m bg-primary rounded-s s-padded border-none" type="button">Cancel</button>
             </div>
         </form>
         

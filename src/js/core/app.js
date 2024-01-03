@@ -1,3 +1,8 @@
+// TODO:
+// SIDEBAR
+// DELETE SHEET OR BOARD FUNCTION
+// CENTER PROFILE DROPDOWN
+
 function logout() {
     localStorage.removeItem("privKey");
     window.location.href = 'index.html';
@@ -5,56 +10,15 @@ function logout() {
 
 (function () {
 
-
     // Logged key
     var privKey = localStorage.getItem("privKey")
 
     // Check if exist key on local storage and if is valid otherwise redirects to index.html
-    if (isValidHexKey(privKey)) {
-        main()
-    } else {
-        localStorage.removeItem("privKey");
-        window.location.href = 'index.html';
+    if (!isValidHexKey(privKey)) {
+        logout()
     }
 
-    // Main function
-    function main() {
-
-        // Background switcher
-        const backgroundSwitchers = document.querySelectorAll('.backgroundSwitcher');
-
-        // Retrieve the saved background from localStorage on app launch
-        const savedBackground = localStorage.getItem('selectedBackground');
-
-        var htmlElement = document.documentElement;
-
-        if (savedBackground) {
-            htmlElement.classList.remove(htmlElement.classList.item(0));
-            // Set the new class as the class for the <html> element
-            htmlElement.classList.add(savedBackground);
-        }
-        
-
-        backgroundSwitchers.forEach(function(element) {
-            element.addEventListener('click', function() {
-                // Get the raw attribute value
-                const rawAttributeValue = element.getAttribute('raw-theme');
-                while (htmlElement.classList.length > 0) {
-                    htmlElement.classList.remove(htmlElement.classList.item(0));
-                }
-
-                localStorage.setItem('selectedBackground', rawAttributeValue);
-                
-                // Set the new class as the class for the <html> element
-                htmlElement.classList.add(rawAttributeValue);
-            });
-        });
-
-    }
-    
 })();
-
-
 
 // Drag handler
 
