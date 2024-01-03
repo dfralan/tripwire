@@ -1,5 +1,3 @@
-const genHex = (a) => Math.random().toString(16).slice(2, (a + 2));
-
 let trashDropdownId = genHex(12);
 
 var boardcontainer = `

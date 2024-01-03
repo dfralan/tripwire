@@ -1,6 +1,4 @@
 
-let dropdownElementClass = 'display-flex display-row text-right font-m dropdown-element block-mode hover-bg-lighter hover-color-primary color-secondary hover-fill-primary fill-secondary rounded-xs cursor-pointer'
-
 var coordinator =`
     
     <div id='coordinatorModal' class="modal z-i full-center blur-behind smooth-300 display-none">
