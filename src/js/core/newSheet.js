@@ -69,6 +69,7 @@ function launchModalSheet(boardId, sheetHash) {
 
 function copySheetContent(content) {
     navigator.clipboard.writeText(content);
+    ephemeralNotification("Content copied correctly")
 }
 
 // Submit sheet listener
