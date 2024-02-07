@@ -67,6 +67,10 @@ function launchModalSheet(boardId, sheetHash) {
     
 };
 
+function copySheetContent(content) {
+    navigator.clipboard.writeText(content);
+}
+
 // Submit sheet listener
 newSheetForm.addEventListener('submit', function (event) {
     event.preventDefault()
