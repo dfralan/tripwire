@@ -128,6 +128,7 @@
 
             // Handle incoming messages
             socket.addEventListener('message', async function (message) {
+                console.log('newMessage')
                 var [type, subId, event] = JSON.parse(message.data);
                 var { kind, content, tags } = event || {}
                 if (!event || event === true) return
