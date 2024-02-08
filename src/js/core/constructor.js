@@ -413,7 +413,7 @@ function constructSheet(sheetHash) {
                 </button>
                 <ul class="dropdown-content to-right z-1 absolute text-right rounded shadow-two bg-body s-padded btn">
                     <li class="${dropdownElementClass}" data-parent-id="${sheetId}" onclick="launchModalSheet('${boardId}', '${sheetId}')">Edit Sheet</li>
-                    <li class="${dropdownElementClass}" onclick="copySheetContent('${sheetDescription}')">Copy Sheet Content</li>
+                    <li class="${dropdownElementClass}" onclick="copySheetContent('${boardId}')">Copy Sheet Content</li>
                 </ul>
             </div>
         </div>

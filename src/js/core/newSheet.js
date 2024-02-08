@@ -67,9 +67,27 @@ function launchModalSheet(boardId, sheetHash) {
     
 };
 
-function copySheetContent(content) {
-    navigator.clipboard.writeText(content);
-    ephemeralNotification("Content copied correctly")
+function copySheetContent(boardId) {
+    const boardElement = document.getElementById(boardId)
+    
+    if (boardElement) {
+        // Selecciona el elemento con la clase sheetDescription dentro del tablero
+        var sheetDescriptionElement = boardElement.querySelector('.sheetDescription');
+        
+        // Verifica si el elemento sheetDescription existe dentro del tablero
+        if (sheetDescriptionElement) {
+            // Copia el contenido interno del elemento sheetDescription
+            var innerContent = sheetDescriptionElement.innerHTML;
+            // Devuelve el contenido interno para su uso posterior
+            navigator.clipboard.writeText(innerContent);
+        } else {
+            ephemeralNotification("Failed to copy content")
+            return null; // Retorna null si no se encuentra el elemento sheetDescription
+        }
+    } else {
+        ephemeralNotification("Failed to copy content")
+        return null; // Retorna null si no se encuentra el elemento con el ID proporcionado
+    }
 }
 
 // Submit sheet listener
