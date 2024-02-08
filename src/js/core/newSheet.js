@@ -77,9 +77,10 @@ function copySheetContent(boardId) {
         // Verifica si el elemento sheetDescription existe dentro del tablero
         if (sheetDescriptionElement) {
             // Copia el contenido interno del elemento sheetDescription
-            var innerContent = sheetDescriptionElement.innerHTML;
+            var innerContent = sheetDescriptionElement.textContent;
             // Devuelve el contenido interno para su uso posterior
             navigator.clipboard.writeText(innerContent);
+            ephemeralNotification("Content copied correctly")
         } else {
             ephemeralNotification("Failed to copy content")
             return null; // Retorna null si no se encuentra el elemento sheetDescription
