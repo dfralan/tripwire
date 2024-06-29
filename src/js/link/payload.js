@@ -1,7 +1,7 @@
 (function () {
 
     // Define constants for different kinds of private data
-    const relay = "wss://relayable.org";
+    const relay = "wss://relay.hodl.ar";
     var privKey = ''
     var pubKey = ''
     const privateDMKindNumber = 4
@@ -73,20 +73,6 @@
         return processedArray;
     }
 
-    function generateKeypair() {
-        var { getSharedSecret, schnorr, utils } = nobleSecp256k1
-        var crypto = window.crypto
-        var getRand = size => crypto.getRandomValues(new Uint8Array(size))
-        var sha256 = bitcoinjs.crypto.sha256
-        var keypair = bitcoinjs.ECPair.makeRandom()
-        var privkey = keypair.privateKey.toString("hex")
-        var pubkey = keypair.publicKey.toString("hex")
-        pubkey = pubkey.substring(2)
-        console.log(`clave privada ${privkey}`);
-    }
-
-    generateKeypair()
-
     // Generate public key from private key
     function generatePublicKey(privateKeyHex) {
         const keyPair = ec.keyFromPrivate(privateKeyHex, 'hex');
@@ -122,13 +108,12 @@
 
         var socket = null; // Initialize socket variable
 
-        function createWebSocket() {
+        function createWebSocket(xs) {
 
             socket = new WebSocket(relay); // Initialize WebSocket connection
 
             // Handle incoming messages
             socket.addEventListener('message', async function (message) {
-                console.log('newMessage')
                 var [type, subId, event] = JSON.parse(message.data);
                 var { kind, content, tags } = event || {}
                 if (!event || event === true) return
@@ -144,8 +129,6 @@
                 let dTag = [];
                 let rTag = [];
                 let xTags = [];
-
-                console.log(message)
 
                 // Iterate through the 'tags' array and separate 'p' and 'x' tags
                 for (const [tagType, tagValue] of tags) {
