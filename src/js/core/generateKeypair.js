@@ -51,13 +51,13 @@ function assignCharsToRects(inputStr) {
         rect.setAttribute("y", y);
         rect.setAttribute("width", rectWidth);
         rect.setAttribute("height", rectHeight);
-        rect.setAttribute("fill", `#${inputStr[10]+inputStr[1]+inputStr[i]}`);
+        rect.setAttribute("fill", `#${inputStr[0]+inputStr[1]+inputStr[2]+inputStr[3]+inputStr[4]+inputStr[0]}`);
         svg.appendChild(rect);
     }
     
 }
 
-genKeyButton.addEventListener('click', function() {
+function printKeys(){
     var keys = generateKeypair();
     document.getElementById('generatedPrivKey').textContent = `Clave Privada: ${keys.privateKey}`;
     document.getElementById('generatedPublicKey').textContent = `Clave Pública: ${keys.publicKey}`;
@@ -68,5 +68,11 @@ genKeyButton.addEventListener('click', function() {
         localStorage.setItem("privKey", keys.privateKey);
         window.location.href = 'dashboard.html';
     }); 
+}
+
+printKeys()
+
+genKeyButton.addEventListener('click', function() {
+    printKeys()
 });
 

@@ -82,7 +82,6 @@ function constructWorkspace(workspaceHash) {
 
 // BOARD CONSTRUCTOR
 function constructBoard(BoardHash) {
-
     var newBoardDecrypted = JSON.parse(localStorage.getItem(BoardHash))
     let workspaceId = newBoardDecrypted[0]
     let boardId = newBoardDecrypted[1]
@@ -243,7 +242,6 @@ function constructBoard(BoardHash) {
 
     // Check if is an update, or an older than the actual one with same ID,
     if (document.querySelector(`[data-event-hash="${boardEventHash}"]`)){
-
         const targettedBoard = document.getElementById(BoardHash)
         const existentAccessButton = targettedWorkspace.querySelector(`#accessBtn-${BoardHash}`)
         existentAccessButton.innerHTML = title;
@@ -255,7 +253,6 @@ function constructBoard(BoardHash) {
         existentBoardDescription.innerHTML = boardBody;
 
     } else {
-
         // Create the outermost div with class "responsive-4"
         const newBoardDiv = document.createElement("div")
         newBoardDiv.className = "transition-smooth max-w-350 display-block matchMeMan border-dashed boardDropZone rounded"

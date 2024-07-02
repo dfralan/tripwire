@@ -4,6 +4,10 @@
     const relay = "wss://relay.hodl.ar";
     var privKey = ''
     var pubKey = ''
+    var eventCounter = 0
+    var boardNumber = 0
+    var sheetNumber = 0
+    var workspaceNumber = 0
     const privateDMKindNumber = 4
     const privateSheetKindNumber = 30003
     const coordinatorKindNumber = 10001
@@ -116,6 +120,7 @@
             socket.addEventListener('message', async function (message) {
                 var [type, subId, event] = JSON.parse(message.data);
                 var { kind, content, tags } = event || {}
+
                 if (!event || event === true) return
                 content = await decrypt(privKey, event.pubkey, content)
 
@@ -159,6 +164,8 @@
                 // Private board event handler
                 if (kind === privateWorkspaceKindNumber) {
 
+
+                    
                     // Hide the first time window
                     const firstTimeWindow = document.getElementById("newWorkspaceModal");
                     if (firstTimeWindow) {
@@ -178,6 +185,10 @@
                     let eventParticipants = event.pubkey
                     let revisionsAmount = rTag[0]
                     let eventSocketHash = dTag[0]
+
+                    workspaceNumber++
+                    console.log('workspace Number: ' + workspaceNumber + ', WS Title: ' + eventTitle + ', Description: ' + eventDescription);
+
 
                     function workspaceCreationHandler() {
                         const newWorkspaceDecryptedArrayed = [eventWorkspaceHash, eventTitle, eventDescription, eventTagsArray, eventDeadline, eventTimeCreation, eventParticipants, revisionsAmount, eventSocketHash]
@@ -202,19 +213,18 @@
                     let eventParticipants = event.pubkey
                     let revisionsAmount = rTag[0]
                     let eventSocketHash = dTag[0]
+                    var workspaceIsReady = false
+
+
+                    boardNumber++
+                    console.log('Board Number: ' + boardNumber + ', Event Titles: ' + eventTitle + ', Description: ' + eventDescription + ' --ws linked: ' + eventBoardId);
 
                     const extractedContents = extractAllContentBetweenBrkTags(eventDescription);
 
-                    if (extractedContents.length > 0) {
-                        extractedContents.forEach((content, index) => {
-                            eval(content)
-                        });
-                    } else {
-                        console.log('No content found between <brk> tags.');
-                    }
+                    
 
-                    var workspaceIsReady = false
 
+    console.log('wep')
                     function boardCreationHandler() {
                         const newBoardDecryptedArrayed = [eventWorkspaceHash, eventBoardId, eventTitle, eventDescription, eventTagsArray, eventDeadline, eventTimeCreation, eventParticipants, revisionsAmount, eventSocketHash]
                         localStorage.setItem(eventBoardId, JSON.stringify(newBoardDecryptedArrayed));
@@ -235,11 +245,16 @@
                             boardCreationHandler()
                         });
                     }
+
+                    if (extractedContents.length > 0) {
+                        extractedContents.forEach((content, index) => {
+                            eval(content)
+                        });
+                    }
                 }
 
                 // Private sheet event handler
                 if (kind === privateSheetKindNumber) {
-
                     var boardIsReady = true
                     let eventWorkspaceHash = wsHash[0]
                     let eventBoardId = bHash[0]
@@ -252,6 +267,11 @@
                     let eventParticipants = event.pubkey
                     let revisionsAmount = rTag[0]
                     let eventSocketHash = dTag[0]
+
+
+                    sheetNumber++
+                    console.log('Sheet Number: ' + sheetNumber + ', Event Titles: ' + eventTitle + ', Description: ' + eventDescription);
+
 
                     function sheetCreationHandler() {
                         const newSheetDecryptedArrayed = [eventWorkspaceHash, eventBoardId, eventSheetId, eventTitle, eventDescription, eventTagsArray, eventDeadline, eventTimeCreation, eventParticipants, revisionsAmount, eventSocketHash];
@@ -300,24 +320,26 @@
 
             // Send event with retry
             async function sendEventWithRetry(event) {
-                let retries = 0;
-                while (retries < 3) {
+                const maxRetries = 3;
+                const retryDelay = 1000; // 1 second
+            
+                for (let retries = 1; retries <= maxRetries; retries++) {
                     try {
                         const signedEvent = await getSignedEvent(event, privKey);
-                        console.log(signedEvent)
+                        console.log(signedEvent);
                         socket.send(JSON.stringify(["EVENT", signedEvent]));
                         return;
                     } catch (error) {
-                        retries++;
-                        if (retries < 3) {
+                        if (retries < maxRetries) {
                             ephemeralNotification(`Unable to send event on attempt ${retries}. Retrying...`);
-                            await sleep(1000);
+                            await sleep(retryDelay);
                         } else {
                             ephemeralNotification("Max retries reached. Unable to send event. Please try again later.");
                         }
                     }
                 }
             }
+            
 
             function sleep(ms) {
                 return new Promise(resolve => setTimeout(resolve, ms));
