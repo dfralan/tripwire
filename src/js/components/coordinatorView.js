@@ -43,6 +43,16 @@ var coordinator =`
                 ${copyIcon}
             </span>
         </li>
+
+        <li class="text-center font-xs font-500 dropdown-element inactive block-mode color-primary">
+            Relay URL
+        </li>
+        <li onclick='copyPrivateKeyToClipboard()' class="steady-1 overflow-scroll ${dropdownElementClass}">
+            <span id='urlRelayField' class="overflow-scroll">
+            wss://
+            </span>
+        </li>
+        
         <small class='text-left font-300 font-s color-secondary'>Keep this key in a safe place but do not lose it, if you do you will lose all your data.</small>
 
         <div class="text-center color-grey block-mode divider"></div>

@@ -1,7 +1,6 @@
 (function () {
 
-    // Define constants for different kinds of private data
-    const relay = "wss://relay.hodl.ar";
+    const relay = 'wss://relay.hodl.ar';
     var privKey = ''
     var pubKey = ''
     var eventCounter = 0
@@ -86,23 +85,24 @@
         return shortHexKey;
     }
 
-      // Check if the device is online before proceeding
-      if (!navigator.onLine) {
+    // Check if the device is online before proceeding
+    if (!navigator.onLine) {
         localStorage.removeItem("privKey");
         window.location.href = 'index.html';
         return;
-        } else {
-            let pk = localStorage.getItem("privKey");
-            let pbk = generatePublicKey(pk)
-            localStorage.setItem('pubKey', pbk)
-            let event = new Event('pubKeySetted')
-            document.dispatchEvent(event);
-        }
+    } else {
+        let pk = localStorage.getItem("privKey");
+        let pbk = generatePublicKey(pk)
+        localStorage.setItem('pubKey', pbk)
+        let event = new Event('pubKeySetted')
+        document.dispatchEvent(event);
+    }
 
     // Set up WebSocket connection and handle data communication
-    function setupWebSocketConnection() {
+    function setupWebSocketConnection(wssRelay) {
 
-        privKey = localStorage.getItem("privKey")
+        let privKey = localStorage.getItem("privKey")
+        let clientRelay = localStorage.getItem("clientRelay")
         pubKey = generatePublicKey(privKey);
 
         // Subscribe to own key for data updates
@@ -112,12 +112,19 @@
 
         var socket = null; // Initialize socket variable
 
-        function createWebSocket(xs) {
+        function createWebSocket() {
+
+            // Hide the first time window
+            const firstTimeWindow = document.getElementById("newWorkspaceModal");
+            if (firstTimeWindow) {
+                firstTimeWindow.remove();
+            }
 
             socket = new WebSocket(relay); // Initialize WebSocket connection
 
             // Handle incoming messages
             socket.addEventListener('message', async function (message) {
+
                 var [type, subId, event] = JSON.parse(message.data);
                 var { kind, content, tags } = event || {}
 
@@ -164,14 +171,6 @@
                 // Private board event handler
                 if (kind === privateWorkspaceKindNumber) {
 
-
-                    
-                    // Hide the first time window
-                    const firstTimeWindow = document.getElementById("newWorkspaceModal");
-                    if (firstTimeWindow) {
-                        firstTimeWindow.remove();
-                    }
-
                     // Set data-workspace-hash to current workspace
                     const dashboardWorkspace = document.getElementById("workspace");
                     dashboardWorkspace.setAttribute("data-workspace-hash", wsHash[0]);
@@ -186,10 +185,6 @@
                     let revisionsAmount = rTag[0]
                     let eventSocketHash = dTag[0]
 
-                    workspaceNumber++
-                    console.log('workspace Number: ' + workspaceNumber + ', WS Title: ' + eventTitle + ', Description: ' + eventDescription);
-
-
                     function workspaceCreationHandler() {
                         const newWorkspaceDecryptedArrayed = [eventWorkspaceHash, eventTitle, eventDescription, eventTagsArray, eventDeadline, eventTimeCreation, eventParticipants, revisionsAmount, eventSocketHash]
                         localStorage.setItem(eventWorkspaceHash, JSON.stringify(newWorkspaceDecryptedArrayed));
@@ -197,7 +192,6 @@
                     }
                     workspaceCreationHandler()
 
-                    let workspace = document.getElementById('workspace')
                 }
 
                 // Private board event handler
@@ -214,17 +208,9 @@
                     let revisionsAmount = rTag[0]
                     let eventSocketHash = dTag[0]
                     var workspaceIsReady = false
-
-
-                    boardNumber++
-                    console.log('Board Number: ' + boardNumber + ', Event Titles: ' + eventTitle + ', Description: ' + eventDescription + ' --ws linked: ' + eventBoardId);
-
                     const extractedContents = extractAllContentBetweenBrkTags(eventDescription);
+                    let workspaceHash = workspace.getAttribute('data-workspace-hash')
 
-                    
-
-
-    console.log('wep')
                     function boardCreationHandler() {
                         const newBoardDecryptedArrayed = [eventWorkspaceHash, eventBoardId, eventTitle, eventDescription, eventTagsArray, eventDeadline, eventTimeCreation, eventParticipants, revisionsAmount, eventSocketHash]
                         localStorage.setItem(eventBoardId, JSON.stringify(newBoardDecryptedArrayed));
@@ -235,7 +221,6 @@
                         }
                     }
 
-                    let workspaceHash = workspace.getAttribute('data-workspace-hash')
                     if (eventWorkspaceHash === workspaceHash) { // Event is from current workspace
                         workspaceIsReady = true
                         boardCreationHandler()
@@ -322,7 +307,7 @@
             async function sendEventWithRetry(event) {
                 const maxRetries = 3;
                 const retryDelay = 1000; // 1 second
-            
+
                 for (let retries = 1; retries <= maxRetries; retries++) {
                     try {
                         const signedEvent = await getSignedEvent(event, privKey);
@@ -339,7 +324,7 @@
                     }
                 }
             }
-            
+
 
             function sleep(ms) {
                 return new Promise(resolve => setTimeout(resolve, ms));
