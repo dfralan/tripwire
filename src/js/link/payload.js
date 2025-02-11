@@ -1,6 +1,7 @@
 (function () {
 
-    const relay = 'wss://relay.hodl.ar';
+    const relay2 = 'wss://relay.hodl.ar';
+    const relay = 'wss://relay.logicomnipresence.com';
     var privKey = ''
     var pubKey = ''
     var eventCounter = 0
