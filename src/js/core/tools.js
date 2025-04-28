@@ -224,3 +224,49 @@ function toggleSideBar() {
         hideSideBar()
     }
 }
+
+// Minimal bech32 decoder
+const BECH32_CHARSET = "qpzry9x8gf2tvdw0s3jn54khce6mua7l";
+
+function bech32Decode(bechString) {
+    const lower = bechString.toLowerCase();
+    const pos = lower.lastIndexOf('1');
+    if (pos < 1 || pos + 7 > lower.length || lower.length > 90) {
+        throw new Error("Invalid bech32 string");
+    }
+
+    const words = [];
+    for (let i = pos + 1; i < lower.length; i++) {
+        const c = lower[i];
+        const idx = BECH32_CHARSET.indexOf(c);
+        if (idx === -1) throw new Error("Invalid character in bech32 string");
+        words.push(idx);
+    }
+    return words;
+}
+
+function fromWords(words) {
+    let buffer = [];
+    let bits = 0;
+    let value = 0;
+    for (let i = 0; i < words.length; ++i) {
+        value = (value << 5) | words[i];
+        bits += 5;
+        while (bits >= 8) {
+            bits -= 8;
+            buffer.push((value >> bits) & 0xff);
+        }
+    }
+    return buffer;
+}
+
+function bytesToHex(bytes) {
+    return bytes.map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+function nsecToHex(nsec) {
+    const words = bech32Decode(nsec);
+    const bytes = fromWords(words);
+    return bytesToHex(bytes);
+}
+
