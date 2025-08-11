@@ -4,11 +4,12 @@ let navUserDropdownId = genHex(12);
 var navbar =`
 <div class="bg-body stick-top z-3 s-padded spaced display-flex flex-row full-center s-gap">
     <div class="display-flex flex-row s-gap full-center s-padded no-padded-bottom no-padded-top">
-        <!-- Left Sidebar -->
+        <!-- Left Sidebar 
         <p onclick="showSideBar()" class='hover-bg-lighter btn cursor-pointer hover-fill-primary fill-secondary xs-padded rounded-s'>
             ${menuIcon}
         </p>
-
+        -->
+        
         <!-- Brand -->
         <div class="display-flex flex-row h-center">
             ${clipIcon}
