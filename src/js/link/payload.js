@@ -13,6 +13,8 @@
     const privateBoardKindNumber = 30002
     const privateWorkspaceKindNumber = 30001
 
+    document.getElementById('urlRelayField').innerHTML = relay
+
     // Define elliptic curve and cryptographic functions
     const ec = new elliptic.ec('secp256k1');// Instantiate the secp256k1 elliptic curve (the one used in Bitcoin)
     var { getSharedSecret, schnorr, utils } = nobleSecp256k1

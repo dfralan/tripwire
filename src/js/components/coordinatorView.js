@@ -45,11 +45,11 @@ var coordinator =`
         </li>
 
         <li class="text-center font-xs font-500 dropdown-element inactive block-mode color-primary">
-            Relay URL
+            Connected to:
         </li>
-        <li onclick='copyPrivateKeyToClipboard()' class="steady-1 overflow-scroll ${dropdownElementClass}">
+        <li class="steady-1 overflow-scroll ${dropdownElementClass}">
             <span id='urlRelayField' class="overflow-scroll">
-            wss://
+            ...
             </span>
         </li>
         
