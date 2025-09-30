@@ -1,6 +1,6 @@
 (function () {
 
-    const relay = 'wss://relay.hodl.ar';
+    const relay = 'wss://relay.snort.social';
     var privKey = ''
     var pubKey = ''
     var eventCounter = 0
