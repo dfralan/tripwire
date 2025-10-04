@@ -1,6 +1,6 @@
 (function () {
 
-    const relay = 'wss://noxir-xvaifq.fly.dev';
+    const relay = 'wss://noxirwire.fly.dev';
     var privKey = ''
     var pubKey = ''
     var eventCounter = 0
