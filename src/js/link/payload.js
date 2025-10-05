@@ -8,10 +8,10 @@
     var sheetNumber = 0
     var workspaceNumber = 0
     const privateDMKindNumber = 4
-    const privateSheetKindNumber = 30003
-    const coordinatorKindNumber = 10001
-    const privateBoardKindNumber = 30002
-    const privateWorkspaceKindNumber = 30001
+    const privateSheetKindNumber = 9999
+    const coordinatorKindNumber = 9998
+    const privateBoardKindNumber = 9997
+    const privateWorkspaceKindNumber = 9996
 
     document.getElementById('urlRelayField').innerHTML = relay
 
