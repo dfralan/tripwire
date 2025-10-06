@@ -1,6 +1,6 @@
 (function () {
 
-    const relay = 'wss://noxirwire.fly.dev';
+    const relay = 'wss://relay.snort.social';
     var privKey = ''
     var pubKey = ''
     var eventCounter = 0
